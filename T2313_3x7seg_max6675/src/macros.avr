@@ -1,0 +1,145 @@
+;; Макросы (принимают до 10 параметров "@0 - @9" 
+.MACRO SetBit	;{ ;; установить бит в регистре SetBit r8,4
+	PUSH r16
+	MOV r16,@0
+	SBR r16,(1 << @1)
+	MOV @0,r16
+	POP r16
+.ENDMACRO ;}
+.MACRO ClrBit	;{ ;; сбросить бит в регистре ClrBit r8,4
+	PUSH r16
+	MOV r16,@0
+	CBR r16,(1 << @1)
+	MOV @0,r16
+	POP r16
+.ENDMACRO ;}
+.MACRO LdiFZ		;{ ;; загрузить в регистровую пару Z адрес для сегмента флеш памяти
+	LDI zh,high(@0*2)
+	LDI zl,low(@0*2)
+.ENDMACRO ;}
+.MACRO LdiZ		;{ ;; загрузить в регистровую пару Z адрес
+	LDI zh,high(@0)
+	LDI zl,low(@0)
+.ENDMACRO ;}
+.MACRO LdiY		;{ ;; загрузить в регистровую пару Y адрес
+	LDI yh,high(@0)
+	LDI yl,low(@0)
+.ENDMACRO ;}
+.MACRO LdiX		;{ ;; загрузить в регистровую пару X адрес
+	LDI xh,high(@0)
+	LDI xl,low(@0)
+.ENDMACRO ;}
+.MACRO pushX	;{ ;; 
+	PUSH xh	;; r27
+	PUSH xl ;; r26
+.ENDMACRO ;}
+.MACRO pushY	;{ ;; 
+	PUSH yh	;; r29
+	PUSH yl	;; r28
+.ENDMACRO ;}
+.MACRO pushZ	;{ ;; 
+	PUSH zh	;; r31
+	PUSH zl	;; r30
+.ENDMACRO ;}
+.MACRO pushSREGr16	;{ ;; 
+	PUSH r16
+	IN r16,SREG
+	PUSH r16
+.ENDMACRO ;}
+.MACRO popX		;{ ;; 
+	POP xl	;; r26
+	POP xh	;; r27
+.ENDMACRO ;}
+.MACRO popY		;{ ;; 
+	POP yl	;; r28
+	POP yh	;; r29
+.ENDMACRO ;}
+.MACRO popZ		;{ ;; 
+	POP zl	;; r30
+	POP zh	;; r31
+.ENDMACRO ;}
+.MACRO popSREGr16		;{ ;; 
+	POP r16
+	out SREG,r16
+	POP r16
+.ENDMACRO ;}
+.MACRO AdrX		;{ ;; увеличение адреса xl,xh значением из регистра
+	PUSH r16
+	ADD xl,@0
+	IN r16,SREG
+	SBRC r16,0
+	INC xh
+	POP r16
+.ENDMACRO ;}
+.MACRO SbrX		;{ ;; уменьшение адреса xl,xh значением из регистра
+	PUSH r16
+	SUB xl,@0
+	IN r16,SREG
+	SBRC r16,0
+	DEC xh
+	POP r16
+.ENDMACRO ;}
+.MACRO AdrY		;{ ;; увеличение адреса yl,yh значением из регистра
+	PUSH r16
+	ADD yl,@0
+	IN r16,SREG
+	SBRC r16,0
+	INC yh
+	POP r16
+.ENDMACRO ;}
+.MACRO SbrY		;{ ;; уменьшение адреса yl,yh значением из регистра
+	PUSH r16
+	SUB yl,@0
+	IN r16,SREG
+	SBRC r16,0
+	DEC yh
+	POP r16
+.ENDMACRO ;}
+.MACRO AdrZ		;{ ;; увеличение адреса zl,zh значением из регистра
+	PUSH r16
+	ADD zl,@0
+	IN r16,SREG
+	SBRC r16,0
+	INC zh
+	POP r16
+.ENDMACRO ;}
+.MACRO SbrZ		;{ ;; уменьшение адреса zl,zh значением из регистра
+	PUSH r16
+	SUB zl,@0
+	IN r16,SREG
+	SBRC r16,0
+	DEC zh
+	POP r16
+.ENDMACRO ;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,292 @@
+   1               		.file	"main.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.text
+   9               	.global	init
+  11               	init:
+  12               	/* prologue: function */
+  13               	/* frame size = 0 */
+  14 0000 479A      		sbi 40-32,7
+  15 0002 1ABA      		out 58-32,__zero_reg__
+  16 0004 1BBA      		out 59-32,__zero_reg__
+  17 0006 87B3      		in r24,55-32
+  18 0008 8360      		ori r24,lo8(3)
+  19 000a 87BB      		out 55-32,r24
+  20 000c 88B3      		in r24,56-32
+  21 000e 8C7F      		andi r24,lo8(-4)
+  22 0010 88BB      		out 56-32,r24
+  23 0012 81B3      		in r24,49-32
+  24 0014 807C      		andi r24,lo8(-64)
+  25 0016 81BB      		out 49-32,r24
+  26 0018 82B3      		in r24,50-32
+  27 001a 8A62      		ori r24,lo8(42)
+  28 001c 82BB      		out 50-32,r24
+  29 001e 82B3      		in r24,50-32
+  30 0020 8A7E      		andi r24,lo8(-22)
+  31 0022 82BB      		out 50-32,r24
+  32               	/* epilogue start */
+  33 0024 0895      		ret
+  35               	.global	CheckBVK
+  37               	CheckBVK:
+  38               	/* prologue: function */
+  39               	/* frame size = 0 */
+  40 0026 8599      		sbic 48-32,5
+  41 0028 00C0      		rjmp .L4
+  42 002a 849B      		sbis 48-32,4
+  43 002c 00C0      		rjmp .L7
+  44 002e 00C0      		rjmp .L17
+  45               	.L4:
+  46 0030 8499      		sbic 48-32,4
+  47 0032 00C0      		rjmp .L7
+  48               	.L17:
+  49 0034 1092 0000 		sts BVK_T,__zero_reg__
+  50 0038 00C0      		rjmp .L6
+  51               	.L7:
+  52 003a 81E0      		ldi r24,lo8(1)
+  53 003c 8093 0000 		sts BVK_T,r24
+  54               	.L6:
+  55 0040 8199      		sbic 48-32,1
+  56 0042 00C0      		rjmp .L8
+  57 0044 809B      		sbis 48-32,0
+  58 0046 00C0      		rjmp .L11
+  59 0048 00C0      		rjmp .L18
+  60               	.L8:
+  61 004a 8099      		sbic 48-32,0
+  62 004c 00C0      		rjmp .L11
+  63               	.L18:
+  64 004e 1092 0000 		sts BVK_L,__zero_reg__
+  65 0052 00C0      		rjmp .L10
+  66               	.L11:
+  67 0054 81E0      		ldi r24,lo8(1)
+  68 0056 8093 0000 		sts BVK_L,r24
+  69               	.L10:
+  70 005a 8399      		sbic 48-32,3
+  71 005c 00C0      		rjmp .L12
+  72 005e 829B      		sbis 48-32,2
+  73 0060 00C0      		rjmp .L15
+  74 0062 00C0      		rjmp .L19
+  75               	.L12:
+  76 0064 8299      		sbic 48-32,2
+  77 0066 00C0      		rjmp .L15
+  78               	.L19:
+  79 0068 1092 0000 		sts BVK_R,__zero_reg__
+  80 006c 0895      		ret
+  81               	.L15:
+  82 006e 81E0      		ldi r24,lo8(1)
+  83 0070 8093 0000 		sts BVK_R,r24
+  84 0074 0895      		ret
+  86               	.global	ExecuteBVK
+  88               	ExecuteBVK:
+  89               	/* prologue: function */
+  90               	/* frame size = 0 */
+  91 0076 8091 0000 		lds r24,LEFT
+  92 007a 8130      		cpi r24,lo8(1)
+  93 007c 01F4      		brne .L21
+  94 007e 8091 0000 		lds r24,RIGTH
+  95 0082 8130      		cpi r24,lo8(1)
+  96 0084 01F0      		breq .L22
+  97               	.L21:
+  98 0086 8091 0000 		lds r24,BVK_L
+  99 008a 8130      		cpi r24,lo8(1)
+ 100 008c 01F4      		brne .L23
+ 101 008e 8091 0000 		lds r24,BVK_R
+ 102 0092 8130      		cpi r24,lo8(1)
+ 103 0094 01F4      		brne .L23
+ 104               	.L22:
+ 105 0096 1092 0000 		sts LEFT,__zero_reg__
+ 106 009a 1092 0000 		sts RIGTH,__zero_reg__
+ 107 009e 1092 0000 		sts STATUS,__zero_reg__
+ 108 00a2 C098      		cbi 56-32,0
+ 109 00a4 C198      		cbi 56-32,1
+ 110 00a6 0895      		ret
+ 111               	.L23:
+ 112 00a8 8091 0000 		lds r24,BVK_L
+ 113 00ac 8823      		tst r24
+ 114 00ae 01F4      		brne .L25
+ 115 00b0 8091 0000 		lds r24,BVK_R
+ 116 00b4 8823      		tst r24
+ 117 00b6 01F4      		brne .+2
+ 118 00b8 00C0      		rjmp .L33
+ 119               	.L25:
+ 120 00ba 8091 0000 		lds r24,STATUS
+ 121 00be 8823      		tst r24
+ 122 00c0 01F4      		brne .L26
+ 123 00c2 8091 0000 		lds r24,LEFT
+ 124 00c6 8823      		tst r24
+ 125 00c8 01F0      		breq .+2
+ 126 00ca 00C0      		rjmp .L33
+ 127 00cc 8091 0000 		lds r24,RIGTH
+ 128 00d0 8823      		tst r24
+ 129 00d2 01F0      		breq .+2
+ 130 00d4 00C0      		rjmp .L33
+ 131 00d6 8091 0000 		lds r24,BVK_T
+ 132 00da 8130      		cpi r24,lo8(1)
+ 133 00dc 01F0      		breq .+2
+ 134 00de 00C0      		rjmp .L33
+ 135 00e0 8091 0000 		lds r24,BVK_L
+ 136 00e4 8130      		cpi r24,lo8(1)
+ 137 00e6 01F4      		brne .L27
+ 138 00e8 8093 0000 		sts RIGTH,r24
+ 139 00ec 8093 0000 		sts STATUS,r24
+ 140 00f0 C19A      		sbi 56-32,1
+ 141               	.L27:
+ 142 00f2 8091 0000 		lds r24,BVK_R
+ 143 00f6 8130      		cpi r24,lo8(1)
+ 144 00f8 01F0      		breq .+2
+ 145 00fa 00C0      		rjmp .L33
+ 146 00fc 8093 0000 		sts LEFT,r24
+ 147 0100 8093 0000 		sts STATUS,r24
+ 148 0104 C09A      		sbi 56-32,0
+ 149 0106 0895      		ret
+ 150               	.L26:
+ 151 0108 8091 0000 		lds r24,RIGTH
+ 152 010c 8130      		cpi r24,lo8(1)
+ 153 010e 01F4      		brne .L28
+ 154 0110 8091 0000 		lds r24,BVK_R
+ 155 0114 8130      		cpi r24,lo8(1)
+ 156 0116 01F4      		brne .L28
+ 157 0118 88E8      		ldi r24,lo8(5000)
+ 158 011a 93E1      		ldi r25,hi8(5000)
+ 159 011c 29E1      		ldi r18,lo8(25)
+ 160 011e 30E0      		ldi r19,hi8(25)
+ 161               	.L29:
+ 162 0120 F901      		movw r30,r18
+ 163               	/* #APP */
+ 164               	 ;  105 "c:/winavr/lib/gcc/../../avr/include/util/delay_basic.h" 1
+ 165 0122 3197      		1: sbiw r30,1
+ 166 0124 01F4      		brne 1b
+ 167               	 ;  0 "" 2
+ 168               	/* #NOAPP */
+ 169 0126 0197      		sbiw r24,1
+ 170 0128 01F4      		brne .L29
+ 171 012a 1092 0000 		sts STATUS,__zero_reg__
+ 172 012e 1092 0000 		sts RIGTH,__zero_reg__
+ 173 0132 C198      		cbi 56-32,1
+ 174 0134 80E1      		ldi r24,lo8(10000)
+ 175 0136 97E2      		ldi r25,hi8(10000)
+ 176 0138 29E1      		ldi r18,lo8(25)
+ 177 013a 30E0      		ldi r19,hi8(25)
+ 178               	.L30:
+ 179 013c F901      		movw r30,r18
+ 180               	/* #APP */
+ 181               	 ;  105 "c:/winavr/lib/gcc/../../avr/include/util/delay_basic.h" 1
+ 182 013e 3197      		1: sbiw r30,1
+ 183 0140 01F4      		brne 1b
+ 184               	 ;  0 "" 2
+ 185               	/* #NOAPP */
+ 186 0142 0197      		sbiw r24,1
+ 187 0144 01F4      		brne .L30
+ 188               	.L28:
+ 189 0146 8091 0000 		lds r24,LEFT
+ 190 014a 8130      		cpi r24,lo8(1)
+ 191 014c 01F4      		brne .L33
+ 192 014e 8091 0000 		lds r24,BVK_L
+ 193 0152 8130      		cpi r24,lo8(1)
+ 194 0154 01F4      		brne .L33
+ 195 0156 88E8      		ldi r24,lo8(5000)
+ 196 0158 93E1      		ldi r25,hi8(5000)
+ 197 015a 29E1      		ldi r18,lo8(25)
+ 198 015c 30E0      		ldi r19,hi8(25)
+ 199               	.L31:
+ 200 015e F901      		movw r30,r18
+ 201               	/* #APP */
+ 202               	 ;  105 "c:/winavr/lib/gcc/../../avr/include/util/delay_basic.h" 1
+ 203 0160 3197      		1: sbiw r30,1
+ 204 0162 01F4      		brne 1b
+ 205               	 ;  0 "" 2
+ 206               	/* #NOAPP */
+ 207 0164 0197      		sbiw r24,1
+ 208 0166 01F4      		brne .L31
+ 209 0168 1092 0000 		sts STATUS,__zero_reg__
+ 210 016c 1092 0000 		sts LEFT,__zero_reg__
+ 211 0170 C098      		cbi 56-32,0
+ 212 0172 80E1      		ldi r24,lo8(10000)
+ 213 0174 97E2      		ldi r25,hi8(10000)
+ 214 0176 29E1      		ldi r18,lo8(25)
+ 215 0178 30E0      		ldi r19,hi8(25)
+ 216               	.L32:
+ 217 017a F901      		movw r30,r18
+ 218               	/* #APP */
+ 219               	 ;  105 "c:/winavr/lib/gcc/../../avr/include/util/delay_basic.h" 1
+ 220 017c 3197      		1: sbiw r30,1
+ 221 017e 01F4      		brne 1b
+ 222               	 ;  0 "" 2
+ 223               	/* #NOAPP */
+ 224 0180 0197      		sbiw r24,1
+ 225 0182 01F4      		brne .L32
+ 226               	.L33:
+ 227 0184 0895      		ret
+ 229               	.global	main
+ 231               	main:
+ 232               	/* prologue: function */
+ 233               	/* frame size = 0 */
+ 234 0186 00D0      		rcall init
+ 235 0188 88E8      		ldi r24,lo8(5000)
+ 236 018a 93E1      		ldi r25,hi8(5000)
+ 237 018c 29E1      		ldi r18,lo8(25)
+ 238 018e 30E0      		ldi r19,hi8(25)
+ 239               	.L39:
+ 240 0190 F901      		movw r30,r18
+ 241               	/* #APP */
+ 242               	 ;  105 "c:/winavr/lib/gcc/../../avr/include/util/delay_basic.h" 1
+ 243 0192 3197      		1: sbiw r30,1
+ 244 0194 01F4      		brne 1b
+ 245               	 ;  0 "" 2
+ 246               	/* #NOAPP */
+ 247 0196 0197      		sbiw r24,1
+ 248 0198 01F4      		brne .L39
+ 249               	.L43:
+ 250 019a 00D0      		rcall CheckBVK
+ 251 019c 00D0      		rcall ExecuteBVK
+ 252 019e 00C0      		rjmp .L43
+ 254               	.global	STATUS
+ 255               	.global	STATUS
+ 256               		.section .bss
+ 259               	STATUS:
+ 260 0000 00        		.skip 1,0
+ 261               	.global	LEFT
+ 262               	.global	LEFT
+ 265               	LEFT:
+ 266 0001 00        		.skip 1,0
+ 267               	.global	RIGTH
+ 268               	.global	RIGTH
+ 271               	RIGTH:
+ 272 0002 00        		.skip 1,0
+ 273               	.global	BVK_T
+ 274               	.global	BVK_T
+ 277               	BVK_T:
+ 278 0003 00        		.skip 1,0
+ 279               	.global	BVK_L
+ 280               	.global	BVK_L
+ 283               	BVK_L:
+ 284 0004 00        		.skip 1,0
+ 285               	.global	BVK_R
+ 286               	.global	BVK_R
+ 289               	BVK_R:
+ 290 0005 00        		.skip 1,0
+ 291               	.global __do_clear_bss
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:2      *ABS*:0000003f __SREG__
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:3      *ABS*:0000003e __SP_H__
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:4      *ABS*:0000003d __SP_L__
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:5      *ABS*:00000034 __CCP__
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:11     .text:00000000 init
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:37     .text:00000026 CheckBVK
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:277    .bss:00000003 BVK_T
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:283    .bss:00000004 BVK_L
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:289    .bss:00000005 BVK_R
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:88     .text:00000076 ExecuteBVK
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:265    .bss:00000001 LEFT
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:271    .bss:00000002 RIGTH
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:259    .bss:00000000 STATUS
+C:\Users\9E8E~1\AppData\Local\Temp/ccCyFsGV.s:231    .text:00000186 main
+
+UNDEFINED SYMBOLS
+__do_clear_bss

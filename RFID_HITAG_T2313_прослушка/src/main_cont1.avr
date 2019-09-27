@@ -1,0 +1,757 @@
+SendOK_PC: ;{			;;Посылка по RS232 "ОК" (hex: 4F 4B)
+				push r16
+				
+				ldi r16,'O'
+				rcall Send_Byte_USART
+				ldi r16,'K'
+				rcall Send_Byte_USART
+				
+				pop r16
+ret ;}
+SendERROR_E_PC: ;{		;;Посылка по RS232 "ERROR" (hex: 45 52 52 4F 52)
+				push r16
+				
+				ldi r16,'E'
+				rcall Send_Byte_USART
+				ldi r16,'R'
+				rcall Send_Byte_USART
+				rcall Send_Byte_USART
+				mov r16,ERROR
+				rcall Send_Byte_USART
+				
+				pop r16
+ret ;}
+Send_Byte_USART: ;{ 	;; r16 => send 
+				sbis UCSRA,UDRE
+				rjmp Send_Byte_USART
+				out UDR,r16
+ret ;}
+USI_START: ;{ 	;; формирование сигнала "СТАРТ" на линиях USI
+				cbi PORTB,6		;; DOUT
+				sbi PORTB,7		;; SCLK
+				rcall d_USI_PP
+				sbi PORTB,6		;; DOUT
+				rcall d_USI_PP
+ret ;}
+USI_SEND_r16: ;{ 	;; посылка 8 бит из регистра r16 начиная со старшего
+				push r17
+				push r16
+
+				ldi r17,8			;; счетчик битов
+				cbi PORTB,7		;; SCLK
+				rcall d_USI_PP
+	usis8b01:
+				sbrc r16,7
+				sbi PORTB,6		;; DOUT
+				sbrs r16,7
+				cbi PORTB,6		;; DOUT
+				lsl r16			;; сдвиг влево заполняя нулями
+				rcall d_USI_PP
+				sbi PORTB,7		;; SCLK
+				rcall d_USI_PP
+				rcall d_USI_PP
+				cbi PORTB,7		;; SCLK
+				rcall d_USI_PP
+				dec r17
+				brne usis8b01
+
+				pop r16
+				pop r17
+ret ;}
+USI_RECV_r16: ;{ 	;; прием 8 бит из USI в регистр r16 начиная со старшего
+				push r17
+
+				clr r16
+				ldi r17,8			;; счетчик битов
+				cbi PORTB,7		;; SCLK
+				rcall d_USI_PP
+	usir8b01:
+				rcall d_USI_PP
+				sbi PORTB,7		;; SCLK
+				rcall d_USI_PP
+				lsl r16			;; сдвиг влево заполняя нулями
+				sbic PINB,4		;; DOUT
+				sbr r16,1
+				rcall d_USI_PP
+				cbi PORTB,7		;; SCLK
+				rcall d_USI_PP
+				dec r17
+				brne usir8b01
+
+				pop r17
+ret ;}
+USI_STOP: ;{ 	;; формирование сигнала "СТОП" на линиях USI
+				sbi PORTB,6		;; DOUT
+				rcall d_USI_PP
+				sbi PORTB,7		;; SCLK
+				rcall d_USI_PP
+				rcall d_USI_PP
+				cbi PORTB,6		;; DOUT
+				rcall d_USI_PP
+ret ;}
+USI_SEND_AND_RECV_1Byte: ;{ 	;; 
+				rcall USI_START
+				rcall USI_SEND_r16
+				rcall USI_RECV_r16
+				rcall USI_STOP
+				rcall Send_Byte_USART
+ret ;}
+USI_SEND_1Byte: ;{ 	;; 
+				rcall USI_START
+				rcall USI_SEND_r16
+				rcall USI_STOP
+				rcall SendOK_PC
+ret ;}
+USI_SEND_READ_TAG: ;{ 	;; 
+				push r17
+
+				rcall USI_START
+				
+				ldi r17,3			;; счетчик битов
+				cbi PORTB,7		;; SCLK
+				rcall d_USI_PP
+				sbi PORTB,6		;; DOUT
+	usisrt01:
+				rcall d_USI_PP
+				sbi PORTB,7		;; SCLK
+				rcall d_USI_PP
+				rcall d_USI_PP
+				cbi PORTB,7		;; SCLK
+				rcall d_USI_PP
+				dec r17
+				brne usisrt01
+				cbi PORTB,6		;; DOUT
+				
+				pop r17
+ret ;}
+;{	;; устаревшие функции
+;; Copy3_X_Y: ;{			;; переносит 3 байта с X(озу) -> Y(озу) и возвращает указатели на место
+				;; push r16
+				
+				;; ld r16,x+		;; младший байт
+				;; st y+,r16
+				;; ld r16,x+		;; средний байт
+				;; st y+,r16
+				;; ld r16,x+		;; старший байт
+				;; st y+,r16
+				;; sbiw xl,3
+				;; sbiw yl,3
+				
+				;; pop r16
+;; ret ;}
+;; Copy3_Y_X: ;{			;; переносит 3 байта с Y(озу) -> X(озу) и возвращает указатели на место
+				;; push r16
+				
+				;; ld r16,y+		;; младший байт
+				;; st x+,r16
+				;; ld r16,y+		;; средний байт
+				;; st x+,r16
+				;; ld r16,y+		;; старший байт
+				;; st x+,r16
+				;; sbiw xl,3
+				;; sbiw yl,3
+				
+				;; pop r16
+;; ret ;}
+;; Copy3_Zm_X: ;{			;; перенос из PROGMEM(Z) в ОЗУ(X) 3 байтов. На выходе указатели восстанавливаются
+				;; push r18
+				;; push r17
+
+				;; ldi r17,3
+	;; cp3zmx01:
+				;; lpm r18,z+
+				;; st x+,r18
+				;; dec r17
+				;; brne cp3zmx01
+
+				;; sbiw xl,3
+				;; sbiw zl,3
+
+				;; pop r17
+				;; pop r18
+;; ret ;}
+;; Compare3_Zm_Y: ;{		;; сравнивает 24бит. числа с адресами Zm(из прогр.памяти) и Y(ОЗУ).
+;; ;; На выходе флаги Z = 1 числа равны; C = 1 (Z < Y); если (Z > Y) флаги Z и C = 0.
+;; ;; указатели Y и Z восстанавливаются.
+				;; pushZ
+				;; pushY
+				;; push r18
+				;; push r17
+				;; push r16
+				
+				;; ldi r16,4
+				;; adiw zl,2
+				;; adiw yl,3
+	;; cmpxz00:
+				;; dec r16
+				;; breq cmpxz01
+				;; lpm r18,z
+				;; sbiw zl,1
+				;; ld r17,-y
+				;; cp r18,r17
+				;; breq cmpxz00
+	;; cmpxz01:
+				;; pop r16
+				;; pop r17
+				;; pop r18
+				;; popY
+				;; popZ
+;; ret ;}
+;; Compare3_Y_X: ;{		;; сравнивает 24бит. числа с адресами Y(ОЗУ) и X(ОЗУ).
+;; ;; На выходе флаги Z = 1 (Y == X); C = 1 (Y < X); если (Y > X) флаги Z и C = 0.
+;; ;; указатели Y и Z восстанавливаются.
+				;; pushZ
+				;; pushY
+				;; push r18
+				;; push r17
+				;; push r16
+				
+				;; ldi r16,4
+				;; adiw yl,3
+				;; adiw xl,3
+	;; cmpyx00:
+				;; dec r16
+				;; breq cmpyx01
+				;; ld r18,-y
+				;; ld r17,-x
+				;; cp r18,r17
+				;; breq cmpyx00
+	;; cmpyx01:
+				;; pop r16
+				;; pop r17
+				;; pop r18
+				;; popY
+				;; popZ
+;; ret ;}
+;; .cseg ;{	;; добавляем 0 для выравнивания кратно 2м байтам
+;; ;; world_0:		.db 4,'P','I','N','G',0				;; "PING"
+;; ;; world_1:		.db 3,'S','E','T'					;; "SET"
+;; ;; world_2:		.db 3,'G','E','T'					;; "GET"
+;; ;; world_3:		.db 6,'F','S','T','A','R','T',0		;; "FSTART"
+;; ;; world_4:		.db 5,'F','S','T','O','P'			;; "FSTOP"
+;; ;; world_5:		.db 5,'F','S','T','E','P'			;; "FSTEP"
+;; ;; world_6:		.db 6,'E','R','R','O','R','S',0		;; "ERRORS"
+;; constFreqMax:	.db $DF,$93,$04,0					;; 299999
+;; constFreqMin:	.db $98,$3A,$00,0					;; 15000
+;; constStepMax:	.db $47,$59,$04,0					;; 284999
+;; constStepMin:	.db $64,$00,$00,0					;; 100
+;; err_cnt_max:	.db $FE,$54,$00,0					;; 21758 eeERR_CNT возможно до 21758(вкл)
+;; ;; world_space:	.db 1,$20							;;одиночный пробел
+;; ;}
+;; ADD_YinX16: ;{	;; сложить указатель Y и значение по адресу X; результат в Y
+				;; pushX
+				;; push r16
+				
+				;; ld r16,x+
+				;; add yl,r16
+				;; ld r16,x
+				;; adc yh,r16
+				
+				;; pop r16
+				;; popX
+;; ret ;}
+;; ADD_Y24_X24: ;{	;; сложить значения по указателям Y и X с сохранением результата в Y.указатели восстанавливаются
+				;; pushX
+				;; pushY
+				;; push r16
+				;; push r17
+				
+				;; ld r16,y
+				;; ld r17,x+
+				;; add r16,r17
+				;; st y+,r16
+				
+				;; ld r16,y
+				;; ld r17,x+
+				;; adc r16,r17
+				;; st y+,r16
+				
+				;; ld r16,y
+				;; ld r17,x+
+				;; adc r16,r17
+				;; st y+,r16
+
+				;; pop r17
+				;; pop r16
+				;; popY
+				;; popX
+;; ret ;}
+;; INCinX24: ;{	;; инкременировать значение по адресу X. указатель X восстанавливается
+				;; pushX
+				;; pushY
+				;; push r16
+
+				;; ld yl,x+
+				;; ld yh,x
+				;; adiw yl,1
+				;; sbiw xl,1
+				;; st x+,yl
+				;; st x+,yh
+				;; st x+,r10
+
+				;; pop r16
+				;; popY
+				;; popX
+;; ret ;}
+;; MULinXto3: ;{	;; умножить значение по адресу X на 3. указатель X восстанавливается
+;; ;; исходим из того, что макс. умножаемое число 21758($54FE) при этом результат будет 65274($FEFA) т.е. 2байта полюбому
+				;; pushX
+				;; push r16
+				;; push r17
+				;; push r18
+				;; push r19
+				
+				;; ldi r17,3
+				
+				;; ld r16,x+
+				;; mul r16,r17		;;результат r1:r0
+				;; movw r18,r0		;; r19:r18 <- r1:r0
+				;; ld r16,x
+				;; mul r16,r17		;;результат r1:r0
+				;; add r19,r0
+				;; sbiw xl,1
+				;; st x+,r18
+				;; st x+,r19
+				;; st x,r10
+				
+				;; pop r19
+				;; pop r18
+				;; pop r17
+				;; pop r16
+				;; popX
+;; ret ;}
+
+;; ;; Debug_Send_Byte: ;{ 	;; r16 => send PB3 а ля RS232
+;; ;; ;; для скорости 38400 длительность бита 1/38400=26,0416(6)мкс
+				;; ;; push r17
+				;; ;; push r16
+
+				;; ;; ldi r17,8			;; счетчик битов
+				;; ;; cbi PORTB,3
+				;; ;; rcall d_26mks		;; стартовый бит
+;; ;; dbsbt01:	
+				;; ;; sbrc r16,0
+				;; ;; sbi PORTB,3
+				;; ;; sbrs r16,0
+				;; ;; cbi PORTB,3
+				;; ;; ror r16
+				;; ;; rcall d_26mks		;; 8 битов данных
+				;; ;; dec r17
+				;; ;; brne dbsbt01
+
+				;; ;; sbi PORTB,3
+				;; ;; rcall d_26mks		;; стоповый бит
+
+				;; ;; pop r16
+				;; ;; pop r17
+;; ;; ret ;}
+;; ;; SaveDebugINFO: ;{ 	;; сохранение отладочной информации во внутренней EEPROM
+;; ;; ;; eDEBUG_INFO:	.db 0,0,0,0,0,0,0,0	8 байт: STATUS,ERROR,ANS_RS_COM,ANS_RS_VAL,STEP_CYKL,ANS_RS_CNT,ANS_RS_SUM,'E' - записываются в случае ошибки
+				;; ;; pushY
+				;; ;; push r18
+				
+				;; ;; LdiY(eDEBUG_INFO)
+				;; ;; mov r18,STATUS
+				;; ;; rcall Save_r18_eY
+				;; ;; adiw yl,1
+				;; ;; mov r18,ERROR
+				;; ;; rcall Save_r18_eY
+				;; ;; adiw yl,1
+				;; ;; mov r18,ANS_RS_COM
+				;; ;; rcall Save_r18_eY
+				;; ;; adiw yl,1
+				;; ;; mov r18,ANS_RS_VAL
+				;; ;; rcall Save_r18_eY
+				;; ;; adiw yl,1
+				;; ;; mov r18,STEP_CYKL
+				;; ;; rcall Save_r18_eY
+				;; ;; adiw yl,1
+				;; ;; mov r18,ANS_RS_CNT
+				;; ;; rcall Save_r18_eY
+				;; ;; adiw yl,1
+				;; ;; mov r18,ANS_RS_SUM
+				;; ;; rcall Save_r18_eY
+				;; ;; adiw yl,1
+				;; ;; ldi r18,$EE
+				;; ;; rcall Save_r18_eY
+
+				;; ;; pop r18
+				;; ;; popY
+;; ;; ret ;}
+;; ;; SendDebugINFO_USART: ;{ 	;; отправляем рабочие регистры из внутренней EEPROM по USART
+				;; ;; pushY
+				;; ;; push r18
+				;; ;; push r16
+
+				;; ;; LdiY(eDEBUG_INFO)
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Send_Byte_USART
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Send_Byte_USART
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Send_Byte_USART
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Send_Byte_USART
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Send_Byte_USART
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Send_Byte_USART
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Send_Byte_USART
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Send_Byte_USART
+				
+				;; ;; pop r16
+				;; ;; pop r18
+				;; ;; popY
+;; ;; ret ;}
+;; ;; SendDebugINFO_PB3: ;{ 	;; отправляем рабочие регистры из внутренней EEPROM на PB3 (а ля RS232)
+				;; ;; pushY
+				;; ;; push r18
+				;; ;; push r16
+
+				;; ;; LdiY(eDEBUG_INFO)
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Debug_Send_Byte
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Debug_Send_Byte
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Debug_Send_Byte
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Debug_Send_Byte
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Debug_Send_Byte
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Debug_Send_Byte
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Debug_Send_Byte
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; mov r16,r18
+				;; ;; rcall Debug_Send_Byte
+
+				;; ;; pop r16
+				;; ;; pop r18
+				;; ;; popY
+;; ;; ret ;}
+;; ;; SendDebugINFO_PC: ;{ 	;; отправляем рабочие регистры из внутренней EEPROM по USART в компьютер
+				;; ;; pushX
+				;; ;; pushY
+				;; ;; push r18
+
+				;; ;; LdiX(buf_TX)
+				;; ;; LdiY(eDEBUG_INFO)
+				;; ;; ldi r18,8
+				;; ;; st x+,r18
+				;; ;; rcall Load_eY_r18
+				;; ;; st x+,r18
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; st x+,r18
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; st x+,r18
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; st x+,r18
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; st x+,r18
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; st x+,r18
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; st x+,r18
+				;; ;; adiw yl,1
+				;; ;; rcall Load_eY_r18
+				;; ;; st x+,r18
+				;; ;; rcall SetCheckSummTX
+				;; ;; rcall SendTX
+				
+				;; ;; pop r18
+				;; ;; popY
+				;; ;; popX
+;; ;; ret ;}
+
+;; ;; Load_eY_r18: ;{			;; чтение из EEPROM Y => адрес и r18 выходные данные
+				;; ;; sbic EECR,EEWE		;; можно ли записывать адрес
+				;; ;; rjmp Load_eY_r18		;; выждем процесс прошлой записи ~3,4мс
+				;; ;; out EEARH,yh
+				;; ;; out EEARL,yl
+				;; ;; sbi EECR,EERE
+				;; ;; in r18,EEDR
+;; ;; ret ;}
+;; ;; Save_r18_eY: ;{			;; сохранение: r18(данные) => Y(адрес EEPROM) ; 
+				;; ;; sbic EECR,EEWE		;; можно ли записывать адрес
+				;; ;; rjmp Save_r18_eY			;; выждем процесс прошлой записи ~3,4мс
+				;; ;; out EEARH,yh
+				;; ;; out EEARL,yl
+				;; ;; out EEDR,r18
+				;; ;; sbi EECR,EEMWE
+				;; ;; sbi EECR,EEWE
+;; ;; ret ;}
+
+;; ;{	;; функции для работы с внутренней EEPROM
+;; ;; BufferCat3_Ye_X: ;{		;; копирует 3 байта(Ye) в буфер X
+;; ;; ;; r16 - смещение на позицию начала записи. По окончании указатель X возвращается на начало,
+;; ;; ;; к r16 прибавляется длина добавленной строки
+;; ;; ;; счетчик буфера увеличивается на длину записываемой строки
+				;; ;; push r17
+				;; ;; push r18
+
+				;; ;; ldi r17,3
+				;; ;; pushX
+				;; ;; adiw xl,1
+				;; ;; AdrX r16
+	;; ;; bfc3yx01:
+				;; ;; rcall Load_eY_r18
+				;; ;; st x+,r18
+				;; ;; adiw yl,1
+				;; ;; dec r17
+				;; ;; brne bfc3yx01
+				
+				;; ;; subi r16,-3
+				;; ;; popX
+				;; ;; st x,r16
+
+				;; ;; pop r18
+				;; ;; pop r17
+;; ;; ret ;}
+;; ;; Copy3_X_Ye: ;{			;;запись из ОЗУ(X) в EEPROM(Ye) 3 байтов. На выходе указатели восстанавливаются
+				;; ;; push r18
+				;; ;; push r17
+				
+				;; ;; ldi r17,3
+	;; ;; cp3xye01:
+				;; ;; ld r18,x+
+				;; ;; rcall Save_r18_eY
+				;; ;; adiw yl,1
+				;; ;; dec r17
+				;; ;; brne cp3xye01
+
+				;; ;; sbiw xl,3
+				;; ;; sbiw yl,3
+
+				;; ;; pop r17
+				;; ;; pop r18
+;; ;; ret ;}
+;; ;; Copy3_Ye_X: ;{			;;чтение из EEPROM(Ye) в ОЗУ(X) 3 байтов. На выходе указатели восстанавливаются
+				;; ;; push r18
+				;; ;; push r17
+				
+				;; ;; ldi r17,3
+	;; ;; cp3yex01:
+				;; ;; rcall Load_eY_r18
+				;; ;; st x+,r18
+				;; ;; adiw yl,1
+				;; ;; dec r17
+				;; ;; brne cp3yex01
+
+				;; ;; sbiw xl,3
+				;; ;; sbiw yl,3
+
+				;; ;; pop r17
+				;; ;; pop r18
+;; ;; ret ;}
+;; ;; Copy3_Zm_Ye: ;{			;; перенос из PROGMEM(Z) в EEPROM(Ye) 3 байтов. На выходе указатели восстанавливаются
+				;; ;; push r18
+				;; ;; push r17
+
+				;; ;; ldi r17,3
+	;; ;; cp3zmye01:
+				;; ;; lpm r18,z+
+				;; ;; rcall Save_r18_eY
+				;; ;; adiw yl,1
+				;; ;; dec r17
+				;; ;; brne cp3zmye01
+
+				;; ;; sbiw xl,3
+				;; ;; sbiw zl,3
+
+				;; ;; pop r17
+				;; ;; pop r18
+;; ;; ret ;}
+;; ;}
+;; ;; Debug_Send_bufRX_toRS: ;{ 	;; отправка содержимого буфера buf_RX по RS232. buf_RX[0] - кол-во отправляемых байтов
+				;; ;; pushZ
+				;; ;; push r16
+				;; ;; push r17
+				
+				;; ;; LdiZ(buf_RX)
+				;; ;; ld r17,z+
+	;; ;; dbgsndrx01:	
+				;; ;; ld r16,z+
+				;; ;; rcall Debug_Send_Byte
+				;; ;; dec r17
+				;; ;; brne dbgsndrx01
+
+				;; ;; pop r17
+				;; ;; pop r16
+				;; ;; popZ
+;; ;; ret ;}
+;; ;; BufferCatString_Zm_X: ;{;; копирует строку(Zm) в буфер X
+;; ;; ;; r16 - смещение на позицию начала записи. По окончании указатель X возвращается на начало,
+;; ;; ;; к r16 прибавляется длина добавленной строки
+;; ;; ;; счетчик буфера увеличивается на длину записываемой строки
+				;; ;; push r17
+				;; ;; push r18
+				;; ;; push r19
+
+				;; ;; lpm r17,z+		;;загрузили длину строки
+				;; ;; mov r19,r17
+				;; ;; pushX
+				;; ;; adiw xl,1
+				;; ;; AdrX r16
+	;; ;; bfcszx01:
+				;; ;; lpm r18,z+
+				;; ;; st x+,r18
+				;; ;; dec r19
+				;; ;; brne bfcszx01
+				
+				;; ;; add r16,r17
+				;; ;; popX
+				;; ;; st x,r16
+
+				;; ;; pop r19
+				;; ;; pop r18
+				;; ;; pop r17
+;; ;; ret ;}
+;; ;; BufferCat3_Y_X: ;{		;; копирует 3 байта(Y) в буфер X, указатели восстанавливаются
+;; ;; ;; r16 - смещение на позицию начала записи.
+;; ;; ;; к r16 прибавляется длина добавленной строки
+;; ;; ;; счетчик буфера увеличивается на длину записываемой строки
+				;; ;; push r17
+				;; ;; push r18
+
+				;; ;; ldi r17,3
+				;; ;; pushX
+				;; ;; pushY
+				;; ;; adiw xl,1
+				;; ;; AdrX r16
+	;; ;; bfc3yx02:
+				;; ;; ld r18,y+
+				;; ;; st x+,r18
+				;; ;; dec r17
+				;; ;; brne bfc3yx02
+				
+				;; ;; subi r16,-3
+				;; ;; popY
+				;; ;; popX
+				;; ;; st x,r16
+
+				;; ;; pop r18
+				;; ;; pop r17
+;; ;; ret ;}
+;; ;; Compare_SubString: ;{		;; поиск первого вхождения подстроки в буфере. zh,zl - индекс подстроки(lpm)
+;; ;; возвращает в r16 индекс начала первого вхождения подстроки (с 0). 0xFF - если подстрока не найдена
+				;; ;; push r23
+				;; ;; push r22
+				;; ;; push r21
+				;; ;; push r20
+				;; ;; push r19
+				;; ;; push r18
+				;; ;; push r17
+				;; ;; pushX
+				;; ;; in r17,SREG
+				;; ;; push r17
+				
+				;; ;; clr r16			;; индекс перемещения по буферу глобальный (за весь поиск проходит 1 раз)
+				;; ;; clr r17			;; индекс перемещения по буферу временный
+				;; ;; clr r23			;; индекс перемещения по подстроке временный
+				;; ;; lpm r18,z+		;; байтов в подстроке, z индекс находится на первом байте подстроки
+
+	;; ;; css00:		
+				;; ;; mov r22,r18
+				;; ;; LdiX(buf_RX)
+				;; ;; ld r19,x+		;; загрузим кол-во байт в буфере, x индекс находится на первом байте подстроки
+				;; ;; AdrX r16
+				;; ;; mov r17,r16		;; сохраним копию индекса смещения по буферу
+				;; ;; SbrZ r23
+				;; ;; clr r23
+	;; ;; css02:		
+				;; ;; cp r17,r19		;; если индекс вышел за пределы буфера
+				;; ;; breq cssFail
+				;; ;; inc r23
+				;; ;; inc r17
+				;; ;; lpm r20,z+		;; байт подстроки
+				;; ;; ld r21,x+		;; байт буфера
+				;; ;; cp r21,r20
+				;; ;; brne css01
+				;; ;; dec r22
+				;; ;; brne css02		;; если не индекс вышел за пределы подстроки
+				;; ;; rjmp cssExit	;; подстрока найдена
+
+	;; ;; css01:		;;символ не совпал, начинаем сначала но со следующей позицией в буфере
+				;; ;; inc r16			;;начнем со следующего байта в буфере
+				;; ;; rjmp css00
+	;; ;; cssFail:
+				;; ;; ser r16		;; 0xFF - ничего не найдено
+	;; ;; cssExit:
+				;; ;; pop r17
+				;; ;; out SREG,r17
+				;; ;; popX
+				;; ;; pop r17
+				;; ;; pop r18
+				;; ;; pop r19
+				;; ;; pop r20
+				;; ;; pop r21
+				;; ;; pop r22
+				;; ;; pop r23
+;; ;; ret ;}
+;; ;; CheckSUMM: ;{		;; проверка контрольной суммы в сообщении
+				;; ;; push r18
+				;; ;; push r17
+				;; ;; push r16
+
+				;; ;; clr r18
+				;; ;; LdiZ(buf_RX)
+				;; ;; ld r17,z+  			;; загрузим счетчик буфера с постинкрементом указателя
+							;; ;; dec r17
+				;; ;; tst r17
+				;; ;; breq chcksm01
+	;; ;; chcksm02:			
+				;; ;; ld r16,z+  			;; загрузим байт из буфера
+				;; ;; add r18,r16
+				;; ;; dec r17
+				;; ;; brne chcksm02
+				;; ;; ld r16,z+  			;; загрузим последний байт из буфера - контрольная сумма
+				;; ;; cp r18,r16
+				;; ;; breq chcksm01
+				;; ;; SetBit ERROR,6		;; (6 бит)ошибка контрольной суммы в сообщении
+	;; ;; chcksm01:
+				;; ;; pop r16
+				;; ;; pop r17
+				;; ;; pop r18
+;; ;; ret ;}
+;}
+
+

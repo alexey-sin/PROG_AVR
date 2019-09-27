@@ -1,0 +1,89 @@
+<GUI_PLUGIN>
+   <FRAMEWORK>
+      <NAME>STK500</NAME>
+      <COMMAND_LIST>[SHOW:FPROG:EPROG:EREAD:AUTO:CONNECT]</COMMAND_LIST>
+      <HELP_FILE/>
+   </FRAMEWORK>
+   <MENUS>
+      <MENU_NAMES>[TOOLS]</MENU_NAMES>
+      <TOOLS>
+         <MENU_TEXT>Program AVR</MENU_TEXT>
+         <SUB_MENU>TRUE</SUB_MENU>
+         <TOOLTIP_HELP/>
+         <MENU_NAMES>[CONNECT:SHOW:-:FPROG:EPROG:EREAD:AUTO]</MENU_NAMES>
+         <CONNECT>
+            <MENU_TEXT>Connect...</MENU_TEXT>
+            <SUB_MENU>FALSE</SUB_MENU>
+            <TOOLTIP_HELP>Display the 'Connect' Dialog</TOOLTIP_HELP>
+            <COMMAND_ID>CONNECT</COMMAND_ID>
+         </CONNECT>
+         <SHOW>
+            <MENU_TEXT>Auto Connect</MENU_TEXT>
+            <SUB_MENU>FALSE</SUB_MENU>
+            <TOOLTIP_HELP>Connect to the Selected AVR Programmer</TOOLTIP_HELP>
+            <COMMAND_ID>SHOW</COMMAND_ID>
+         </SHOW>
+         <FPROG>
+            <MENU_TEXT>Write Flash</MENU_TEXT>
+            <SUB_MENU>FALSE</SUB_MENU>
+            <TOOLTIP_HELP>Write Flash Memory Using Current Settings</TOOLTIP_HELP>
+            <COMMAND_ID>FPROG</COMMAND_ID>
+         </FPROG>
+         <EPROG>
+            <MENU_TEXT>Write EEPROM</MENU_TEXT>
+            <SUB_MENU>FALSE</SUB_MENU>
+            <TOOLTIP_HELP>Write EEPROM Memory Using Current Settings</TOOLTIP_HELP>
+            <COMMAND_ID>EPROG</COMMAND_ID>
+         </EPROG>
+         <EREAD>
+            <MENU_TEXT>Read EEPROM</MENU_TEXT>
+            <SUB_MENU>FALSE</SUB_MENU>
+            <TOOLTIP_HELP>Read EEPROM Memory Using Current Settings</TOOLTIP_HELP>
+            <COMMAND_ID>EREAD</COMMAND_ID>
+         </EREAD>
+         <AUTO>
+            <MENU_TEXT>Start Auto </MENU_TEXT>
+            <SUB_MENU>FALSE</SUB_MENU>
+            <TOOLTIP_HELP>Start Auto Programming</TOOLTIP_HELP>
+            <COMMAND_ID>AUTO</COMMAND_ID>
+         </AUTO>
+      </TOOLS>
+   </MENUS>
+   <TOOLBARS>
+      <TOOLBAR_NAMES>[STK500]</TOOLBAR_NAMES>
+      <STK500>
+         <COMMAND_LIST>[CONNECT:SHOW:FPROG:EPROG:EREAD:AUTO]</COMMAND_LIST>
+         <CONNECT>
+            <COMMAND_ID>CONNECT</COMMAND_ID>
+            <TOOLTIP_HELP>Display the 'Connect' Dialog</TOOLTIP_HELP>
+         </CONNECT>
+         <SHOW>
+            <COMMAND_ID>SHOW</COMMAND_ID>
+            <TOOLTIP_HELP>Connect to the Selected AVR Programmer</TOOLTIP_HELP>
+         </SHOW>
+         <FPROG>
+            <COMMAND_ID>FPROG</COMMAND_ID>
+            <TOOLTIP_HELP>Write Flash Memory Using Current Settings</TOOLTIP_HELP>
+         </FPROG>
+         <EPROG>
+            <COMMAND_ID>EPROG</COMMAND_ID>
+            <TOOLTIP_HELP>Write EEPROM Memory Using Current Settings</TOOLTIP_HELP>
+         </EPROG>
+         <EREAD>
+            <COMMAND_ID>EREAD</COMMAND_ID>
+            <TOOLTIP_HELP>Read EEPROM Memory Using Current Settings</TOOLTIP_HELP>
+         </EREAD>
+         <AUTO>
+            <COMMAND_ID>AUTO</COMMAND_ID>
+            <TOOLTIP_HELP>Start Auto Programming</TOOLTIP_HELP>
+         </AUTO>
+      </STK500>
+   </TOOLBARS>
+   <SHORTCUTS>
+      <NMB_SHORTCUTS>1</NMB_SHORTCUTS>
+      <SHORTCUT_1>
+         <KEYS>ALT+8</KEYS>
+         <COMMAND_ID>SHOW</COMMAND_ID>
+      </SHORTCUT_1>
+   </SHORTCUTS>
+</GUI_PLUGIN>

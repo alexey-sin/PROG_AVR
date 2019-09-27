@@ -1,0 +1,77 @@
+;; 1 группа
+;; Стиль: полужирный
+;; Оттенок:		20		Красный:	128
+;; Контраст:	240		Зеленый:	64
+;; Яркость:		80		Синий:		0
+.INCLUDE .DEF .DSEG .ORG .CSEG .ESEG .EQU .DB .BYTE .MACRO .ENDMACRO
+
+.include .def .dseg .org .cseg .eseg .equ .db .byte .macro .endmacro
+
+;; 2 группа
+;; Стиль: полужирный
+;; Оттенок:		160		Красный:	0
+;; Контраст:	240		Зеленый:	0
+;; Яркость:		120		Синий:		255
+
+ADD ADC ADIW SUB SUBI SBC SBCI SBIW AND ANDI OR ORI EOR COM NEG SBR CBR INC DEC TST CLR SER MUL MULS MULSU FMUL FMULS FMULSU
+RJMP IJMP JMP RCALL ICALL CALL RET RETI CPSE CP CPC CPI SBRC SBRS SBIC SBIS BRBS BRBC BREQ BRNE BRCS BRCC BRSH BRLO BRMI BRPL BRGE BRLT BRHS BRHC BRTS BRTC BRVS BRVC BRIE BRID
+NOP SLEEP WDR BREAK 
+MOV MOVW LDI LD LDD LDS ST STD STS LPM ELPM SPM IN OUT PUSH POP
+SBI CBI LSL LSR ROL ROR ASR SWAP BSET BCLR BST BLD SEC CLC SEN CLN SEZ CLZ SEI CLI SES CLS SEV CLV SET CLT SEH CLH
+
+Add adc adiw sub subi sbc sbci sbiw and andi or ori eor com neg sbr cbr inc dec tst clr ser mul muls mulsu fmul fmuls fmulsu
+rjmp ijmp jmp rcall icall call ret reti cpse cp cpc cpi sbrc sbrs sbic sbis brbs brbc breq brne brcs brcc brsh brlo brmi brpl brge brlt brhs brhc brts brtc brvs brvc brie brid
+nop sleep wdr break 
+mov movw ldi ld ldd lds st std sts lpm elpm spm in out push pop
+sbi cbi lsl lsr rol ror asr swap bset bclr bst bld sec clc sen cln sez clz sei cli ses cls sev clv set clt seh clh
+
+;; 3 группа
+;; Стиль: полужирный
+;; Оттенок:		220		Красный:	170
+;; Контраст:	240		Зеленый:	0
+;; Яркость:		80		Синий:		85
+
+r0 r1 r2 r3 r4 r5 r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 r30 x y z xh xl yh yl zh zl z spl sph 
+
+;; 4 группа
+;; Стиль: 
+;; Оттенок:		220		Красный:	255
+;; Контраст:	240		Зеленый:	0
+;; Яркость:		120		Синий:		128
+
+SetBit ClrBit high low LdiX LdiY LdiZ pushX pushY pushZ pushSREGr16 popX popY popZ popSREGr16 LdiFZ AdrX SbrX AdrY SbrY AdrZ SbrZ
+
+;; 5 группа полужирный
+;; Стиль: 
+;; Оттенок:		160		Красный:	115
+;; Контраст:	77		Зеленый:	115
+;; Яркость:		140		Синий:		183
+
+SREG TCCR0 UCSRA UDRE UDR DDRA PORTA PINA DDRB PORTB PINB DDRC PORTC PINC DDRD PORTD PIND DDRE PORTE PINE DDRF PORTF PINF UBRRH UBRRL UCSRB UCSRC MCUCR GICR TIMSK TWBR TWCR TWSR TWDR TWAR
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

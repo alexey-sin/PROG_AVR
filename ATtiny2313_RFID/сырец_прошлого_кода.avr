@@ -1,0 +1,1374 @@
+.include "..\_AVR_ASSEMBLER\DEFs\tn2313def.inc"
+.equ 	t1			=$60
+.equ 	t2			=$61
+.equ 	t3			=$62
+
+; .equ DELAY_OF_SECURITY	= 3		;время в секундах перед постановкой на охрану(не более 255 => 4.25мин)
+
+; .eseg	;EEPROM энергоНЕзависимая память 128 байт
+; .org 0x000	;EEPROM прошивать ненадо, эти номера контроллер запишет сам при настройке
+; smsc:	.db 7, 9,0,3, 7,0,1, 1,1, 1,1	;телефон SMS сервис центра (1байт- кол-во знаков в номере)79037011111
+; .org 0x010
+; da:		.db 7, 9,1,5, 9,6,3, 3,6, 8,5	;телефон получателя (1байт- кол-во знаков в номере)
+
+; .dseg	;сектор ОЗУ 128 байт, здесь же и стек
+; .org 0x063
+; buff_sms_ascii: .byte 30	;буфер смс в ASCII для передачи
+; buffer: 		.byte 30	;буфер для приема ответов от модуля (1 байт - кол-во символов)
+; buff_sms_c: 	.byte 1		;кол-во символов в сообщении
+; u_batt:			.byte 5		;символы заряда батареи в % (1 байт - кол-во символов)
+
+; ==============================================
+; ==============================================
+; для F = 16МГц (внешний кварц)
+; Фьюзы: для USBASP и PonyProg 	1 => установленный бит => галки нет		( )
+;								0 => сброшенный бит => отмечено галкой 	(V)
+; все биты LOCK установлены
+;---- Fuse High Byte ----
+; DWEN - 				(если V и LOCK не установлены влючается режим отладки debugWIRE через вывод RESET
+; EESAVE -
+; SPIEN - V (недоступен)
+; WDTON -
+; BODLEVEL2 -
+; BODLEVEL1 -
+; BODLEVEL0 -
+; RSTDISBL -   (недоступен)
+;---- Fuse Low Byte ----
+; CKDIV8 -
+; CKOUT -
+; SUT1 -
+; SUT0 - 
+; CKSEL3 - 
+; CKSEL2 -
+; CKSEL1 - 
+; CKSEL0 - 
+; ==============================================
+; ==============================================
+
+; .def DES_KEY_DAT	= r22		;биты активности датчиков 0-активен, 1-дизактивен
+	; ;DES_KEY_DAT: 5бит	датчик 3
+	; ;DES_KEY_DAT: 4бит	датчик 2
+	; ;DES_KEY_DAT: 3бит	датчик 1
+	
+	; ;DES_KEY_DAT: 1бит	низкое напряжение батареи
+
+; .def KEY_DAT	= r23		;биты повторители выводов порта PB	
+	; ;KEY_DAT: 5бит	датчик 3
+	; ;KEY_DAT: 4бит	датчик 2
+	; ;KEY_DAT: 3бит	датчик 1
+	; ;KEY_DAT: 2бит	кнопка START
+	; ;KEY_DAT: 1бит	аналоговый компаратор (питание 1-низкое напряжение) только для режима охраны
+	; ;KEY_DAT: 0бит	кнопка SET
+	
+; .def STATUS		= r25		;статус состояния устройства
+	; ;STATUS: 7бит - 1= начальная включение и инициализация SIM900 прошла успешно
+	; ;STATUS: 6бит - 1= временный выход из режима охраны (0 - обычное состояние)
+	; ;STATUS: 5бит - 1= PDU послано, ожидается ответ
+	; ;STATUS: 4бит - 1= антидребезг контактов кнопок и датчиков, запрещена реакция по выводам; 0 - обычный режим
+	; ;STATUS: 3бит - 1= режим охрана; 0 - обычный режим
+	; ;STATUS: 2бит - 1= блокировка буфера приема (0 - буфер свободен)
+	; ;STATUS: 1бит - 1= режим настройки (0 - обычный режим)
+
+; .def IDENT		= r24		;идентификатор полученных ответов от модуля
+
+	; ;IDENT: 5бит - 1= "+CBC:" - ответ на запрос о батарее
+	; ;IDENT: 4бит - 1= "+CMGS:" - ответ на отправление смс
+	; ;IDENT: 3бит - 1= наличие номера хозяина
+	; ;IDENT: 2бит - 1= наличие номера smsc центра
+	; ;IDENT: 1бит - 1= готовность устройства "+CPAS:"
+	; ;IDENT: 0бит - 1= Получен "ОК"
+	
+.def COUNTER_L		= r25		;счетчик тактовых импульсов 125кГц младший регистр
+.def COUNTER_H		= r24		;счетчик тактовых импульсов 125кГц старший регистр
+;===============================================
+; Блок прерываний - каждый адрес/ссылка = 2 байта
+.cseg
+.org	0x0000			rjmp start	;
+.org	INT0addr		reti	;rjmp RFID_Int	; External Interrupt Request 0
+.org	INT1addr		reti	; External Interrupt Request 1
+.org	ICP1addr		reti	; Timer/Counter1 Capture Event
+.org	OC1Aaddr		reti	; Timer/Counter1 Compare Match A
+.org	OVF1addr		reti	; Timer/Counter1 Overflow (при переполнении счетчика(16бит))
+.org	OVF0addr		rjmp TIM0_OVF	; Timer/Counter0 Overflow (при переполнении счетчика(8бит))
+.org	URXCaddr		reti	;rjmp Receive_Int	; USART, Rx Complete (при возникновении прерывания RXC)
+.org	UDREaddr		reti	; USART Data Register Empty
+.org	UTXCaddr		reti	; USART, Tx Complete
+.org	ACIaddr			reti	; Analog Comparator
+.org	PCIaddr			reti	; при изменении сигналов на выводах PB0-7
+.org	OC1Baddr		reti	; 
+.org	OC0Aaddr		reti	; 
+.org	OC0Baddr		reti	; 
+.org	USI_STARTaddr	reti	; USI Start Condition
+.org	USI_OVFaddr		reti	; USI Overflow
+.org	ERDYaddr		reti	; 
+.org	WDTaddr			reti	; Watchdog Timer Overflow
+;===============================================
+.org 0x020
+start:
+
+	ldi r16,low(RAMEND)
+	out spl,r16
+	; ; rcall d_1000ms
+	
+	clr r10					;R10 - 00000000
+	ser r16
+	mov r11,r16				;R11 - 11111111
+
+;===============================================
+; Настройка портов => DDRx = 1(out); 0 = (in)   PORTx = 1(подтянут к +); 0(в воздухе - 0)
+; Порт A (-,-,-,-,-,2,1,0)
+	; ldi r16,0b00000011
+	; out DDRA,r16
+	; ldi r16,0b00000011
+	; out PORTA,r16
+
+; Порт B (7,6,5,4,3,2,1,0)	PB2(OC0A) - как выход с подтягивающим резистором для выхода 125кГц
+	ldi r16,0b00000100
+	out DDRB,r16
+	ldi r16,0b00000100
+	out PORTB,r16
+
+; ; Порт C
+	; ; out DDRC,r11			;все выводы работают как выход
+	; ; out PORTC,r10			;без подтягивающих резисторов т.е. 0
+
+; Порт D (-,6,5,4,3,2,1,0)	PD2(INT0) - вход импульсов от ридера RFID - красный светодиод
+;							PD4 - зелёный светодиод
+	ldi r16,0b00010000
+	out DDRD,r16
+	ldi r16,0b00010000
+	out PORTD,r16
+;===============================================
+; Настройка 8 разрядного таймера на генерацию 125 кГц
+	ldi r16,0b01000010	;режим СТС, генерация
+	out TCCR0A,r16
+	ldi r16,0b00000001	;без предварительного деления
+	out TCCR0B,r16
+	ldi r16,0b00111111
+	out OCR0A,r16
+;===============================================
+; Аналоговый компаратор		(Отключение 0b10000000 => ACSR)
+	ldi r16,0b01000000
+	out ACSR,r16
+	ldi r16,0b00000010		; Блокируем цифровой ввод по AIN1
+	out DIDR,r16
+;===============================================
+; Настройка USART
+; скорость возьмем 38400
+	; установка скорости 
+	out UBRRH,r10
+	ldi r16,25		;12 для 38400 при 8МГц;  25 для 38400 при 16МГц
+	out UBRRL,r16
+	; ускоритель скорости на 2 выключим (U2X = 0 - 1 бит UCSRA)
+	out UCSRA,r10
+	; (для включения приемника тоже сделать: (1<<RXEN)|(1<<TXEN)
+	;TXEN - включения передатчика
+	;RXEN - включения приемника
+	;TXCIE - разрешить прерывание по окончании передачи байта	|(1<<TXCIE)
+	;RXCIE - разрешить прерывание по окончании приема байта
+	ldi r16,(1<<TXEN)|(1<<RXEN)|(1<<RXCIE)
+	out UCSRB,r16
+	; установка формата кадра (3<<UCSZ0)=011=8бит	(7<<UCSZ0)=111=9бит
+	ldi r16,(0<<UMSEL)|(0<<UPM0)|(0<<UPM1)|(0<<USBS)|(3<<UCSZ0)
+	out UCSRC,r16
+	out UDR,r10		;очистим буфер приема-передачи
+;===============================================
+; Настройка прерываний
+	ldi r16,(1<<ISC00)|(1<<ISC01)		; установка прерываний по любому изменению уровня INT0 (для INT1 (1<<ISC10)|(1<<ISC11))
+	out MCUCR,r16
+	ldi r16,(1<<INT0)		; установка прерываний по INT0  (для INT1 |(1<<INT1))
+	out GIMSK,r16
+	
+	ldi r16,0b00000011		;0b00000001 разрешить прерывание по совпадению на канале А 0(8разр) счетчика  ;  0b00000010 разрешить прерывание по переполнению 0(8разр) счетчика
+	out TIMSK,r16			;или 0b10000010 разрешить прерывание по переполнению 0(8разр) и 1(16разр) счетчиков
+;===============================================
+;===============================================
+	; ldi zh,high(buffer)
+	; ldi zl,low(buffer)
+	; st z,r10   			;Установить указатель сообщения в ноль	
+	
+	; ldi yh,high(buff_sms_ascii)
+	; ldi yl,low(buff_sms_ascii)
+	; st Y,r10   			;Установить указатель сообщения в ноль	
+
+	; clr IDENT			;обнулим идентификатор полученных ответов от модуля
+	; clr STATUS			;обнулим статус состояния устройства
+	; clr KEY_DAT			;обнулим состояние выводов PB
+	
+	cbi PORTD,4		; GREEN
+	clr COUNTER_L 	;обнулим счетчик тактовых импульсов 125кГц младший регистр
+	clr COUNTER_H 	;обнулим счетчик тактовых импульсов 125кГц старший регистр
+	sei
+;##############################################################################################
+;##############################################################################################
+;##############################################################################################
+				; rcall initSIM
+loop:
+; in r16,spl		; стартовый стек 0x00DF
+; rcall out_debug_byte
+
+				; sbrs STATUS,5			;5 PDU послано, ловим ответ
+				; rjmp lp001
+					; clr IDENT			;сбросим флаги ответов
+			; lp002:	sbrs IDENT,0		;пропустить если ОК
+					; rjmp lp002
+					; sbrs IDENT,4		;пропустить если получен "+CMGS:" - ответ на отправление смс
+					; rjmp lp002
+					; cbr STATUS,0b00110000	;снимем 5 PDU послано и блокировку контактов
+					; sbi PORTD,5			; GREEN
+					; sbrs STATUS,3		;пропустить если режим охраны
+					; rjmp lp001
+
+					; ldi r16,10				;задержка на 10 сек.(дадим модулю отправить СМС)
+					; rcall d_sec
+					; rcall modul_off
+					; rjmp loop_sec
+	; lp001:
+				; sbrc STATUS,3
+				; rjmp loop_sec		;если в режиме охраны
+				
+				; ;проверим кнопки
+				; rcall check_key
+				; rcall check_dat
+	; rjmp loop
+;--------
+; loop_sec:
+				; sbi PORTD,5		; GREEN
+				; ;проверим датчики
+				; rcall check_security
+				
+				; sbrc STATUS,6		;если временный выход из режима охраны
+				; rjmp loop
+				
+				; rcall d_100ms
+				; ; Запускаем/перезапускаем 16 битный счетчик. Прерывание по переполнению.
+				; out TCNT1H,r10
+				; out TCNT1L,r10
+				; ldi r16,0b00000101		; 0,125мкс*1024*65536 = 8,388с (переполнение счетчика)
+				; out TCCR1B,r16
+				; ;дальше уходим спать
+				; ldi r16,0b00100000		;Спящий режим Idle
+				; out MCUCR,r16
+				; cbi PORTD,5		; GREEN
+				; ldi STATUS,0b00001000	;остается только бит состояния охраны
+				; SLEEP
+rjmp loop
+;##############################################################################################
+;##############################################################################################
+RFID_Int:	;(INT0) - вход импульсов от ридера RFID - по любому фронту
+			; cli
+			; push r16
+
+			; ldi r17,0xCC
+			; rcall out_byte_RS232
+
+			; pop r16
+			; sei
+			; cbi PORTD,4		; GREEN
+reti
+;===============================================
+TIM0_OVF:
+			; cpi COUNTER_L,255
+			; brsh tm0_1		;перейти если равно или больше
+			; inc COUNTER_L
+
+	; tm0_1:
+
+			; cpi COUNTER_H,255
+			; brsh tm0_1		;перейти если равно или больше
+			; cpi COUNTER_L,255
+			; brsh tm0_1		;перейти если равно или больше
+			
+			; inc COUNTER_L
+			; brcc tm0_2
+			; inc COUNTER_H
+			
+	; tm0_2:	reti
+
+	; tm0_1:	
+			sbi PORTD,4		; GREEN
+
+reti
+;===============================================
+; check_key:
+			; ;BATTERY
+			; sbis ACSR,5
+			; cbi PORTD,6		;RED BATTERY
+			; sbic ACSR,5
+			; sbi PORTD,6		;RED BATTERY
+			
+			; sbrs KEY_DAT,0			;пропустить если 1  (кн. SET нажата)
+			; rjmp chk01
+				; cbr KEY_DAT,0b00000001	;сброс
+				; cbr STATUS,0b00000010	;сбросим флаг ответа: OK
+				; rcall get_nomer_DA
+	; chk01:
+			; sbrs KEY_DAT,2			;пропустить если 1  (кн. START нажата)
+			; ret
+				; cbr KEY_DAT,0b00000100	;сброс
+				; ;встаем на охрану и уходим спать
+				; ;проверка питания
+					; sbic ACSR,5
+					; ret
+				; ;проверка датчиков
+					; sbic PINB,3
+					; ret
+					; sbic PINB,4
+					; ret
+					; sbic PINB,5
+					; ret
+					; clr KEY_DAT
+				; ;мигнем
+					; cbi PORTD,5		; GREEN
+					; rcall d_100ms
+					; sbi PORTD,5		; GREEN
+
+				; ;задержка на постановку под охрану
+					; ldi r16,DELAY_OF_SECURITY				;задержка постановки на охрану
+					; rcall d_sec
+
+				; ;выключаем светодиоды и модуль
+					; rcall modul_off
+; ret
+;===============================================
+; sms_1:		.DB 15,'П','р','о','в','е','р','к','а','\r','с','в','я','з','и','\r'
+; sms_2:		.DB 9,'Т','Р','Е','В','О','Г','А','!','\r'
+; sms_3:		.DB 7,' ','з','о','н','а','.','\r'
+; sms_4:		.DB 8,'Б','а','т','а','р','е','я',' ',0
+; ----------------------------------------------
+;===============================================
+; check_security:
+				; sbr STATUS,0b00010000	;блокируем выводы PB (против дребезга)
+				; cbr KEY_DAT,0b00000101	;сбросим кнопки (на всякий случай)
+				; ;есть ли новые сработки
+				; sbrs KEY_DAT,3			;пропустить если 1 (1 датчик сработал)
+				; rjmp ch_s1
+					; sbrc DES_KEY_DAT,3	;пропустить если уже не активен
+					; cbr KEY_DAT,0b00001000	;сбросим 
+					; sbrs DES_KEY_DAT,3	;пропустить если уже не активен
+					; sbr DES_KEY_DAT,0b00001000	;установим как не активный 
+	; ch_s1:
+				; sbrs KEY_DAT,4			;пропустить если 1 (2 датчик сработал)
+				; rjmp ch_s2
+					; sbrc DES_KEY_DAT,4	;пропустить если уже не активен
+					; cbr KEY_DAT,0b00010000	;сбросим 
+					; sbrs DES_KEY_DAT,4	;пропустить если уже не активен
+					; sbr DES_KEY_DAT,0b00010000	;установим как не активный 
+	; ch_s2:
+				; sbrs KEY_DAT,5			;пропустить если 1 (3 датчик сработал)
+				; rjmp ch_s3
+					; sbrc DES_KEY_DAT,5	;пропустить если уже не активен
+					; cbr KEY_DAT,0b00100000	;сбросим 
+					; sbrs DES_KEY_DAT,5	;пропустить если уже не активен
+					; sbr DES_KEY_DAT,0b00100000	;установим как не активный 
+	; ch_s3:
+				; sbrs KEY_DAT,1			;пропустить если батарея разряжена
+				; rjmp ch_s4
+					; sbrc DES_KEY_DAT,1	;пропустить если уже не активен
+					; cbr KEY_DAT,0b00000010	;сбросим 
+					; sbrs DES_KEY_DAT,1	;пропустить если уже не активен
+					; sbr DES_KEY_DAT,0b00000010	;установим как не активный 
+	; ch_s4:
+				; cpi KEY_DAT,0			;есть ли новые
+				; brne ch_s5
+				; ret
+	; ch_s5:
+				; rcall initSIM
+				
+				; ;составим смс
+				; clr r17					;счетчик байтов текста смс
+				; ldi xh,high(buff_sms_ascii)
+				; ldi xl,low(buff_sms_ascii)
+				
+				; ;определим сработку датчиков
+				; cpi KEY_DAT,2
+				; brne ch_s51
+				; rjmp ch_s6				; если только батарея
+		; ch_s51:	
+				; ;1 часть о сработках датчиков
+				; ldi zh,high(sms_2*2)
+				; ldi zl,low(sms_2*2)
+				; lpm r16,z+
+				; add r17,r16
+				; rcall copy_string
+				
+				; sbrs KEY_DAT,3			;1 датчик не сработал
+				; rjmp ch_s61
+					; ldi r18,$31
+					; st x+,r18
+					; inc r17
+		; ch_s61:
+				; sbrs KEY_DAT,4			;2 датчик не сработал
+				; rjmp ch_s62
+					; ldi r18,$32
+					; st x+,r18
+					; inc r17
+		; ch_s62:
+				; sbrs KEY_DAT,5			;3 датчик не сработал
+				; rjmp ch_s63
+					; ldi r18,$33
+					; st x+,r18
+					; inc r17
+		; ch_s63:
+				; ldi zh,high(sms_3*2)
+				; ldi zl,low(sms_3*2)
+				; lpm r16,z+
+				; add r17,r16
+				; rcall copy_string
+	; ch_s6:
+				; ;2 часть о состоянии батареи
+				; rcall get_Ubat
+				
+				; ldi xh,high(buff_sms_c)
+				; ldi xl,low(buff_sms_c)
+				; st x,r17
+
+				; clr KEY_DAT
+				; ldi STATUS,0b01001000	;временный выход из состояния охраны
+				; rcall send_query
+; ret
+; ;===============================================
+; get_Ubat:	;о состоянии батареи
+				; ldi zh,high(sms_4*2)
+				; ldi zl,low(sms_4*2)
+				; lpm r16,z+
+				; add r17,r16
+				; rcall copy_string
+				; push r17
+				; ;запросим состояние батареи
+					; ldi zh,high(at_cbc*2)
+					; ldi zl,low(at_cbc*2)
+					; clr IDENT
+					; rcall out_str_lpm
+		; ch_s7:	
+				; sbrs IDENT,5		;пропустить если получен "+CBC:" - ответ на запрос о состоянии батареи
+				; rjmp ch_s7
+				; sbrs IDENT,0		;пропустить если ОК
+				; rjmp ch_s7
+		
+				; pop r17
+				; ldi yh,high(buffer)
+				; ldi yl,low(buffer)
+				; ld r16,y
+				; add yl,r16			; прирастим
+				; brcc ch_s8			;если перенос инкременируем старший разряд
+				; inc yh
+		; ch_s8:
+				; ld r16,y+
+				; cpi r16,$2C
+				; breq ch_s9
+				; st x+,r16
+				; inc r17
+				; rjmp ch_s8
+; ; ldi r16,$37
+; ; st x+,r16
+; ; inc r17
+; ; ldi r16,$36
+; ; st x+,r16
+; ; inc r17
+				
+		; ch_s9:
+				; ldi r16,'%'	;%
+				; st x+,r16
+				; inc r17
+
+				; ldi yh,high(buffer)
+				; ldi yl,low(buffer)
+				; st y,r10
+				; cbr STATUS,0b00000100	;освободим буфер
+; ret
+; ;===============================================
+; send_TEST_SMS:
+				; ldi zh,high(sms_1*2)
+				; ldi zl,low(sms_1*2)
+				; ldi xh,high(buff_sms_ascii)
+				; ldi xl,low(buff_sms_ascii)
+				; lpm r16,z+
+				; mov r17,r16
+				
+				; rcall copy_string
+				; rcall get_Ubat
+		
+				; ldi xh,high(buff_sms_c)
+				; ldi xl,low(buff_sms_c)
+				; st x,r17
+				; rcall send_query
+; ret
+; ;===============================================
+; copy_string:
+				; lpm r18,z+
+				; st x+,r18
+				; dec r16
+				; brne copy_string
+; ret
+; ;===============================================
+; modul_off:
+		; ; выключим модуль
+			; ldi zh,high(at_cpowd*2)
+			; ldi zl,low(at_cpowd*2)
+			; rcall out_str_lpm
+
+		; ; выключим USART
+			; out UCSRB,r10
+			; ldi STATUS,0b00001000	;остается только бит состояния охраны
+; ret
+; ;===============================================
+; PCINT_Int:
+			; sbrc STATUS,4	;пропустить если запрещена реакция по выводам (1)
+			; reti
+			
+			; sbrc STATUS,3
+			; rjmp pcint_sec			;если в режиме охраны
+			
+			; ; обычный режим
+			; sbrs STATUS,7	;пропустить если идет начальная установка/проверка состояния SIM900
+			; reti
+			
+			; cli
+			; push r16
+			
+			; sbr STATUS,0b00010000	;блокируем выводы PB
+				
+			; rcall set_key_dat
+			; out TCNT1H,r10
+			; out TCNT1L,r10
+			; ldi r16,0b00000011		; 0,125мкс*64*65536 = 524,288мс (переполнение счетчика)
+			; out TCCR1B,r16
+
+			; pop r16
+			; sei
+; reti
+; ;--------
+	; pcint_sec:
+			; ; режим охраны
+			; cli
+			; out TCCR1B,r10		; Останавливаем 16 битный счетчик.
+			; rcall set_key_dat
+			; sei
+; reti
+; ;===============================================
+; over_16:
+			; cli
+			; out TCCR1B,r10			; Останавливаем 16 битный счетчик.
+			; cbr STATUS,0b00010000	;снимаем блокировку выводов PB
+			; sbrc STATUS,3
+			; rcall set_key_dat	; режим охраны
+			; sei
+; reti
+; ;===============================================
+; set_key_dat:
+			; sbis PINB,0			;пропустить если 1 (кн. SET не нажата)
+			; sbr KEY_DAT,0b00000001
+			; sbic ACSR,5
+			; sbr KEY_DAT,0b00000010
+			; sbis PINB,2			;пропустить если 1 (кн. START не нажата)
+			; sbr KEY_DAT,0b00000100
+			; sbic PINB,3			;пропустить если 0 (1 датчик не сработал)
+			; sbr KEY_DAT,0b00001000
+			; sbic PINB,4			;пропустить если 0 (2 датчик не сработал)
+			; sbr KEY_DAT,0b00010000
+			; sbic PINB,5			;пропустить если 0 (3 датчик не сработал)
+			; sbr KEY_DAT,0b00100000
+; ret
+; ;===============================================
+; check_dat:
+			; sbic PINB,3			;1 датчик
+			; sbi PORTD,4			;светодиод 1 датчик RED
+			; sbis PINB,3			;1 датчик
+			; cbi PORTD,4			;светодиод 1 датчик RED
+			
+			; sbic PINB,4			;2 датчик
+			; sbi PORTD,3			;светодиод 2 датчик RED
+			; sbis PINB,4			;2 датчик
+			; cbi PORTD,3			;светодиод 2 датчик RED
+			
+			; sbic PINB,5			;3 датчик
+			; sbi PORTD,2			;светодиод 3 датчик RED
+			; sbis PINB,5			;3 датчик
+			; cbi PORTD,2			;светодиод 3 датчик RED
+; ret
+; ;===============================================
+; over_8:		;конец приема слова
+			; cli
+			; push zh
+			; push zl
+			; push yh
+			; push yl
+			; push xh
+			; push xl
+			; push r20
+			; push r19
+			; push r18
+			; push r17
+			; push r16
+			; ; Останавливаем 8 битный счетчик.
+			; out TCCR0B,r10
+			
+			; sbr STATUS,0b00000100	;блокируем буфер, получен ответ от модуля
+			
+			; ;анализируем на ответ
+			; ldi yh,high(world_0*2)	;"+CPAS:" готовность устройства
+			; ldi yl,low(world_0*2)
+			; rcall compare_world
+			; tst r16
+			; breq ovr00
+			
+				; ldi xh,high(buffer)
+				; ldi xl,low(buffer)
+				; subi r16,-7			;добавим смещение от начала "+CPAS:" до первой цифры
+				; add xl,r16			; прирастим
+				; brcc ovr001			;если перенос инкременируем старший разряд
+				; inc xh
+		; ovr001:
+				; ld r16,x
+				; cpi r16,$30			;0x30 => 0 - устройство готово
+				; brne ovr002
+					; sbr IDENT,0b00000010	;установим готовность устройства "+CPAS:"
+					; rjmp ovr_out
+		; ovr002:
+				; rcall repeat_at		;повторим последнюю команду
+				; rjmp ovr_out
+	; ovr00:
+			; ldi yh,high(world_1*2)		;">"
+			; ldi yl,low(world_1*2)
+			; rcall compare_world
+			; tst r16
+			; breq ovr01
+				; rcall send_pdu
+			; rjmp ovr_out
+	; ovr01:
+			; ldi yh,high(world_2*2)		;"OK"
+			; ldi yl,low(world_2*2)
+			; rcall compare_world
+			; tst r16
+			; breq ovr02
+				; sbr IDENT,0b00000001	;получен "OK"
+	; ovr02:
+			; ldi yh,high(world_3*2)		;"ERROR"
+			; ldi yl,low(world_3*2)
+			; rcall compare_world
+			; tst r16
+			; breq ovr03
+				; rcall repeat_at		;повторим последнюю команду
+			; rjmp ovr_out
+	; ovr03:
+			; ldi yh,high(world_4*2)		;"+CSCA:"
+			; ldi yl,low(world_4*2)
+			; rcall compare_world
+			; tst r16
+			; breq ovr04
+			; ;запишем полученный номер SMS центра
+			; rcall write_smsc
+				; sbr IDENT,0b00000100	;получен номер SMS центра
+			; rjmp ovr_out
+	; ovr04:
+			; ldi yh,high(world_5*2)		;"+CLIP:"
+			; ldi yl,low(world_5*2)
+			; rcall compare_world
+			; tst r16
+			; breq ovr05
+			
+			; sbrs STATUS,1		;пропустить если режим настройки
+			; rjmp ovr07
+			; ;запишем полученный номер хозяина
+			; rcall write_da
+				; sbr IDENT,0b00001000	;получен номер хозяина
+				
+		; ovr07:	;сбросим входящий звонок
+				; rcall d_500ms
+				; ldi zh,high(at_ath*2)
+				; ldi zl,low(at_ath*2)
+				; rcall out_str_lpm
+				
+			; rjmp ovr_out
+	; ovr05:
+			; ldi yh,high(world_6*2)		;"+CMGS:"
+			; ldi yl,low(world_6*2)
+			; rcall compare_world
+			; tst r16
+			; breq ovr06
+				; sbr IDENT,0b00010000	;получен "+CMGS:" - ответ на отправление смс
+			; rjmp ovr_out
+	; ovr06:
+			; ldi yh,high(world_7*2)		;"+CBC:"
+			; ldi yl,low(world_7*2)
+			; rcall compare_world
+			; tst r16
+			; breq ovr_out
+				; sbr IDENT,0b00100000	;получен "+CBC:" - ответ на запрос о состоянии батареи
+				; ;оставим в первом байте буфера позицию значений о % заряда
+				; subi r16,-8			;добавим смещение от начала "+CBC:" до первой цифры значения
+				; ldi yh,high(buffer)
+				; ldi yl,low(buffer)
+				; st y,r16
+				; rjmp ovr_outX		;выйдем без очистки буфера
+
+	; ovr_out:
+			; ldi xh,high(buffer)
+			; ldi xl,low(buffer)
+			; st x,r10
+			; cbr STATUS,0b00000100	;освободим буфер
+			
+	; ovr_outX:
+			; pop r16
+			; pop r17
+			; pop r18
+			; pop r19
+			; pop r20
+			; pop xl
+			; pop xh
+			; pop yl
+			; pop yh
+			; pop zl
+			; pop zh
+			; sei
+; reti
+; ;===============================================
+; repeat_at:
+			; rcall d_1000ms
+			; ldi zh,high(at_repeat*2)	;повторим последнюю команду
+			; ldi zl,low(at_repeat*2)
+			; rcall out_str_lpm
+; ret
+; ;===============================================
+; .cseg
+; world_0: .DB 4,'+','C','P','A','S',':',0				;"+CPAS:"
+; world_1: .DB 4,'\r','\n','>',' ',0						;">"
+; world_2: .DB 6,'\r','\n','O','K','\r','\n',0			;"OK"
+; world_3: .DB 9,'\r','\n','E','R','R','O','R','\r','\n'	;"ERROR"
+; world_4: .DB 6,'+','C','S','C','A',':',0				;"+CSCA:"
+; world_5: .DB 6,'+','C','L','I','P',':',0				;"+CLIP:"
+; world_6: .DB 6,'+','C','M','G','S',':',0				;"+CMGS:"
+; world_7: .DB 5,'+','C','B','C',':'						;"+CBC:"
+; ;===============================================
+; compare_world:		;поиск первого вхождения подстроки в буфере. yh,yl - индекс подстроки(lpm)
+; ;возвращает в r16 позицию начала первого вхождения подстроки (с 1). 0 - если подстрока не найдена
+			; clr r16			;счетчик просмотренных байтов
+	; cw00:		
+			; mov zh,yh
+			; mov zl,yl
+			; ldi xh,high(buffer)
+			; ldi xl,low(buffer)
+			; ld r20,x+		;загрузим кол-во байт ответа модуля
+			; add xl,r16
+			; brcc cw03
+			; inc xh
+	; cw03:
+			; lpm r19,z+		;байтов в подстроке
+			; sub r20,r19		;если байтов в подстроке больше чем в принятом буфере
+			; brcs fail
+			
+	; cw02:	lpm r17,z+		;байт подстроки
+			; ld r18,x+		;байт буфера
+			; sub r18,r17
+			; brne cw01
+			; dec r19
+			; brne cw02
+			; inc r16			;подстрока найдена
+			; ret
+	; cw01:	
+			; inc r16
+			; sub r20,r16
+			; brcs fail
+			; rjmp cw00
+	; fail:
+			; clr r16
+			; ret
+; ;===============================================
+; initSIM:
+			; ; Настройка USART
+			; out UDR,r10				;очистим буфер приема-передачи
+			; ldi r16,0b00100000		;Регистр данных пуст
+			; out UCSRA,r16
+			; ldi r16,0b10011000		;вкл приемник и передатчик с прерыванием по приему
+			; out UCSRB,r16
+			; ldi r16,0b00000110		;асинхронный, без контроля четности, 1 стоп-бит, 8 бит данные
+			; out UCSRC,r16
+
+			; out UBRRH,r10
+			; ldi r16,12				;для 38400 => (8000000\(16*38400))-1 = 12
+			; out UBRRL,r16			; 1/38400 = 0,000026s = 26mks/bit 10bit = 260mks
+			
+			; ; Включение SIM900
+			; cbi PORTA,1
+			; rcall d_500ms
+			; sbi PORTA,1
+			
+			; ldi r16,20				;задержка на 30 сек.
+			; rcall d_sec
+			
+	; ;отключим эхо команд
+			; ldi zh,high(at_e0*2)
+			; ldi zl,low(at_e0*2)
+			; clr IDENT
+			; rcall out_str_lpm
+	; iSIM00:	
+			; sbrs IDENT,0		;пропустить если ОК
+			; rjmp iSIM00
+			; rcall d_500ms
+			
+	; ;готовность устройства
+			; ldi zh,high(at_cpas*2)
+			; ldi zl,low(at_cpas*2)
+			; clr IDENT
+	; iSIM01:	
+			; rcall out_str_lpm
+			; rcall d_1000ms
+			; sbrs IDENT,1		;готовность устройства "+CPAS:"
+			; rjmp iSIM01
+			
+	; ; ;сброс настроек
+			; ; ldi zh,high(at_f*2)
+			; ; ldi zl,low(at_f*2)
+			; ; clr IDENT
+			; ; rcall out_str_lpm
+	; ; iSIM00:	
+			; ; sbrs IDENT,0		;пропустить если ОК
+			; ; rjmp iSIM00
+			; ; rcall d_500ms	;пауза после сброса заводских настроек
+			
+	; ;включить вывод номера вызывающего абонента
+			; ldi zh,high(at_clip1*2)
+			; ldi zl,low(at_clip1*2)
+			; clr IDENT
+			; rcall out_str_lpm
+	; iSIM02:	
+			; sbrs IDENT,0		;пропустить если ОК
+			; rjmp iSIM02
+			; rcall d_500ms
+			
+	; ;формат сообщений SMS -> PDU
+			; ldi zh,high(at_cmgf0*2)
+			; ldi zl,low(at_cmgf0*2)
+			; clr IDENT
+			; rcall out_str_lpm
+	; iSIM03:	
+			; sbrs IDENT,0		;пропустить если ОК
+			; rjmp iSIM03
+			; rcall d_500ms
+			
+	; ;записан ли номер smsc центра
+			; ldi r16,low(smsc)
+			; rcall load_e
+			; cpi r16,$FF			;1байт в номере не записан
+			; brne iSIM06
+				; ldi zh,high(at_csca*2)
+				; ldi zl,low(at_csca*2)
+				; clr IDENT
+				; rcall out_str_lpm
+		; iSIM05:	
+				; sbrs IDENT,2
+				; rjmp iSIM05
+	; ;записан ли номер абонента	
+	; iSIM06:
+			; ldi r16,low(da)	
+			; rcall load_e
+			; cpi r16,$FF			;1байт в номере не записан
+			; brne iSIM07
+			; clr IDENT
+			; rcall get_nomer_DA
+	; iSIM07:		
+			; ;конец инициализации SIM
+			; sbr STATUS,0b10000000	;начальная установка/проверка состояния SIM900 прошла успешно
+			; sbi PORTD,5		; GREEN
+; ret
+; ;===============================================
+; write_smsc:		;запись номера смс центра в память EEROM
+			; ; ответ:  ..+CSCA: "+79037011111",145....
+			; ; 0D 0A 2B 43 53 43 41 3A 20 22 2B 37 39 30 33 37 30 31 31 31 31 31 22 2C 31 34 35 0D 0A 0D 0A
+			
+			; ldi r18,11			; счетчик байтов номера
+			; clr xh
+			; ldi xl,low(buffer)
+			; subi r16,-9			;добавим смещение от начала "+CSCA:" до первой цифры номера (7)
+			; add xl,r16			; прирастим
+
+			; ldi r17,low(smsc)
+	; ws01:	ld r16,x+
+			; subi r16,$30		;из текста в просто цифру
+			; rcall save_e		;запишем
+			; inc r17
+			; dec r18
+			; brne ws01			;номер не весь - продолжим
+; ret
+; ;===============================================
+; write_da:		;запись номера абонента в память EEROM
+			; ; ответ:  ..RING....+CLIP: "+79159633685"...
+			; ; 0D 0A 52 49 4E 47 0D 0A 0D 0A 2B 43 4C 49 50 3A 20 22 2B 37 39 31 35 39 36 33 33 36 38 35 22....
+			
+			; ldi r18,11			; счетчик байтов номера
+			; clr xh
+			; ldi xl,low(buffer)
+			; subi r16,-9			;добавим смещение от начала "+CLIP:" до первой цифры номера (7)
+			; add xl,r16			; прирастим
+
+			; ldi r17,low(da)
+	; ws02:	ld r16,x+
+			; subi r16,$30		;из текста в просто цифру
+			; rcall save_e		;запишем
+			; inc r17
+			; dec r18
+			; brne ws02			;номер не весь - продолжим
+; ret
+; ;===============================================
+; load_e:			;чтение из EEPROM r16=>адрес и выходные данные
+			; sbic EECR,1			;можно ли записывать адрес
+			; rjmp load_e			;выждем процесс прошлой записи ~3,4мс
+			; out EEAR,r16
+			; sbi EECR,EERE
+			; in r16,EEDR
+; ret
+; ;===============================================
+; save_e:			;сохранение в EEPROM r17=>адрес; r16-данные
+			; sbic EECR,1			;можно ли записывать адрес
+			; rjmp save_e			;выждем процесс прошлой записи ~3,4мс
+			; out EEAR,r17
+			; out EEDR,r16
+			; sbi EECR,2
+			; sbi EECR,1
+; ret
+; ;===============================================
+; get_nomer_DA:
+			; sbr STATUS,0b00000010	;установим режим настройки
+			; rcall d_100ms
+			; cbi PORTD,5		; GREEN
+			
+			; sbrs IDENT,3		;пропустить если получен RING с номером
+			; rjmp gnd02		;если нет - дальше
+				; clr IDENT
+				; sbi PORTD,5		; GREEN
+				; cbr STATUS,0b00000010	;снимем режим настройки
+				; ret
+	; gnd02:	
+			; sbrs KEY_DAT,0			;пропустить если 0  (кн. SET нажата)
+			; rjmp gnd03
+					; mov r16,KEY_DAT
+					; cbr r16,0b00000001	;сброс
+					; mov KEY_DAT,r16
+				; sbi PORTD,5		; GREEN
+				; cbr STATUS,0b00000010	;снимем режим настройки
+				; ret
+	; gnd03:	
+			; sbrs KEY_DAT,2			;пропустить если 0  (кн. START нажата)
+			; rjmp gnd04
+					; mov r16,KEY_DAT
+					; cbr r16,0b00000100	;сброс
+					; mov KEY_DAT,r16
+					; sbr STATUS,0b00010000	;блокируем выводы PB
+					; rcall send_TEST_SMS
+					; cbr STATUS,0b00000010	;снимем режим настройки
+			; ret
+	; gnd04:	
+			; rcall d_100ms
+			; sbi PORTD,5		; GREEN
+; rjmp get_nomer_DA
+; ;===============================================
+; out_str_lpm:		;вывод строки по RS из памяти flash. zh,zl - адрес строки
+			; push r17
+			; push r18
+			; lpm r18,z+
+	; o_str1:	lpm r17,z+
+			; rcall out_byte
+			; dec r18
+			; brne o_str1
+			; pop r18
+			; pop r17
+; ret
+; ;===============================================
+; out_str_sram:		;вывод строки по RS из памяти sram. zh,zl - адрес строки
+			; push r17
+			; push r18
+			; ld r18,z+
+	; o_str2:	ld r17,z+
+			; rcall out_byte
+			; dec r18
+			; brne o_str2
+			; pop r18
+			; pop r17
+; ret
+; ;===============================================
+; out_byte:
+			; sbis UCSRA,UDRE
+			; rjmp out_byte
+			; out UDR,r17
+; ret
+;===============================================
+out_byte_RS232:
+			sbis UCSRA,UDRE
+			rjmp out_byte_RS232
+			out UDR,r17
+ret
+;===============================================
+; ; ----------------------------------------------
+; at_repeat:	.DB 2,'A','/',0
+; ; at_f:		.DB 6,'A','T','&','F','\r','\n',0
+; at_e0:		.DB 6,'A','T','E','0','\r','\n',0
+; at_clip1:	.DB 11,'A','T','+','C','L','I','P','=','1','\r','\n'
+; at_cmgf0:	.DB 11,'A','T','+','C','M','G','F','=','0','\r','\n'
+; at_cpas:	.DB 9,'A','T','+','C','P','A','S','\r','\n'
+; at_csca:	.DB 10,'A','T','+','C','S','C','A','?','\r','\n',0
+; at_cmgs:	.DB 8,'A','T','+','C','M','G','S','=',0
+; at_cbc:		.DB 8,'A','T','+','C','B','C','\r','\n',0
+; at_ath:		.DB 5,'A','T','H','\r','\n'
+; at_cpowd:	.DB 12,'A','T','+','C','P','O','W','D','=','0','\r','\n',0	;AT+CPOWD=0 выключить без посылки сообщения NORMAL POWER DOWN
+; ; ----------------------------------------------
+; ;===============================================
+; send_query:
+		; ldi zh,high(buff_sms_c)
+		; ldi zl,low(buff_sms_c)
+		; ld r17,z
+		; lsl r17
+		; subi r17,-14
+		; mov r18,r17
+
+		; ldi zh,high(at_cmgs*2)
+		; ldi zl,low(at_cmgs*2)
+		; rcall out_str_lpm
+
+; ;закоментирован блок требуется если итоговое PDU больше 100 байт
+		; ; ldi r17,-1
+; ; s_m2:	inc r17
+		; ; subi r18,100
+       	; ; brsh s_m2
+		; ; subi r18,-100
+		; ; tst r17
+		; ; breq s_m3
+		; ; subi r17,-$30
+		; ; rcall out_byte
+
+; s_m3:	ldi r17,-1
+; s_m4:	inc r17
+		; subi r18,10
+       	; brsh s_m4
+		; subi r18,-10
+		; subi r17,-$30
+		; rcall out_byte
+	
+		; ldi r17,-1
+; s_m5:	inc r17
+		; subi r18,1
+       	; brsh s_m5
+		; subi r17,-$30
+		; rcall out_byte
+
+		; ldi r17,$0D	
+		; rcall out_byte
+; ret
+; ;===============================================
+; send_pdu:
+		; ldi r19,$07
+		; rcall out_double_byte
+		
+		; ldi r16,low(smsc)
+		; rcall send_number
+
+		; ldi r19,$11
+		; rcall out_double_byte
+		; clr r19
+		; rcall out_double_byte
+
+		; ldi r19,$0B
+		; rcall out_double_byte
+
+	    ; ldi r16,low(da)
+		; rcall send_number
+
+		; clr r19
+		; rcall out_double_byte
+		; ldi r19,$08
+		; rcall out_double_byte
+		; ser r19
+		; rcall out_double_byte
+
+		; ldi xh,high(buff_sms_c)
+		; ldi xl,low(buff_sms_c)
+		; ld r19,X
+		; mov r20,r19
+		; lsl r19
+		; rcall out_double_byte
+		
+		; ldi xh,high(buff_sms_ascii)
+		; ldi xl,low(buff_sms_ascii)
+; spd2:	ld r19,X+
+		; cpi r19,$C0
+		; brsh spd3
+		; rcall out_double_byte_eng
+		; rjmp spd4
+		
+; spd3:	rcall out_double_byte_rus	
+		
+; spd4:	dec r20
+		; brne spd2
+		
+		; ldi r17,$1a			;последний байт PDU сообщения
+		; rcall out_byte
+		
+		; sbr STATUS,0b00100000	;5 PDU послано
+		; ret
+; ; ----------------------------------------------
+; send_number:
+		; ldi r17,11
+		; ldi r19,$91
+		; rcall out_double_byte
+		; clr r18
+; sn1:    rcall load_e
+		; sbrc r17,0
+		; rjmp sn2		;нечетное
+		; swap r16
+		; or r19,r16
+		; rcall out_double_byte
+		; rjmp sn3
+; sn2:	mov r19,r16
+; sn3:	in r16,EEAR
+		; inc r16
+		; dec r17
+		; brne sn1
+		; ori r19,$f0
+		; rcall out_double_byte
+; ret
+; ; ----------------------------------------------
+; out_double_byte:	;r19-вход, выход:r17
+		; push r17
+
+		; mov r17,r19
+		; swap r17
+		; cbr r17,0b11110000
+		; sbr r17,0b00110000
+		; rcall check_alfa
+		; rcall out_byte
+		; mov r17,r19
+		; cbr r17,0b11110000
+		; sbr r17,0b00110000
+		; rcall check_alfa
+		; rcall out_byte
+
+		; pop r17
+; ret
+; ; ----------------------------------------------
+; out_double_byte_rus:	;r19-вход, выход:r19
+		; push r19
+		; push r18
+		; push r16
+
+		; ldi r16,$03
+		; ldi r18,$50
+		; add r18,r19
+		; brcc odbr
+		; inc r16
+; odbr:	mov r19,r16
+		; rcall out_double_byte
+		; mov r19,r18
+		; rcall out_double_byte
+
+		; pop r16
+		; pop r18
+		; pop r19
+; ret
+; ; ----------------------------------------------
+; out_double_byte_eng:	;r19-вход, выход:r19
+		; push r19
+		; push r18
+		; mov r18,r19
+		; ldi r19,0
+		; rcall out_double_byte
+		; mov r19,r18
+		; rcall out_double_byte
+		; pop r18
+		; pop r19
+; ret
+; ; ----------------------------------------------
+; check_alfa:
+		; cpi r17,$3a
+		; brne ca1
+		; ldi r17,$41
+		; ret
+; ca1:	cpi r17,$3b
+		; brne ca2
+		; ldi r17,$42
+		; ret
+; ca2:	cpi r17,$3c
+		; brne ca3
+		; ldi r17,$43
+		; ret
+; ca3:	cpi r17,$3d
+		; brne ca4
+		; ldi r17,$44
+		; ret
+; ca4:	cpi r17,$3e
+		; brne ca5
+		; ldi r17,$45
+		; ret
+; ca5:	cpi r17,$3f
+		; brne ca6
+		; ldi r17,$46
+; ca6:	ret
+;===============================================
+Receive_Int:	; обработка прерывания при поступлении очередного байта в приемник UART
+			; sbrc STATUS,2		;пропустить буфер не занят
+			; reti
+			
+			cli
+			; push zh
+			; push zl
+			push r17
+			push r16
+
+			; ; Останавливаем 8 битный счетчик.
+			; out TCCR0B,r10
+
+			in r16,UDR             ;Считать байт из регистра данных приемника
+			mov r17,r16
+			rcall out_byte_RS232
+			; ;сохраним байт в буфере
+			; ldi zh,high(buffer)
+			; ldi zl,low(buffer)
+			; ld r17,z   			;загрузим указатель буфера	
+			; inc r17				;чтобы запись не началась на указатель
+			; cpi r17,50			;если случился перебор
+			; brne id01
+			; clr r17
+			; clr r16
+	; id01:	st z,r17			;запишем указатель
+			; add zl,r17
+			; brcc id02
+			; inc zh
+	; id02:	st z,r16
+
+			; ; Запускаем/перезапускаем 8 битный счетчик. Прерывание по переполнению.
+			; out TCNT0,r10
+			; ldi r16,0b00000011		; 0,125мкс*64*256 = 2,048мс (переполнение счетчика) а длительность байта 260мкс
+			; out TCCR0B,r16
+
+			pop r16
+			pop r17
+			; pop zl
+			; pop zh
+			sei
+reti
+;===============================================
+; out_debug_byte:		;r16 - отправляемый байт
+			; push r17
+
+			; ldi r17,8			;счетчик битов
+			; cbi PORTA,0			;стартовый бит
+			; rcall d_bit_deb
+	; t_bit:	sbrc r16,0
+			; sbi PORTA,0
+			; sbrs r16,0
+			; cbi PORTA,0
+			; ror r16
+			; rcall d_bit_deb
+			; dec r17
+			; brne t_bit
+			; sbi PORTA,0			;стоповый бит
+			; rcall d_bit_deb
+
+			; pop r17
+			; ret
+; ; ----------------------------------------------
+; ;для скорости 38400 длительность бита 1/38400 = 26,04мкс (при f=8MHz такт=0,125мкс)
+; ; 3(rcall)+2+1+ K(1+2)-1 +2+4(ret) = TKT		TKT*0,125 = Tmkc
+; ; K = (Tmkc/0,125 - 11)/3		=> (26.04/0.125 - 11)/3 = 65.7 ~ 66
+; d_bit_deb:
+		; push r16
+		; ldi r16,66
+; del5:	dec r16
+		; brne del5
+		; pop r16
+		; ret
+; ----------------------------------------------
+;===============================================
+; ----------------------------------------------
+;БЛОК ЗАДЕРЖЕК		расчет задержек включает вход и выход из подпрограммы задержки
+; (при f=8MHz такт=0,125мкс)
+; ----------------------------------------------
+; d_sec:	;задержка по количеству секунд (r16)
+		; rcall d_1000ms
+		; dec r16
+		; brne d_sec
+; ret
+; ----------------------------------------------
+; d_100ms:
+		; push r16
+		; ldi r16,9
+		; sts t1,r16
+		; ldi r16,116
+		; sts t2,r16
+		; ldi r16,255
+		; sts t3,r16
+		; rcall delay
+		; pop r16
+		; ret
+; ----------------------------------------------
+; d_200ms:
+		; push r16
+		; ldi r16,9
+		; sts t1,r16
+		; ldi r16,232
+		; sts t2,r16
+		; ldi r16,255
+		; sts t3,r16
+		; rcall delay
+		; pop r16
+		; ret
+; ----------------------------------------------
+; d_500ms:
+		; push r16
+		; ldi r16,255
+		; sts t1,r16
+		; ldi r16,118
+		; sts t2,r16
+		; ldi r16,43
+		; sts t3,r16
+		; rcall delay
+		; pop r16
+		; ret
+; ----------------------------------------------
+; d_800ms:	; 3(rcall)+2+1+2+1+2+1+2+3(rcall)+[2+2+2+2+{ t1*(5+t2*(5+(t3*3-1))-1)-1 }+2+2+2+4(ret)]+2+4(ret) = X*T(0.125) = 
+			; ; 41+{ t1*(5+t2*(5+(t3*3-1))-1)-1 } = 41+ 34*188504-1 = 6409176*0.125 = 801147мкс = 801,147мс
+		; push r16	;2
+		; ldi r16,34	;1
+		; sts t1,r16	;2
+		; ldi r16,250	;1
+		; sts t2,r16	;2
+		; ldi r16,250	;1
+		; sts t3,r16	;2
+		; rcall delay	;3
+		; pop r16		;2
+		; ret			;4
+; ----------------------------------------------
+; d_1000ms:		;1000,625mc
+		; push r16
+		; ldi r16,255
+		; sts t1,r16
+		; ldi r16,236
+		; sts t2,r16
+		; ldi r16,43
+		; sts t3,r16
+		; rcall delay
+		; pop r16
+		; ret
+; ----------------------------------------------
+;использование см. выше. минимум(1,1,1)= 41+{1*(5+1*(5+(1*3-1))-1)-1 } = 51*0.125 = 6.375мкс
+; delay:	
+		; push r13	;2
+		; push r14	;2
+		; push r15	;2
+		; lds r15,t1	;2
+; del3:	lds r14,t2	;2
+; del2:	lds r13,t3	;2
+; del1:	dec r13		;1
+		; brne del1	;2/1
+		; dec r14		;1
+		; brne del2	;2/1
+		; dec r15		;1
+		; brne del3	;2/1
+		; pop r15		;2
+		; pop r14		;2
+		; pop r13		;2
+		; ret			;4
+; ----------------------------------------------
+
+
+
+

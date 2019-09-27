@@ -1,0 +1,131 @@
+;; Макросы (принимают до 10 параметров "@0 - @9" 
+.macro SetBit	;{ ;; установить бит в регистре SetBit r8,4
+	push r16
+	mov r16,@0
+	sbr r16,(1 << @1)
+	mov @0,r16
+	pop r16
+.endmacro ;}
+.macro ClrBit	;{ ;; сбросить бит в регистре ClrBit r8,4
+	push r16
+	mov r16,@0
+	cbr r16,(1 << @1)
+	mov @0,r16
+	pop r16
+.endmacro ;}
+.macro LdiZ		;{ ;; загрузить в регистровую пару Z адрес
+	ldi zh,high(@0)
+	ldi zl,low(@0)
+.endmacro ;}
+.macro LdiY		;{ ;; загрузить в регистровую пару Y адрес
+	ldi yh,high(@0)
+	ldi yl,low(@0)
+.endmacro ;}
+.macro LdiX		;{ ;; загрузить в регистровую пару X адрес
+	ldi xh,high(@0)
+	ldi xl,low(@0)
+.endmacro ;}
+.macro pushX	;{ ;; 
+	push xh	;; r27
+	push xl ;; r26
+.endmacro ;}
+.macro pushY	;{ ;; 
+	push yh	;; r29
+	push yl	;; r28
+.endmacro ;}
+.macro pushZ	;{ ;; 
+	push zh	;; r31
+	push zl	;; r30
+.endmacro ;}
+.macro popX		;{ ;; 
+	pop xl	;; r26
+	pop xh	;; r27
+.endmacro ;}
+.macro popY		;{ ;; 
+	pop yl	;; r28
+	pop yh	;; r29
+.endmacro ;}
+.macro popZ		;{ ;; 
+	pop zl	;; r30
+	pop zh	;; r31
+.endmacro ;}
+.macro AdrX		;{ ;; увеличение адреса xl,xh значением из регистра
+	push r16
+	add xl,@0
+	in r16,SREG
+	sbrc r16,0
+	inc xh
+	pop r16
+.endmacro ;}
+.macro SbrX		;{ ;; уменьшение адреса xl,xh значением из регистра
+	push r16
+	sub xl,@0
+	in r16,SREG
+	sbrc r16,0
+	dec xh
+	pop r16
+.endmacro ;}
+.macro AdrY		;{ ;; увеличение адреса yl,yh значением из регистра
+	push r16
+	add yl,@0
+	in r16,SREG
+	sbrc r16,0
+	inc yh
+	pop r16
+.endmacro ;}
+.macro SbrY		;{ ;; уменьшение адреса yl,yh значением из регистра
+	push r16
+	sub yl,@0
+	in r16,SREG
+	sbrc r16,0
+	dec yh
+	pop r16
+.endmacro ;}
+.macro AdrZ		;{ ;; увеличение адреса zl,zh значением из регистра
+	push r16
+	add zl,@0
+	in r16,SREG
+	sbrc r16,0
+	inc zh
+	pop r16
+.endmacro ;}
+.macro SbrZ		;{ ;; уменьшение адреса zl,zh значением из регистра
+	push r16
+	sub zl,@0
+	in r16,SREG
+	sbrc r16,0
+	dec zh
+	pop r16
+.endmacro ;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

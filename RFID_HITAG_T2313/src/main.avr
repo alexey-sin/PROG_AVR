@@ -1,0 +1,648 @@
+;{ ;; ************************************************************************************* 
+;; * Прошивка для контроллера ATTiny2313 репитер 
+;; * транслятор байтов из PCF7991AT по RS232 и обратно
+;; * 
+;; * 
+;; * КОНСТАНТЫ HIGAG1
+;; * T0 = 1/Fclk = 1/125kHz = 8mks
+;; * 
+;; * Длительности 256 и 512 мкс примем с допуском +/-52
+;; * т.е. 204-308 и 460-564 в мкс
+;; * по счетчику с периодом 4мкс это будет 51-77 и 115-141
+;; * что больше 141, переполнение и периоды между диапазонами как сброс и начало нового приема
+;; * 
+;; * короткие периоды от 10(40мкс) до 40(160мкс) сигнализируют о границе блоков по 16 байт
+;; * их может быть 1 или 3
+;; * HITAG1 (PCF9130/31/35) при попадании в поле катушки непрерывно передают 2 блока по 16 байт - 0 и 1
+;; * 
+;; * 
+									;; * Длительность низкого уровня (PINB,4 == 0) 4..10 T0
+									;; * Длительность декодированного 0 (низкий + высокий уровень) 18..22 T0
+									;; * Длительность декодированной 1 (низкий + высокий уровень) 26..32 T0
+									;; * Длительность высокого уровня (PINB,4 == 1) состояния остановки > 36 T0
+									;; * 
+									;; * Для подсчета интервалов будем использовать счетчик с периодом 4мкс (Переполнение наступит 4*256=1024мкс - сбой-стоп состояние)
+									;; * Значения счетчика для каждого варианта будут:
+									;; * Для 4..10 T0 => 8-20
+									;; * Для 18..22 T0 => 36-44
+									;; * Для 26..32 T0 => 52-64
+									;; * Границы этих значений будем принимать как входящие в диапазон
+									;; * Для > 36 T0 => будем принимать значения счетчика более 64 и переполнение счетчика
+;; * 
+;; * 
+;; * 
+;; * 
+;; * 
+;; * 
+;; * 
+;; *************************************************************************************
+;}
+;; *************************************************************************************
+.include "macros.avr"
+.include "..\..\_AVR_ASSEMBLER\DEFs\tn2313def.inc"
+.equ 	t1			=$60
+.equ 	t2			=$61
+.equ 	t3			=$62
+
+;;=========================================================================================================
+;; .eseg	;; EEPROM энергоНЕзависимая память 1024 байт
+;; .org 0x000	;; EEPROM прошивать ненадо, эти номера контроллер запишет сам при настройке
+;; ;; значения частот и шага записаны с младшего байта к старшему
+;; eFstart:	.db 0x98,0x3A,0x00	;; стартовая частота 15000 (1500.0 кГц)
+;; .org 0x003
+;; eFstop:		.db 0xDF,0x93,0x04	;; конечная частота 299999 (29999.9 кГц)
+;; .org 0x006
+;; eFstep:		.db 0x64,0x00,0x00	;; шаг перестройки 100 (10.0 кГц)
+;; .org 0x009
+;; e:	.db 0x98,0x3A,0x00	;; 
+
+;;=========================================================================================================
+.dseg ;{	;сектор ОЗУ
+.org 0x063
+bf_RX:			.byte 17	;; буфер принятых байтов, первый байт - кол-во принятых байтов
+;; bf_RFID_TMP:	.byte 10	;; буфер демодулированных данных временный
+;; bf_RFID:		.byte 5	;; буфер демодулированных данных
+bf_RFID:		.byte 64	;; буфер демодулированных данных
+RFID_READER:	.byte 2		;; счетчики декодера
+	;; RFID_READER[0]:	;; счетчик принимаемых байтов (индекс смещения в буфере bf_RFID на текущий байт)
+	;; RFID_READER[1]:	;; счетчик бит в текущем байте
+		;; RFID_READER[0]: 0бит - 
+;}
+;;=========================================================================================================
+.def STATUS			= r15 ;{		;; регистр состояния
+	;; STATUS: 7бит - 1 = Принято сообщение по RS232
+	;; STATUS: 6бит - 1 = READ_TAG
+	;; STATUS: 5бит - 1 = нечетный бит коротких интервалов
+	;; STATUS: 4бит - 1 = 
+	;; STATUS: 3бит - 1 = 
+	;; STATUS: 2бит - 1 = 
+	;; STATUS: 1бит - 1 = Принято 2 блока по 16 байт
+	;; STATUS: 0бит - 1 = прошлый бит (для манчестера) - начало - с 1
+;}
+.def ERROR			= r14 ;{		;; регистр ошибок
+	;; ERROR: 7бит - 1= ($80) Переполнение буфера bf_RX
+	;; ERROR: 6бит - 1= ($40) Неопознанная команда из ПК
+	;; ERROR: 5бит - 1= ($20) 
+	;; ERROR: 4бит - 1= ($10) 
+	;; ERROR: 3бит - 1= ($08)
+	;; ERROR: 2бит - 1= ($04)
+	;; ERROR: 1бит - 1= ($02) Переполнение буфера
+	;; ERROR: 0бит - 1= ($01) Не успели обработать прошлый тайминг
+;}	
+.def RFID_INT		= r13		;; зарегистрированный модулированный интервал 
+.def RFID_CNT	= r12		;; 
+	;; 1 - (1/Fclk)*16
+	;; 2 - (1/Fclk)*32
+	;; 3 - (1/Fclk)*64
+;;=========================================================================================================
+.cseg ;{	;; Таблица прерываний  - каждый адрес/ссылка = 2 байта
+.org 0x0000		rjmp start
+.org	INT0addr		reti	;; External Interrupt Request 0
+.org	INT1addr		reti	;; External Interrupt Request 1
+.org	ICP1addr		reti	;; Timer/Counter1 Capture Event
+.org	OC1Aaddr		reti	;; Timer/Counter1 Compare Match A
+.org	OVF1addr		reti	;; Timer/Counter1 Overflow (при переполнении счетчика(16бит))
+.org	OVF0addr		rjmp Interrupt_OverFlow_80		;; Timer/Counter0 Overflow (при переполнении счетчика(8бит))
+.org	URXCaddr		rjmp Interrupt_USART_RX_Complete	;; USART, Rx Complete (при возникновении прерывания RXC)
+.org	UDREaddr		reti	;; USART Data Register Empty
+.org	UTXCaddr		reti	;; USART, Tx Complete
+.org	ACIaddr			reti	;; Analog Comparator
+.org	PCIaddr			rjmp Interrupt_PCINT	;; при изменении сигналов на выводах PB0-7
+.org	OC1Baddr		reti	;; 
+.org	OC0Aaddr		reti	;; 
+.org	OC0Baddr		reti	;; 
+.org	USI_STARTaddr	reti	;; USI Start Condition
+.org	USI_OVFaddr		reti	;; USI Overflow
+.org	ERDYaddr		reti	;; 
+.org	WDTaddr			reti	;; Watchdog Timer Overflow
+;}	
+;;=========================================================================================================
+ ;{		;; Фьюзы
+ ;; для F = 16 МГц (внешний кварц)
+;; Фьюзы: для USBASP 1 => установленный бит => галки нет
+;;					0 => сброшенный бит => отмечено галкой
+;; все биты LOCK установлены
+;;---- Fuse High Byte ----
+;; DWEN - 1				(если V и LOCK не установлены влючается режим отладки debugWIRE через вывод RESET
+;; EESAVE - 1
+;; SPIEN - 0 (недоступен)
+;; WDTON - 1
+;; BODLEVEL2 - 1
+;; BODLEVEL1 - 1
+;; BODLEVEL0 - 1
+;; RSTDISBL - 1
+;;---- Fuse Low Byte ----
+;; CKDIV8 - 1
+;; CKOUT - 1
+;; SUT1 - 1
+;; SUT0 - 1
+;; CKSEL3 - 1
+;; CKSEL2 - 1
+;; CKSEL1 - 1
+;; CKSEL0 - 1
+;;---- Fuse Extended Byte ----
+;;
+;; SELFPRGEN - 1
+;}
+;;=========================================================================================================
+.org 0x018
+start: ;{
+	ldi r16,low(RAMEND)
+	out spl,r16
+
+	clr r10					;; R10 - 00000000
+	ser r16
+	mov r11,r16				;; R11 - 11111111
+;;=========================================================================================================
+;; Настройка портов => DDRx = 1(out); 0 = (in)   PORTx = 1(подтянут к +); 0(в воздухе - 0)
+;; Порт A (-,-,-,-,-,2,1,0)
+	;; ldi r16,0b00000011
+	;; out DDRA,r16
+	;; ldi r16,0b00000011
+	;; out PORTA,r16
+
+;; Порт B (7,6,5,4,3,2,1,0) PB7 - выход тактов USI(из МК); PB6 - выход данных USI(из МК); PB4 - вход данных USI(в МК)
+	ldi r16,0b11000000
+	out DDRB,r16
+	ldi r16,0b00000000
+	out PORTB,r16
+
+;; Порт D (-,6,5,4,3,2,1,0)	PD2 - красный светодиод
+;;							PD4 - зелёный светодиод
+	ldi r16,0b00010100
+	out DDRD,r16
+	ldi r16,0b00000000
+	out PORTD,r16
+;;=========================================================================================================
+;; Аналоговый компаратор		(Отключение 0b10000000 => ACSR)
+	ldi r16,0b01000000
+	out ACSR,r16
+	ldi r16,0b00000010		;; Блокируем цифровой ввод по AIN1
+	out DIDR,r16
+;;=========================================================================================================
+;; Настройка UART на 38400 bps(бод)
+	out UBRRH,r10	;; предделитель старший разряд
+	ldi r16,25		;; UBRR = 16000000/(16 * 38400) - 1 = 25,04 //при U2X = 0
+	out UBRRL,r16	;; предделитель младший разряд
+	out UCSRA,r10	;; ускоритель скорости на 2 выключим (U2X = 0 - 1 бит UCSRA)
+	ldi r16,(1 << TXEN)|(1 << RXEN)|(1 << RXCIE)	;; вкл приемник(RXEN=1),вкл передатчик(TXEN=1),вкл прерывание по приему(RXCIE=1)
+	out UCSRB,r16
+	ldi r16,(3 << UCSZ0)	;; асинхронный режим(UMSEL=0), 8 бит(UCSZ2-0=011), 1 стоп-бит(USBS=0),без контроля четности(UPM1-0=00)
+	out UCSRC,r16
+;;=========================================================================================================
+;; Прерывания таймеров
+	ldi r16,(1 << TOIE0)		;; TOIE0 разрешить прерывание по переполнению 0(8разр) счетчика
+	out TIMSK,r16				;; TOIE2 разрешить прерывание по переполнению 2(8разр) счетчика
+;;=========================================================================================================
+;; Прерывания по выводам PCINT7-0
+	;;PCMSK будем управлять в тексте
+	ldi r16,(1 << PCIE)		;; PCIE разрешить прерывание по выводам PCINT7-0
+	out GIMSK,r16
+	;; ldi r16,(1 << PCINT4)
+	;; out PCMSK,r16
+;;=========================================================================================================
+;; инициализация буферов и переменных
+	LdiX(bf_RX)
+	st x,r10	 			;; обнулим счетчик принятых байтов (первый байт буфера)
+	clr ERROR				;; очистим регистр ошибок
+	clr STATUS				;; очистим регистр состояния
+	clr RFID_INT
+;;=========================================================================================================
+	;; sbi PORTD,4 ;; GREEN	;; обмен с компьютером
+	;; sbi PORTD,2 ;; RED	;; обмен с РС
+	;; rcall d_500ms
+	;; cbi PORTD,2 ;; RED
+	;; cbi PORTD,4 ;; GREEN
+;;=========================================================================================================
+	;; rcall CheckEEpromValues
+
+;; ldi r16,'S'
+;; rcall Send_Byte_USART
+
+;; rcall d_200ms
+	sei
+;; установим сразу тактовую частоту 8 МГц в RFID Reader'е
+	LdiX(bf_RX)
+	ldi r16,$01
+	st x+,r16
+	ldi r16,$71
+	st x+,r16
+	rcall AnalizRX
+;; и установим сразу режим READ_TAG
+;; rcall d_500ms
+	LdiX(bf_RX)
+	ldi r16,$01
+	st x+,r16
+	ldi r16,$E0
+	st x+,r16
+	rcall AnalizRX
+;}
+;;=========================================================================================================
+loop: ;{
+				tst ERROR
+				breq lpNotERR ;{
+				;; если произошла ошибка
+					cli
+					rcall SendERROR_E_PC
+					sbi PORTD,2 ;; RED	;; ERROR
+					rcall d_500ms
+					rcall d_500ms
+					cbi PORTD,2 ;; RED
+					
+					LdiX(bf_RX)
+					st x,r10	 			;; обнулим счетчик принятых байтов (первый байт буфера)
+					clr ERROR				;; очистим регистр ошибок
+					clr RFID_INT
+					sei
+				;}
+	lpNotERR:	;;=================================
+				sbrc STATUS,7		;; пропустить если ненадо обрабатывать принятое сообщение по RS232
+				rcall AnalizRX
+		
+				sbrs STATUS,6		;; READ_TAG
+				rjmp lp_nRT
+				;{ ;; режим READ_TAG
+					tst RFID_INT
+					breq lp_RT01
+					rcall Analiz_TIMING_RFID
+		lp_RT01:
+					sbrc STATUS,1		;; Принято 2 блока по 16 байт
+					rcall SendBlocks
+		
+				;}
+	lp_nRT:
+;; sbi PORTD,2 ;; RED
+;; rcall SendERROR_PC	;;Посылка по RS232 "ERROR" (hex: 45 52 52 4F 52)
+
+	;; sbi PORTD,4 ;; GREEN	;; обмен с компьютером
+	;; sbi PORTD,2 ;; RED	;; обмен с РС
+	;; rcall d_500ms
+	;; cbi PORTD,2 ;; RED
+	;; cbi PORTD,4 ;; GREEN
+	;; rcall d_500ms
+	;; rjmp 
+	;; sbi PORTD,6 	;RED 2такта
+
+
+rjmp loop ;}
+;;=========================================================================================================
+AnalizRX: ;{	;; обработка принятого сообщения по RS232
+				LdiX(bf_RX)
+				ld r25,x+		;; кол-во принятых байтов в буфере
+				ld r24,x+		;; загрузим первый (командный байт)
+				
+				cpi r25,1
+				breq anlzrx_00
+				rjmp anlzrx_m
+	anlzrx_00:	;; принят один командный байт
+				mov r16,r24
+				andi r16,$E0
+				cpi r16,$E0		;;0b111xxxxx = READ_TAG
+				brne anlzrx_01
+					SetBit STATUS,6		;; READ_TAG
+					sbi PORTD,4 ;; GREEN
+					ldi r16,(1 << PCINT4)
+					clr RFID_INT
+					clr RFID_CNT
+					rcall USI_SEND_READ_TAG
+					out PCMSK,r16
+				rjmp anlzrx_exit
+	anlzrx_01:
+				mov r16,r24
+				andi r16,$F0
+				cpi r16,$10		;;0b0001xxxx = WRITE_TAG_N
+				brne anlzrx_02
+					mov r16,r24
+					rcall USI_SEND_1Byte
+				rjmp anlzrx_exit
+	anlzrx_02:
+				cpi r24,$08		;;0b00001000 = READ_PHASE
+				brne anlzrx_03
+					mov r16,r24
+					rcall USI_SEND_AND_RECV_1Byte
+				rjmp anlzrx_exit
+	anlzrx_03:
+				mov r16,r24
+				andi r16,$C0
+				cpi r16,$80		;;0b10xxxxxx = SET_SUMPLING_TIME
+				brne anlzrx_04
+					mov r16,r24
+					rcall USI_SEND_1Byte
+				rjmp anlzrx_exit
+	anlzrx_04:
+				cpi r24,$02		;;0b00000010 = GET_SUMPLING_TIME
+				brne anlzrx_05
+					mov r16,r24
+					rcall USI_SEND_AND_RECV_1Byte
+				rjmp anlzrx_exit
+	anlzrx_05:
+				mov r16,r24
+				andi r16,$C0
+				cpi r16,$40		;;0b01xxxxxx = SET_CONFIG_PAGE
+				brne anlzrx_06
+					mov r16,r24
+					rcall USI_SEND_1Byte
+				rjmp anlzrx_exit
+	anlzrx_06:
+				mov r16,r24
+				andi r16,$FC
+				cpi r16,$04		;;0b000001xx = GET_CONFIG_PAGE
+				brne anlzrx_07
+					mov r16,r24
+					rcall USI_SEND_AND_RECV_1Byte
+				rjmp anlzrx_exit
+	anlzrx_07:
+				cpi r24,$C6		;;0b11000110 = WRITE_TAG => SET_CC
+				brne anlzrx_err
+					mov r16,r24
+					rcall USI_START
+					rcall USI_SEND_r16
+					rcall USI_STOP
+
+					SetBit STATUS,6		;; READ_TAG
+					sbi PORTD,4 ;; GREEN
+					ldi r16,(1 << PCINT4)
+					clr RFID_INT
+					clr RFID_CNT
+					rcall USI_SEND_READ_TAG
+					out PCMSK,r16
+					;; sbi PORTD,2 ;; RED
+					;; rcall d_500ms
+					;; cbi PORTD,2 ;; RED
+					;; mov r16,r24
+					;; rcall USI_SEND_AND_RECV_1Byte
+				rjmp anlzrx_exit
+	anlzrx_m:	;; принятых байтов больше одного	
+				mov r16,r24
+				andi r16,$E0
+				cpi r16,$C0		;;0b110xxxxx = WRITE_TAG
+				brne anlzrx_err
+				;; эту команду выполняем здесь
+				;; SetBit CMD_USART,5	;; WRITE_TAG
+				rjmp anlzrx_exit
+	anlzrx_err:
+				SetBit ERROR,6		;; Неопознанная команда из ПК
+	anlzrx_exit:			
+				LdiX(bf_RX)
+				st x,r10
+				ClrBit STATUS,7		;; Принято сообщение по RS232
+ret ;}
+Analiz_TIMING_RFID: ;{	;; на входе мы имеем RFID_INT*4мкс тайминг и уровень Т для которого он был
+
+				mov r25,RFID_INT
+				;; проанализируем длительность периода
+				cpi r25,40
+				brcc anlztmrf_00
+				;; получен межблочный короткий интервал
+					LdiX(RFID_READER)
+					ld r25,x+
+					ld r24,x
+					tst r24
+					breq anlztmrf_001
+					rcall ResetReciveRFID
+					rjmp anlztmrf_e
+		anlztmrf_001:
+					cpi r25,16			;; последний байта 1 блока уже был принят
+					brne anlztmrf_002
+						ldi r16,0b01000001		;;READ_TAG и начало с 1
+						mov STATUS,r16
+					rjmp anlztmrf_e
+		anlztmrf_002:
+					cpi r25,32			;; последний байта 2 блока уже был принят
+					brne anlztmrf_003
+					cli
+					SetBit STATUS,1		;; Принято 2 блока по 16 байт
+					rjmp anlztmrf_e
+		anlztmrf_003:
+					rcall ResetReciveRFID	;;ошибка
+				rjmp anlztmrf_e
+	anlztmrf_00:
+				cpi r25,52
+				brcc anlztmrf_01
+					rcall ResetReciveRFID	;;слишком короткий период
+				rjmp anlztmrf_e
+	anlztmrf_01:
+				cpi r25,78
+				brcc anlztmrf_02
+				;; получен короткий интервал
+					sbrc STATUS,5		;; пропустить если нечетный бит коротких интервалов
+					rjmp anlztmrf_011
+					SetBit STATUS,5		;; это был нечетный короткий импульс
+					rjmp anlztmrf_e
+		anlztmrf_011:
+					clt
+				rjmp anlztmrf_10
+	anlztmrf_02:
+				cpi r25,116
+				brcc anlztmrf_03
+					rcall ResetReciveRFID	;;период между диапазонами
+				rjmp anlztmrf_e
+	anlztmrf_03:
+				cpi r25,142
+				brcc anlztmrf_04
+				;; получен длинный интервал
+					set
+				rjmp anlztmrf_10
+	anlztmrf_04:	;; перебор
+					rcall ResetReciveRFID	;;очень длинный период или переполнение счетчика
+				rjmp anlztmrf_e
+	anlztmrf_10:
+				ClrBit STATUS,5		;; Сброс четности короткого импульса
+	;;====== обработка принятого бита =========================================================
+				;; brtc anlztmrf_11		;; переход если кор.интервал
+				;; ;; инвертируем бит STATUS,0
+				;; ldi r16,1
+				;; eor STATUS,r16
+	;; anlztmrf_11:
+	
+	
+				LdiX(RFID_READER)
+				ld r25,x+			;; счетчик принимаемых байтов (индекс смещения в буфере bf_RFID на текущий байт)
+				ld r24,x			;; счетчик бит в текущем байте
+				
+				LdiX(bf_RFID)
+				add xl,r25
+				adc xh,r10
+				ld r16,x
+				clc
+				;; sbrc STATUS,0
+				brtc anlztmrf_11
+				sec
+	anlztmrf_11:
+				rol r16
+				st x,r16
+				
+				inc r24
+				cpi r24,8
+				brne anlztmrf_12
+				clr r24
+				inc r25
+	anlztmrf_12:
+				LdiX(RFID_READER)
+				st x+,r25
+				st x,r24
+	;;====== закончена обработка принятого бита =========================================================
+	anlztmrf_e:
+				clr RFID_INT
+ret ;}
+SendBlocks: ;{	;; Принято 2 блока по 16 байт
+				sbi PORTD,2 ;; RED
+				
+				ldi r17,32
+				LdiY(bf_RFID)
+	sndblcks_01:
+				ld r16,y+
+				rcall Send_Byte_USART
+				dec r17
+				brne sndblcks_01
+				
+				rcall ResetReciveRFID
+				cbi PORTD,2 ;; RED
+				sei
+ret ;}
+ResetReciveRFID: ;{	;; сброс состояния приема для начало нового приема
+				LdiX(RFID_READER)	;;сброс статусного регистра декодера
+				st x+,r10
+				st x,r10
+				
+				ldi r16,0b01000001		;;READ_TAG и начало с 1
+				mov STATUS,r16
+ret ;}
+Interrupt_USART_RX_Complete: ;{	;; обработка прерывания при поступлении очередного байта в приемник UART
+				cli
+				push r17
+				pushX
+				push r16
+				in r16,SREG
+				push r16
+		
+				out TCCR0B,r10		;; Останавливаем 8 битный счетчик.
+				in r16,UDR          ;; Считать байт из регистра данных приемника
+				
+				sbrc STATUS,7		;; прошлое сообщение не обработано
+				rjmp intusart_ext
+				
+				sbrs STATUS,6		;; READ_TAG
+				rjmp intusart_01
+				;; останавливаем режим READ_TAG
+				sbi PORTB,7		;; SCLK
+				out PCMSK,r10
+				ClrBit STATUS,6
+				cbi PORTD,4 	;; GREEN
+				cbi PORTD,2 ;; RED
+				rjmp intusart_ext
+	intusart_01:
+				;; сохраним байт в буфере
+				LdiX(bf_RX)
+				ld r17,x   			;; загрузим указатель буфера	
+				inc r17				;; чтобы запись не началась на указатель
+				cpi r17,16			;; если случился перебор
+				breq intusart_ovf
+				st x,r17			;; запишем указатель
+				add xl,r17
+				adc xh,r10
+				st x,r16
+				rjmp intusart_nxt
+	intusart_ovf:
+				SetBit ERROR,7		;; Переполнение буфера bf_RX
+				rjmp intusart_ext
+	intusart_nxt:	
+				;; Запускаем/перезапускаем 8 битный счетчик. Прерывание по переполнению.
+				;; ldi r16,(1 << PSR10)	;; сброс прескалера таймеров 1 и 0
+				;; out GTCCR,r16
+				out TCNT0,r10
+				ldi r16,0b00000011		;; 0,0625мкс*64*256 = 1,024мс (переполнение счетчика) а длительность байта 260мкс
+				;; ldi r16,0b00000100		;; 0,0625мкс*256*256 = 4,096мс (переполнение счетчика) а длительность байта 260мкс
+				out TCCR0B,r16
+	intusart_ext:
+				pop r16
+				out SREG,r16
+				pop r16
+				popX
+				pop r17
+				sei
+reti ;}
+Interrupt_OverFlow_80: ;{	;; время для приема очередного байта вышло - в буфере принята посылка
+				cli
+				push r16
+				in r16,SREG
+				push r16
+
+				out TCCR0B,r10			;; стоп счетчик
+				sbrc STATUS,6		;; READ_TAG
+				rjmp intovf80_rt
+				SetBit STATUS,7			;; Принято сообщение по RS232
+				rjmp intovf80_e
+	intovf80_rt:
+				;;переполнение в режиме READ_TAG
+				mov RFID_CNT,r11
+	intovf80_e:
+				pop r16
+				out SREG,r16
+				pop r16
+				sei
+reti ;}
+Interrupt_PCINT: ;{	;; прерывание по PB4 - вход данных USI(в МК)
+				cli
+				push r25
+				push r16
+				in r16,SREG
+				push r16
+
+				sbrs STATUS,6		;; READ_TAG
+				rjmp intrcint_e
+				
+				in r25,TCNT0		;; загрузим кол-во насчитанных периодов по 4 мкс
+				;; и сразу перезапустим
+				out TCNT0,r10
+				ldi r16,0b00000011		;; 0,0625мкс*64*256 = 1,024мс (переполнение счетчика) а длительность байта 260мкс
+				out TCCR0B,r16
+				
+				cpi r25,10				;; короткие периоды <=40мкс просто проглатываем
+				brcs intrcint_e
+				tst RFID_INT
+				breq intrcint_01
+				SetBit ERROR,0			;; Не успели обработать прошлый тайминг
+				rjmp intrcint_e
+	intrcint_01:
+				mov RFID_INT,r25
+	intrcint_e:
+				pop r16
+				out SREG,r16
+				pop r16
+				pop r25
+				sei
+reti ;}
+;;=========================================================================================================
+.include "main_cont1.avr"
+.include "delay16.avr"
+;;=========================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="ru"><head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Сайт о программировании, робототехнике, электронике">
+		<meta name="yandex-verification" content="4ba641ca062637f3">
+		<link rel="stylesheet" type="text/css" href="AVR%20%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B%20%D0%BD%D0%B0%20%D0%90%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80%D0%B5_files/styles.css">
+		<link rel="shortcut icon" href="http://smartep.ru/images/favicon.png" type="image/png">	
+		<meta name="keywords" content="avr, микроконтроллеры, avr asm, avr assembler, avr ассемблер, avr bmp085, avr hcsr-04, avr bmp180, avr dht11, avr dht22, avr ds18b20, avr bh1750, avr ws2812, avr rgb lamp, динамическая индикация avr, матричная клавиатура avr, примеры, исходники"><title>AVR Примеры на Ассемблере</title>	
+	</head>
+	<body>
+		<script type="text/javascript" async="" src="AVR%20%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B%20%D0%BD%D0%B0%20%D0%90%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80%D0%B5_files/watch.js"></script><script async="" src="AVR%20%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B%20%D0%BD%D0%B0%20%D0%90%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80%D0%B5_files/analytics.js"></script><script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-51949528-1', 'auto');
+  ga('send', 'pageview');
+
+</script>		<div class="container">	
+			<div class="header">
+				<a href="http://smartep.ru/index.php"><img src="AVR%20%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B%20%D0%BD%D0%B0%20%D0%90%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80%D0%B5_files/header.jpg" style="display: block; margin: 0 auto;"></a>
+			</div>	
+			<div id="mainmenu">
+	<ul>
+
+	<!--
+		<li>
+			<a href="index.php">Главная</a>
+		</li>
+	-->
+
+		<li>
+			<a href="#">Проекты</a>
+			<ul>
+				<li><a href="#">Программы на Delphi</a>
+					<ul>
+						<li><a href="http://smartep.ru/index.php?page=kallisto_player">Kallisto player</a></li>
+						<li><a href="http://smartep.ru/index.php?page=system_manager">System Manager</a></li>
+						<li><a href="http://smartep.ru/index.php?page=number_converter">Number Converter</a></li>
+						<li><a href="http://smartep.ru/index.php?page=clocky">Clocky</a></li>
+						<li><a href="http://smartep.ru/index.php?page=solar_system">Solar System</a></li>
+						<li><a href="http://smartep.ru/index.php?page=math_tasks">Math Tasks</a></li>
+						<li><a href="http://smartep.ru/index.php?page=calcs">Калькуляторы</a></li>
+					</ul>  
+				</li>
+				<li><a href="http://smartep.ru/index.php?page=robotics_platform">Мобильный робостенд</a></li>
+				<li><a href="http://smartep.ru/index.php?page=smart_home">Умный дом</a></li>
+			</ul>
+		</li>
+
+
+		<li>
+			<a href="#">Программирование</a>
+			<ul>	
+				<li>
+					<a href="http://smartep.ru/index.php?page=study_delphi">Практикум по Delphi</a>
+					<a href="http://smartep.ru/index.php?page=study_web">Практикум по Web</a>
+					<a href="http://smartep.ru/index.php?page=cpp_codeblocks">Настройка Code::Blocks</a>
+				</li>
+			</ul>
+		</li>			
+
+		<li>
+			<a href="#">LEGO</a>
+			<ul>	
+				<li><a href="#">LEGO Mindstorms</a>
+					<ul>
+						<li><a href="http://smartep.ru/index.php?page=lego_mindstorms_review">Обзор конструктора</a></li>
+						<li><a href="http://smartep.ru/index.php?page=lego_mindstorms_instructions">Инструкции NXT / EV3</a></li>
+						<li><a href="http://smartep.ru/index.php?page=lego_mindstorms_useful_books">Различные материалы</a></li>
+						<li><a href="http://smartep.ru/index.php?page=lego_mindstorms_hardware">Устройство портов и кабелей</a></li>
+						<!--
+						<li><a href="index.php?page=lego_mindstorms_robotc_examples">Примеры на RobotC</a></li>
+						-->
+						<li><a href="#">Проекты</a>
+							<ul>
+								<li><a href="http://smartep.ru/index.php?page=lego_mindstorms_snatcher">Snatcher</a></li>
+							</ul>  
+						</li>
+					</ul>  
+				</li>
+
+				<li><a href="#">LEGO Technic</a>
+					<ul>
+						<li><a href="http://smartep.ru/index.php?page=lego_technic_instructions">Инструкции</a></li>
+					</ul>  
+				</li>
+
+				<li><a href="#">LEGO Pneumatic</a>
+					<ul>
+						<li><a href="http://smartep.ru/index.php?page=lego_pneumatic_instructions">Инструкции</a></li>
+					</ul>  
+				</li>
+
+				<li><a href="#">LEGO Renewable energy</a>
+					<ul>
+						<li><a href="http://smartep.ru/index.php?page=lego_renewable_energy_instructions">Инструкции</a></li>
+					</ul>  
+				</li>				
+			</ul>
+		</li>
+
+
+		<li>
+			<a href="#">Электроника</a>
+			<ul>
+				<li>
+					<a href="#">Atmel AVR</a>
+					<ul>
+						<li><a href="http://smartep.ru/index.php?page=avr_asm_examples">Примеры на Ассемблере</a></li>
+						<li><a href="http://smartep.ru/index.php?page=avr_c_examples">Примеры на Си</a></li>
+						<li><a href="http://smartep.ru/index.php?page=avr_eclipse">Настройка Eclipse для AVR</a></li>
+						<li><a href="http://smartep.ru/index.php?page=avr_prog">FT-232 Программатор</a></li>
+						<li><a href="http://smartep.ru/index.php?page=avr_dev_boards">Отладочные платы</a></li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="#">Arduino</a>
+					<ul>
+						<li><a href="http://smartep.ru/index.php?page=arduino_review">Обзор</a></li>
+						<!--
+						<li><a href="index.php?page=arduino_examples">Примеры</a></li>
+						<li><a href="index.php?page=arduino_books">Различные материалы</a></li>
+						-->
+					</ul>
+				</li>
+
+				<li>
+					<a href="http://smartep.ru/index.php?page=datasheets">Документация</a>
+				</li>	
+			</ul>
+		</li>		
+
+
+		<li><a href="http://smartep.ru/index.php?page=programs">Программы</a></li>
+
+		
+		<li><a href="#">Коллекционирование</a>	
+			<ul>
+				<li><a href="http://smartep.ru/index.php?page=collection_landrin_centenary_war">Ландрин. Жанна Д'Арк. Столетняя война</a></li>
+				<li><a href="http://smartep.ru/index.php?page=collection_landrin_livon_knights">Ландрин. Ливонские рыцари XIII века</a></li>  
+				<li><a href="http://smartep.ru/index.php?page=collection_kinder">Киндер. Разное</a></li>
+				<li><a href="http://smartep.ru/index.php?page=collection_publiy">Солдатики Публия</a></li> 
+				<!--
+					<li><a href="index.php?page=model_mig29">Corgi МиГ-29</a></li>  
+					<li><a href="index.php?page=model_boeing767">Herpa Boeing 767-300</a></li> 
+				-->
+			</ul>
+		</li>		
+	</ul>
+</div>			<div class="main">		
+					<h1>Примеры на Ассемблере для микроконтроллеров Atmel AVR</h1>
+	<p>Здесь представлены примеры различных программ на языке Ассемблера 
+для микроконтроллеров Atmel AVR. Примеры выложены в виде проектов для 
+AVR Studio под микроконтроллер ATmega16, поэтому при переносе на другие 
+МК семейства AVR это нужно учитывать. Тактовая частота микроконтроллера 
+во всех примерах 8 МГц (используется тактирование от внутреннего 
+генератора). Код примеров разбит на блоки и снабжен комментариями. При 
+обнаружении ошибок просьба сообщить на <a href="mailto:studfak@mail.ru" style="text-decoration: underline;">почту</a>.</p>
+
+	<p>Краткое описание команд Ассемблера AVR представлено <a href="http://smartep.ru/datasheets/avr/AVR%208bit%20Instruction%20Set%20Table.pdf" style="text-decoration: underline;">здесь</a>.</p> 
+	<p>Подробное описание каждой команды представлено в <a href="http://smartep.ru/datasheets/avr/AVR%208bit%20Instruction%20Set.pdf" style="text-decoration: underline;">AVR 8bit Instruction Set</a>.</p>
+
+	<p>Для более глубокого изучения ассемблера AVR советую к прочтению книгу Юрия Ревича <span style="font-style: italic">"Практическое программирование микроконтроллеров Atmel AVR на языке ассемблера"</span>. С беcплатным фрагментом книги можно ознакомиться <a href="https://bookland.com/download/1/10/107897/sample.pdf" style="text-decoration: underline;">здесь</a>. Также можно изучить различные методические пособия ВУЗов, например, <a href="http://smartep.ru/projects/Zubarev_AVR_asm.pdf" style="text-decoration: underline;">вот</a>.</p>
+
+	<p>Также на сайте выложены <a href="http://smartep.ru/index.php?page=avr_c_examples" style="text-decoration: underline;">примеры программ на языке Си</a>.</p>
+
+	<div class="content-block">
+		<p style="text-indent:100px; font-weight:bold;">Содержание</p>
+		<ul>
+			<li><a href="#p1">Start – Стартовая инициализация микроконтроллера.</a></li>
+			<li><a href="#p2">Delays – Библиотека задержек (для 8 МГц).</a></li>
+			<li><a href="#p3">Math – Библиотека математических операций.</a></li>
+			<li><a href="#p4">IO Ports – Работа с портами ввода-вывода (светодиоды, обработка нажатия кнопок).</a></li>
+			<li><a href="#p5">Dynamic Indication – Динамическая индикация, вывод на 7-сегментный индикатор.</a></li>
+			<li><a href="#p6">UART – Настройка UART (с прерываниями и без).</a></li>	
+			<li><a href="#p7">Clock – Часы с выводом на 7-сегментный индикатор и кнопками настройки.</a></li>
+			<li><a href="#p8">DS18B20 – Термометр на датчике DS18B20 с выводом показаний на 7-сегментный индикатор.</a></li>		
+			<li><a href="#p9">ADC Indication – Работа с АЦП и вывод показаний на 7-сегментный индикатор.</a></li>
+			<li><a href="#p10">Fast PWM – Реализация аппаратного ШИМ.</a></li>
+			<li><a href="#p11">HCSR04 – Дальномер на датчике HCSR04 с выводом показаний на 7-сегментный индикатор</a></li>
+			<li><a href="#p12">Matrix Keyboard – Опрос матричной клавиатуры.</a></li>
+			<li><a href="#p13">Shift Register – Работа со сдвиговым регистром 74HC595.</a></li>			
+			<li><a href="#p14">SG-90 Servo – Работа с сервоприводом SG-90.</a></li>
+			<li><a href="#p15">RGB Lamp – Светильник с плавным переливанием цветов на RGB-светодиоде.</a></li>
+		</ul>
+	</div>
+
+
+	
+	<p><span id="p1" class="seltext">Start</span> – Заготовка стартовой 
+инициализации микроконтроллера, в которую входят инициализация стека, 
+очистка ОЗУ (SRAM) и регистров общего назначения (R0 - R31), а также 
+глобальный запрет прерываний. Пример кода приведён ниже. При 
+использовании следует помнить, что регистры ввода-вывода (порты, 
+периферия и т.д.) не очищаются, поэтому их НЕОБХОДИМО инициализировать 
+отдельно.</p>	
+	<div class="NavFrame" id="NavFrame0" style="margin:0px auto; width:95%;">
+	<div class="NavHead">Исходный код<a class="NavToggle" id="NavToggle0" href="javascript:collapseDiv(0);">скрыть</a></div>
+	    <div class="NavContent" style="display: block; font-size: 1rem;">
+	        <pre><code class="avrasm hljs"><span class="hljs-meta">.include</span> <span class="hljs-string">"m16def.inc"</span>		<span class="hljs-comment">; Use AtMega16A</span>
+<span class="hljs-comment">;=================================================</span>
+<span class="hljs-comment">; Имена регистров, а также различные константы</span>
+    <span class="hljs-meta">.equ</span> 	XTAL 				= <span class="hljs-number">8000000</span> 	<span class="hljs-comment">; Частота МК</span>
+    <span class="hljs-meta">.equ</span> 	UART_BaudRate 			= <span class="hljs-number">19200</span>		<span class="hljs-comment">; Скорость при связи по UART</span>
+    <span class="hljs-meta">.equ</span> 	UART_BaudDivider 		= XTAL / (<span class="hljs-number">16</span> * UART_BaudRate) - <span class="hljs-number">1</span>
+    <span class="hljs-meta">.equ</span> 	I2C_Frequency 			= <span class="hljs-number">80000</span>		<span class="hljs-comment">; Частота шины I2C</span>
+    <span class="hljs-meta">.equ</span> 	I2C_BaudDivider 		= (XTAL / (<span class="hljs-number">8</span> * I2C_Frequency) - <span class="hljs-number">2</span>)
+    <span class="hljs-meta">.equ</span>	Bit0				= <span class="hljs-number">0</span>b00000001
+    <span class="hljs-meta">.equ</span>	Bit1				= <span class="hljs-number">0</span>b00000010
+    <span class="hljs-meta">.equ</span>	Bit2				= <span class="hljs-number">0</span>b00000100
+    <span class="hljs-meta">.equ</span>	Bit3				= <span class="hljs-number">0</span>b00001000
+    <span class="hljs-meta">.equ</span>	Bit4				= <span class="hljs-number">0</span>b00010000
+    <span class="hljs-meta">.equ</span>	Bit5				= <span class="hljs-number">0</span>b00100000
+    <span class="hljs-meta">.equ</span>	Bit6				= <span class="hljs-number">0</span>b01000000
+    <span class="hljs-meta">.equ</span>	Bit7				= <span class="hljs-number">0</span>b10000000
+    <span class="hljs-meta">.def</span> 	MulLow 				= <span class="hljs-built_in">R0</span>	<span class="hljs-comment">; Младший регистр результата умножения</span>
+    <span class="hljs-meta">.def</span> 	MulHigh 			= <span class="hljs-built_in">R1</span>	<span class="hljs-comment">; Старший регистр результата умножения</span>
+    <span class="hljs-meta">.def</span> 	Temp0 				= <span class="hljs-built_in">R15</span>	<span class="hljs-comment">; Регистр с нулевым значением</span>
+    <span class="hljs-meta">.def</span> 	Temp1 				= <span class="hljs-built_in">R16</span>
+    <span class="hljs-meta">.def</span> 	Temp2 				= <span class="hljs-built_in">R17</span>
+    <span class="hljs-meta">.def</span> 	Temp3 				= <span class="hljs-built_in">R18</span>
+    <span class="hljs-meta">.def</span> 	Temp4 				= <span class="hljs-built_in">R19</span>
+    <span class="hljs-meta">.def</span> 	Temp5 				= <span class="hljs-built_in">R20</span>
+    <span class="hljs-meta">.def</span> 	Temp6 				= <span class="hljs-built_in">R21</span>
+    <span class="hljs-meta">.def</span> 	Temp7 				= <span class="hljs-built_in">R22</span>
+    <span class="hljs-meta">.def</span> 	Temp8 				= <span class="hljs-built_in">R23</span>
+    <span class="hljs-meta">.def</span> 	Counter 			= <span class="hljs-built_in">R24</span>	<span class="hljs-comment">; Регистр счетчик</span>
+    <span class="hljs-meta">.def</span> 	Flags 				= <span class="hljs-built_in">R25</span> 	<span class="hljs-comment">; Флаговый регистр</span>
+<span class="hljs-comment">;=================================================</span>
+<span class="hljs-comment">; Сегмент SRAM памяти</span>
+<span class="hljs-meta">.DSEG</span>				
+<span class="hljs-comment">;=================================================</span>
+<span class="hljs-comment">; Сегмент EEPROM памяти</span>
+<span class="hljs-meta">.ESEG</span>				
+<span class="hljs-comment">;=================================================</span>
+<span class="hljs-comment">; Сегмент FLASH памяти</span>
+<span class="hljs-meta">.CSEG</span>
+<span class="hljs-comment">;=================================================</span>
+<span class="hljs-comment">; Таблица прерываний</span>
+    <span class="hljs-meta">.ORG</span> <span class="hljs-number">0x00</span>
+        <span class="hljs-keyword">RJMP</span>	RESET			
+<span class="hljs-comment">;=================================================</span>
+<span class="hljs-comment">; Прерывание по сбросу, стартовая инициализация </span>
+<span class="hljs-symbol">RESET:</span>	
+    <span class="hljs-comment">; Инициализация стека</span>
+    <span class="hljs-keyword">LDI</span> 	Temp1, LOW(RAMEND)
+    <span class="hljs-keyword">OUT</span> 	<span class="hljs-built_in">SPL</span>, Temp1
+    <span class="hljs-keyword">LDI</span> 	Temp1, HIGH(RAMEND)	
+    <span class="hljs-keyword">OUT</span> 	<span class="hljs-built_in">SPH</span>, Temp1
+    <span class="hljs-comment">; Очистка ОЗУ и регистров R0-R31</span>
+    <span class="hljs-keyword">LDI</span>		<span class="hljs-built_in">ZL</span>, LOW(SRAM_START)		<span class="hljs-comment">; Адрес начала ОЗУ в индекс</span>
+    <span class="hljs-keyword">LDI</span>		<span class="hljs-built_in">ZH</span>, HIGH(SRAM_START)
+    <span class="hljs-keyword">CLR</span>		Temp1				<span class="hljs-comment">; Очищаем R16</span>
+<span class="hljs-symbol">RAM_Flush:</span>
+    <span class="hljs-keyword">ST</span> 		<span class="hljs-built_in">Z</span>+, Temp1				
+    <span class="hljs-keyword">CPI</span>		<span class="hljs-built_in">ZH</span>, HIGH(RAMEND + <span class="hljs-number">1</span>)	
+    <span class="hljs-keyword">BRNE</span>	RAM_Flush			
+    <span class="hljs-keyword">CPI</span>		<span class="hljs-built_in">ZL</span>, LOW(RAMEND + <span class="hljs-number">1</span>)	
+    <span class="hljs-keyword">BRNE</span>	RAM_Flush
+    <span class="hljs-keyword">LDI</span>		<span class="hljs-built_in">ZL</span>, (<span class="hljs-number">0x1F</span><span class="hljs-number">-2</span>)			<span class="hljs-comment">; Адрес регистра R29</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">ZH</span>
+<span class="hljs-symbol">Reg_Flush:</span>
+    <span class="hljs-keyword">ST</span>		<span class="hljs-built_in">Z</span>, <span class="hljs-built_in">ZH</span>
+    <span class="hljs-keyword">DEC</span>		<span class="hljs-built_in">ZL</span>
+    <span class="hljs-keyword">BRNE</span>	Reg_Flush
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">ZL</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">ZH</span>
+    <span class="hljs-comment">; Регистры и SRAM полностью очищены (обнулены)</span>
+    <span class="hljs-comment">; Но регистры ввода-вывода (IO) НЕОБХОДИМО очищать</span>
+    <span class="hljs-comment">; Глобальный запрет прерываний</span>
+    <span class="hljs-keyword">CLI</span></code></pre>
+	    </div>
+	</div>	
+	<a href="http://smartep.ru/projects/AVR_Assembler_Start.asm" class="btn btn-green">Скачать AVR Start.asm</a>
+
+	<p><span id="p2" class="seltext">Delays</span> – Библиотека с 
+подпрограммами задержки. Все задержки рассчитаны на тактовую частоту МК 8
+ МГц. Библиотека включает следующие процедуры:</p>
+	<ul>
+		<li>Delay1us – Задержка повышенной точности в 1 мкс c учетом длительности RCALL и RET.</li>
+		<li>Delay5us – Задержка повышенной точности в 5 мкс c учетом длительности RCALL и RET.</li>
+		<li>Delay10us – Задержка повышенной точности в 10 мкс c учетом длительности RCALL и RET.</li>
+		<li>Delayus – Задержка высокой точности в несколько десятков микросекунд.</li>
+		<li>Delayms – Задержка высокой точности в несколько миллисекунд.</li>
+	</ul>
+	<div class="NavFrame" id="NavFrame1" style="margin:0px auto;width:95%;">
+	<div class="NavHead">Исходный код<a class="NavToggle" id="NavToggle1" href="javascript:collapseDiv(1);">скрыть</a></div>
+	    <div class="NavContent" style="display: block; font-size: 1rem;">
+	        <pre><code class="avrasm hljs"><span class="hljs-comment">; БИБЛИОТЕКА ЗАДЕРЖЕК (8 МГц)</span>
+<span class="hljs-comment">;	Delay1us	задержка повышенной точности в 1 мкс c учетом длительности RCALL и RET</span>
+<span class="hljs-comment">;	Delay5us	задержка повышенной точности в 5 мкс c учетом длительности RCALL и RET</span>
+<span class="hljs-comment">;	Delay10us	задержка повышенной точности в 10 мкс c учетом длительности RCALL и RET</span>
+<span class="hljs-comment">;	Delayus		задержка высокой точности в несколько десятков микросекунд</span>
+<span class="hljs-comment">;	Delayms		задержка высокой точности в несколько миллисекунд</span>
+<span class="hljs-comment">;=================================================</span>
+<span class="hljs-comment">; задержка повышенной точности в 1 мкс c учетом длительности RCALL и RET</span>
+<span class="hljs-comment">; RCALL дает 3 + 1 NOP + 4 RET = 8 - 1 микросекунда при 8МГц</span>
+<span class="hljs-symbol">Delay1us:</span>							
+    <span class="hljs-keyword">NOP</span>			
+<span class="hljs-keyword">RET</span>
+<span class="hljs-comment">;=================================================	</span>
+<span class="hljs-comment">; задержка повышенной точности в 5 мкс c учетом длительности RCALL и RET</span>
+<span class="hljs-symbol">Delay5us:</span>	
+    <span class="hljs-keyword">PUSH</span>	Temp1	
+    <span class="hljs-keyword">LDI</span>		Temp1, <span class="hljs-number">9</span>	
+<span class="hljs-symbol">Delay5us_loop:</span>					
+    <span class="hljs-keyword">DEC</span>		Temp1	
+    <span class="hljs-keyword">BRNE</span>	Delay5us_loop	
+    <span class="hljs-keyword">POP</span>		Temp1
+    <span class="hljs-keyword">NOP</span>
+    <span class="hljs-keyword">NOP</span>				
+<span class="hljs-keyword">RET</span>
+<span class="hljs-comment">;=================================================			</span>
+<span class="hljs-comment">; задержка повышенной точности в 10 мкс c учетом длительности RCALL и RET</span>
+<span class="hljs-symbol">Delay10us:</span>	
+    <span class="hljs-keyword">PUSH</span>	Temp1	
+    <span class="hljs-keyword">LDI</span>		Temp1, <span class="hljs-number">23</span>	
+<span class="hljs-symbol">Delay10us_loop:</span>					
+    <span class="hljs-keyword">DEC</span>		Temp1	
+    <span class="hljs-keyword">BRNE</span>	Delay10us_loop	
+    <span class="hljs-keyword">POP</span>		Temp1				
+<span class="hljs-keyword">RET</span>
+<span class="hljs-comment">;=================================================		</span>
+<span class="hljs-comment">; задержка высокой точности в несколько десятков микросекунд</span>
+<span class="hljs-comment">; вход Temp1 количество необходимых десятков микросекунд</span>
+<span class="hljs-symbol">Delayus:</span>
+    <span class="hljs-keyword">PUSH</span>	Temp2
+<span class="hljs-symbol">Delayus_loop1:</span>
+    <span class="hljs-keyword">LDI</span>		Temp2, <span class="hljs-number">25</span>
+<span class="hljs-symbol">Delayus_loop2:</span>
+    <span class="hljs-keyword">DEC</span>		Temp2	
+    <span class="hljs-keyword">BRNE</span>	Delayus_loop2
+    <span class="hljs-keyword">NOP</span>
+    <span class="hljs-keyword">NOP</span>
+    <span class="hljs-keyword">DEC</span>		Temp1
+    <span class="hljs-keyword">BRNE</span>	Delayus_loop1
+    <span class="hljs-keyword">POP</span>		Temp2
+<span class="hljs-keyword">RET</span>	
+<span class="hljs-comment">;=================================================</span>
+<span class="hljs-comment">; задержка высокой точности в несколько миллисекунд</span>
+<span class="hljs-comment">; вход Temp1 количество необходимых миллисекунд</span>
+<span class="hljs-symbol">Delayms:</span>
+    <span class="hljs-keyword">PUSH</span>	Temp2
+    <span class="hljs-keyword">MOV</span>		Temp2, Temp1
+<span class="hljs-symbol">Delayms_loop:</span>	
+    <span class="hljs-keyword">LDI</span>		Temp1, <span class="hljs-number">100</span>
+    <span class="hljs-keyword">RCALL</span>	Delayus
+    <span class="hljs-keyword">DEC</span>		Temp2
+    <span class="hljs-keyword">BRNE</span>	Delayms_loop
+    <span class="hljs-keyword">POP</span>		Temp2
+<span class="hljs-keyword">RET</span></code></pre>
+	    </div>
+	</div>	
+	<a href="http://smartep.ru/projects/AVR_Assembler_Delay.asm" class="btn btn-green">Скачать AVR Delay.asm</a>
+	<p><span id="p3" class="seltext">Math</span> – Библиотека с подпрограммами математических операций, включает следующие процедуры:</p>
+	<ul>
+		<li>SUB16X16 – Вычитание 16-разрядных чисел.</li>
+		<li>ADD16X16 – Сложение 16-разрядных чисел.</li>
+		<li>MUL16X16s – Знаковое умножение 16-разрядных чисел.</li>
+		<li>MUL16X16u – Беззнаковое умножение 16-разрядных чисел.</li>
+		<li>DIV16X16s – Знаковое деление 16-разрядных чисел.</li>
+		<li>DIV16X16u – Беззнаковое деление 16-разрядных чисел.</li>
+		<li>DIV16POWER2s – Знаковое деление 16-разрядного числа на степень 2.</li>
+		<li>DIV16POWER2u – Беззнаковое деление 16-разрядного числа на степень 2.</li>
+		<li>SIGN16 – Смена знака 16-разрядного числа.</li>
+		<li>DEC2BCD – Перевол 8-разрядного десятичного числа в двоично-десятичное (BCD).</li>
+		<li>BCD2DEC – Перевол 8-разрядного двоично-десятичного (BCD) числа в десятичное.</li>	
+		<li>CP16X16 – Сравнение 16-разрядных чисел.</li>
+		<li>DIGITS8 – Вычисление цифр 8-разрядного числа.</li>
+		<li>DIGITS16 – Вычисление цифр 16-разрядного числа.</li>
+	</ul>
+	<div class="NavFrame" id="NavFrame2" style="margin:0px auto;width:95%;">
+	<div class="NavHead">Исходный код<a class="NavToggle" id="NavToggle2" href="javascript:collapseDiv(2);">скрыть</a></div>
+	    <div class="NavContent" style="display: block; font-size: 1rem;">
+	        <pre><code class="avrasm hljs"><span class="hljs-comment">; БИБЛИОТЕКА ДЛЯ РАБОТЫ С МАТЕМАТИКОЙ</span>
+<span class="hljs-comment">;	SUB16X16		вычитание 16-разрядных чисел</span>
+<span class="hljs-comment">;	ADD16X16		сложение 16-разрядных чисел	</span>
+<span class="hljs-comment">;	MUL16X16s		знаковое умножение 16-разрядных чисел</span>
+<span class="hljs-comment">;	MUL16X16u		беззнаковое умножение 16-разрядных чисел</span>
+<span class="hljs-comment">;	DIV16X16s		знаковое деление 16-разрядных чисел</span>
+<span class="hljs-comment">;	DIV16X16u		беззнаковое деление 16-разрядных чисел</span>
+<span class="hljs-comment">;	DIV16POWER2s		знаковое деление 16-разрядного числа на степень 2</span>
+<span class="hljs-comment">;	DIV16POWER2u		беззнаковое деление 16-разрядного числа на степень 2</span>
+<span class="hljs-comment">;	SIGN16			смена знака 16-разрядного числа</span>
+<span class="hljs-comment">;	DEC2BCD			перевол 8-разрядного десятичного числа в двоично-десятичное (BCD)</span>
+<span class="hljs-comment">;	BCD2DEC			перевол 8-разрядного двоично-десятичного (BCD) числа в десятичное	</span>
+<span class="hljs-comment">;	CP16X16			сравнение 16-разрядных чисел</span>
+<span class="hljs-comment">;	DIGITS8			вычисление цифр 8-разрядного числа</span>
+<span class="hljs-comment">;	DIGITS16		вычисление цифр 16-разрядного числа</span>
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; вычитание 16-разрядных чисел</span>
+<span class="hljs-comment">; вход: 	Temp1-Temp2 первый аргумент от H к L</span>
+<span class="hljs-comment">; 		Temp3-Temp4 второй аргумент от H к L</span>
+<span class="hljs-comment">; выход:	Temp1-Temp2 результат от H к L</span>
+<span class="hljs-symbol">SUB16X16:</span>
+    <span class="hljs-keyword">SUB</span>		Temp2, Temp4
+    <span class="hljs-keyword">SBC</span>		Temp1, Temp3
+<span class="hljs-keyword">RET</span>
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; сложение 16-разрядных чисел</span>
+<span class="hljs-comment">; вход: 	Temp1-Temp2 первый аргумент от H к L</span>
+<span class="hljs-comment">; 		Temp3-Temp4 второй аргумент от H к L</span>
+<span class="hljs-comment">; выход:	Temp1-Temp2 результат от H к L</span>
+<span class="hljs-symbol">ADD16X16:</span>
+    <span class="hljs-keyword">ADD</span>		Temp2, Temp4
+    <span class="hljs-keyword">ADC</span>		Temp1, Temp3
+<span class="hljs-keyword">RET</span>
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; знаковое умножение 16-разрядных чисел</span>
+<span class="hljs-comment">; вход: 	Temp1-Temp2 первый аргумент от H к L</span>
+<span class="hljs-comment">; 		Temp3-Temp4 второй аргумент от H к L</span>
+<span class="hljs-comment">; выход:	Temp1-Temp4 результат от H к L</span>
+<span class="hljs-symbol">MUL16X16s:</span>
+    <span class="hljs-keyword">MULS</span>	Temp3, Temp1    	<span class="hljs-comment">; (signed)ah * (signed)bh</span>
+    <span class="hljs-keyword">MOV</span>		Temp5, MulHigh
+    <span class="hljs-keyword">MOV</span>		Temp6, MulLow
+    <span class="hljs-keyword">MUL</span>		Temp4, Temp2    	<span class="hljs-comment">; al * bl</span>
+    <span class="hljs-keyword">MOV</span>		Temp7, MulHigh
+    <span class="hljs-keyword">MOV</span>		Temp8, MulLow
+    <span class="hljs-keyword">MULSU</span>	Temp3, Temp2    	<span class="hljs-comment">; (signed)ah * bl</span>
+    <span class="hljs-keyword">SBC</span>		Temp5, Temp0		<span class="hljs-comment">; из-за отриц. чисел</span>
+    <span class="hljs-keyword">ADD</span>		Temp7, MulLow
+    <span class="hljs-keyword">ADC</span>		Temp6, MulHigh
+    <span class="hljs-keyword">ADC</span>		Temp5, Temp0
+    <span class="hljs-keyword">MULSU</span>	Temp1, Temp4    	<span class="hljs-comment">; (signed)bh * al</span>
+    <span class="hljs-keyword">SBC</span>		Temp5, Temp0		<span class="hljs-comment">; из-за отриц. чисел</span>
+    <span class="hljs-keyword">ADD</span>		Temp7, MulLow
+    <span class="hljs-keyword">ADC</span>		Temp6, MulHigh
+    <span class="hljs-keyword">ADC</span>		Temp5, Temp0
+    <span class="hljs-keyword">MOV</span>		Temp1, Temp5		<span class="hljs-comment">; move result</span>
+    <span class="hljs-keyword">MOV</span>		Temp2, Temp6
+    <span class="hljs-keyword">MOV</span>		Temp3, Temp7
+    <span class="hljs-keyword">MOV</span>		Temp4, Temp8
+<span class="hljs-keyword">RET</span>
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; беззнаковое умножение 16-разрядных чисел</span>
+<span class="hljs-comment">; вход: 	Temp1-Temp2 первый аргумент от H к L</span>
+<span class="hljs-comment">; 		Temp3-Temp4 второй аргумент от H к L</span>
+<span class="hljs-comment">; выход:	Temp1-Temp4 результат от H к L</span>
+<span class="hljs-symbol">MUL16X16u:</span>
+    <span class="hljs-keyword">MUL</span>    	Temp3, Temp1    	<span class="hljs-comment">; (unsigned)ah * (unsigned)bh</span>
+    <span class="hljs-keyword">MOV</span>		Temp5, MulHigh
+    <span class="hljs-keyword">MOV</span>		Temp6, MulLow
+    <span class="hljs-keyword">MUL</span>		Temp4, Temp2    	<span class="hljs-comment">; al * bl</span>
+    <span class="hljs-keyword">MOV</span>		Temp7, MulHigh
+    <span class="hljs-keyword">MOV</span>		Temp8, MulLow
+    <span class="hljs-keyword">MUL</span>	   	Temp3, Temp2    	<span class="hljs-comment">; (unsigned)ah * bl</span>
+    <span class="hljs-keyword">ADD</span>		Temp7, MulLow
+    <span class="hljs-keyword">ADC</span>		Temp6, MulHigh
+    <span class="hljs-keyword">ADC</span>		Temp5, Temp0
+    <span class="hljs-keyword">MUL</span>		Temp1, Temp4    	<span class="hljs-comment">; (unsigned)bh * al</span>
+    <span class="hljs-keyword">ADD</span>		Temp7, MulLow
+    <span class="hljs-keyword">ADC</span>		Temp6, MulHigh
+    <span class="hljs-keyword">ADC</span>		Temp5, Temp0
+    <span class="hljs-keyword">MOV</span>		Temp1, Temp5		<span class="hljs-comment">; move result</span>
+    <span class="hljs-keyword">MOV</span>		Temp2, Temp6
+    <span class="hljs-keyword">MOV</span>		Temp3, Temp7
+    <span class="hljs-keyword">MOV</span>		Temp4, Temp8
+<span class="hljs-keyword">RET</span>
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; знаковое деление 16-разрядных чисел</span>
+<span class="hljs-comment">; вход: 	Temp1-Temp2 первый аргумент от H к L</span>
+<span class="hljs-comment">; 		Temp3-Temp4 второй аргумент от H к L</span>
+<span class="hljs-comment">; выход:	Temp1-Temp2 результат от H к L</span>
+<span class="hljs-comment">;		R13-R14 остаток от H к L</span>
+<span class="hljs-symbol">DIV16X16s:</span>	
+    <span class="hljs-keyword">MOV</span>		<span class="hljs-built_in">R10</span>, <span class="hljs-built_in">R16</span>	<span class="hljs-comment">;вычисляем знак результата</span>
+    <span class="hljs-keyword">EOR</span>		<span class="hljs-built_in">R10</span>, <span class="hljs-built_in">R18</span>	<span class="hljs-comment">; знак хранится в R10</span>
+    <span class="hljs-keyword">SBRS</span>	<span class="hljs-built_in">R16</span>, <span class="hljs-number">7</span>		<span class="hljs-comment">; проверяем знак делимого</span>
+    <span class="hljs-keyword">RJMP</span>	d16s_1		<span class="hljs-comment">; если положительное то идем дальше</span>
+    <span class="hljs-keyword">COM</span>		<span class="hljs-built_in">R16</span>		<span class="hljs-comment">; иначе меняем знак делимого</span>
+    <span class="hljs-keyword">COM</span>		<span class="hljs-built_in">R17</span>		<span class="hljs-comment">; преобразуем в доп код</span>
+    <span class="hljs-keyword">SUBI</span>	<span class="hljs-built_in">R17</span>, LOW(<span class="hljs-number">-1</span>)
+    <span class="hljs-keyword">SBCI</span>	<span class="hljs-built_in">R16</span>, HIGH(<span class="hljs-number">-1</span>)
+<span class="hljs-symbol">d16s_1:</span>	
+    <span class="hljs-keyword">SBRS</span>	<span class="hljs-built_in">R18</span>, <span class="hljs-number">7</span>		<span class="hljs-comment">; проверяем знак делителя</span>
+    <span class="hljs-keyword">RJMP</span>	d16s_2
+    <span class="hljs-keyword">COM</span>		<span class="hljs-built_in">R18</span>	
+    <span class="hljs-keyword">COM</span>		<span class="hljs-built_in">R19</span>
+    <span class="hljs-keyword">SUBI</span>	<span class="hljs-built_in">R19</span>, LOW(<span class="hljs-number">-1</span>)
+    <span class="hljs-keyword">SBCI</span>	<span class="hljs-built_in">R18</span>, HIGH(<span class="hljs-number">-1</span>)
+    <span class="hljs-comment">; подготовили делимое и делитель</span>
+<span class="hljs-symbol">d16s_2:</span>	
+    <span class="hljs-comment">; очищаем остаток и флаг переноса</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R14</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R13</span>
+    <span class="hljs-keyword">CLC</span>
+    <span class="hljs-keyword">LDI</span>		<span class="hljs-built_in">R31</span>, <span class="hljs-number">17</span>		<span class="hljs-comment">; init loop counter</span>
+<span class="hljs-symbol">d16s_3:</span>		
+    <span class="hljs-keyword">ROL</span>		<span class="hljs-built_in">R17</span>		<span class="hljs-comment">; shift left dividend</span>
+    <span class="hljs-keyword">ROL</span>		<span class="hljs-built_in">R16</span>
+    <span class="hljs-keyword">DEC</span>		<span class="hljs-built_in">R31</span>		<span class="hljs-comment">; decrement counter</span>
+    <span class="hljs-keyword">BRNE</span>	d16s_5		<span class="hljs-comment">; if done</span>
+    <span class="hljs-keyword">SBRS</span>	<span class="hljs-built_in">R10</span>, <span class="hljs-number">7</span>		<span class="hljs-comment">; if MSB in sign register set</span>
+    <span class="hljs-keyword">RJMP</span>	d16s_4
+    <span class="hljs-keyword">COM</span>		<span class="hljs-built_in">R16</span>		<span class="hljs-comment">; change sign of result</span>
+    <span class="hljs-keyword">COM</span>		<span class="hljs-built_in">R17</span>
+    <span class="hljs-keyword">SUBI</span>	<span class="hljs-built_in">R17</span>, LOW(<span class="hljs-number">-1</span>)
+    <span class="hljs-keyword">SBCI</span>	<span class="hljs-built_in">R16</span>, HIGH(<span class="hljs-number">-1</span>)
+<span class="hljs-symbol">d16s_4:</span>	
+    <span class="hljs-keyword">RET</span>
+<span class="hljs-symbol">d16s_5:</span>	
+    <span class="hljs-keyword">ROL</span>		<span class="hljs-built_in">R14</span>		<span class="hljs-comment">; shift dividend into remainder</span>
+    <span class="hljs-keyword">ROL</span>		<span class="hljs-built_in">R13</span>
+    <span class="hljs-keyword">SUB</span>		<span class="hljs-built_in">R14</span>, <span class="hljs-built_in">R19</span>	<span class="hljs-comment">; remainder = remainder - divisor</span>
+    <span class="hljs-keyword">SBC</span>		<span class="hljs-built_in">R13</span>, <span class="hljs-built_in">R18</span>
+    <span class="hljs-keyword">BRCC</span>	d16s_6		<span class="hljs-comment">; if result negative</span>
+    <span class="hljs-keyword">ADD</span>		<span class="hljs-built_in">R14</span>, <span class="hljs-built_in">R19</span>	<span class="hljs-comment">; restore remainder</span>
+    <span class="hljs-keyword">ADC</span>		<span class="hljs-built_in">R13</span>, <span class="hljs-built_in">R18</span>
+    <span class="hljs-keyword">CLC</span>				<span class="hljs-comment">; clear carry to be shifted into result</span>
+    <span class="hljs-keyword">RJMP</span>	d16s_3		<span class="hljs-comment">; else</span>
+<span class="hljs-symbol">d16s_6:</span>	
+    <span class="hljs-keyword">SEC</span>				<span class="hljs-comment">; set carry to be shifted into result</span>
+    <span class="hljs-keyword">RJMP</span>	d16s_3
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; беззнаковое деление 16-разрядных чисел</span>
+<span class="hljs-comment">; вход: 	Temp1-Temp2 первый аргумент от H к L</span>
+<span class="hljs-comment">; 		Temp3-Temp4 второй аргумент от H к L</span>
+<span class="hljs-comment">; выход:	Temp1-Temp2 результат от H к L</span>
+<span class="hljs-comment">;		R13-R14 остаток от H к L</span>
+<span class="hljs-comment">;=================================================</span>
+<span class="hljs-symbol">DIV16X16u:</span>	
+    <span class="hljs-comment">; очищаем остаток и флаг переноса</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R14</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R13</span>
+    <span class="hljs-keyword">CLC</span>
+    <span class="hljs-keyword">LDI</span>		<span class="hljs-built_in">R31</span>, <span class="hljs-number">17</span>		<span class="hljs-comment">; init loop counter</span>
+<span class="hljs-symbol">d16u_1:</span>	
+    <span class="hljs-keyword">ROL</span>		<span class="hljs-built_in">R17</span>		<span class="hljs-comment">; shift left dividend</span>
+    <span class="hljs-keyword">ROL</span>		<span class="hljs-built_in">R16</span>
+    <span class="hljs-keyword">DEC</span>		<span class="hljs-built_in">R31</span>		<span class="hljs-comment">; decrement counter</span>
+    <span class="hljs-keyword">BRNE</span>	d16u_2		<span class="hljs-comment">; if done</span>
+    <span class="hljs-keyword">RET</span>				<span class="hljs-comment">; return</span>
+<span class="hljs-symbol">d16u_2:</span>	
+    <span class="hljs-keyword">ROL</span>		<span class="hljs-built_in">R14</span>		<span class="hljs-comment">; shift dividend into remainder</span>
+    <span class="hljs-keyword">ROL</span>		<span class="hljs-built_in">R13</span>
+    <span class="hljs-keyword">SUB</span>		<span class="hljs-built_in">R14</span>, <span class="hljs-built_in">R19</span>	<span class="hljs-comment">;remainder = remainder - divisor</span>
+    <span class="hljs-keyword">SBC</span>		<span class="hljs-built_in">R13</span>, <span class="hljs-built_in">R18</span>	
+    <span class="hljs-keyword">BRCC</span>	d16u_3		<span class="hljs-comment">; if result negative</span>
+    <span class="hljs-keyword">ADD</span>		<span class="hljs-built_in">R14</span>, <span class="hljs-built_in">R19</span>	<span class="hljs-comment">; restore remainder</span>
+    <span class="hljs-keyword">ADC</span>		<span class="hljs-built_in">R13</span>, <span class="hljs-built_in">R18</span>
+    <span class="hljs-keyword">CLC</span>				<span class="hljs-comment">; clear carry to be shifted into result</span>
+    <span class="hljs-keyword">RJMP</span>	d16u_1		<span class="hljs-comment">; else</span>
+<span class="hljs-symbol">d16u_3:</span>	
+    <span class="hljs-keyword">SEC</span>				<span class="hljs-comment">; set carry to be shifted into result</span>
+    <span class="hljs-keyword">RJMP</span>	d16u_1
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; знаковое деление 16-разрядного числа на степень 2</span>
+<span class="hljs-comment">; вход: 	Temp1-Temp2 делимое от H к L</span>
+<span class="hljs-comment">;		Temp5 степень 2</span>
+<span class="hljs-comment">; выход:	Temp1-Temp2 результат от H к L</span>
+<span class="hljs-symbol">DIV16POWER2s:</span>
+    <span class="hljs-keyword">TST</span>		Temp5
+    <span class="hljs-keyword">BREQ</span>	DIV16POWER2s_2
+<span class="hljs-symbol">DIV16POWER2s_1:</span>
+    <span class="hljs-keyword">ASR</span>		Temp1
+    <span class="hljs-keyword">ROR</span>		Temp2
+    <span class="hljs-keyword">DEC</span>		Temp5
+    <span class="hljs-keyword">BRNE</span>	DIV16POWER2s_1
+<span class="hljs-symbol">DIV16POWER2s_2:</span>
+<span class="hljs-keyword">RET</span>
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; беззнаковое деление 16-разрядного числа на степень 2</span>
+<span class="hljs-comment">; вход: 	Temp1-Temp2 делимое от H к L</span>
+<span class="hljs-comment">;			Temp5 степень 2</span>
+<span class="hljs-comment">; выход:	Temp1-Temp2 результат от H к L</span>
+<span class="hljs-symbol">DIV16POWER2u:</span>
+    <span class="hljs-keyword">TST</span>		Temp5
+    <span class="hljs-keyword">BREQ</span>	DIV16POWER2u_2
+<span class="hljs-symbol">DIV16POWER2u_1:</span>
+    <span class="hljs-keyword">LSR</span>		Temp1
+    <span class="hljs-keyword">ROR</span>		Temp2
+    <span class="hljs-keyword">DEC</span>		Temp5
+    <span class="hljs-keyword">BRNE</span>	DIV16POWER2u_1
+<span class="hljs-symbol">DIV16POWER2u_2:</span>
+<span class="hljs-keyword">RET</span>
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; смена знака 16-разрядного числа</span>
+<span class="hljs-comment">; вход: 	Temp1-Temp2 число от H к L</span>
+<span class="hljs-comment">; выход:	Temp1-Temp2 результат от H к L</span>
+<span class="hljs-symbol">SIGN16:</span>
+    <span class="hljs-keyword">COM</span>		Temp1
+    <span class="hljs-keyword">COM</span>		Temp2
+    <span class="hljs-keyword">SUBI</span>	Temp2, LOW(<span class="hljs-number">-1</span>)
+    <span class="hljs-keyword">SBCI</span>	Temp2, HIGH(<span class="hljs-number">-1</span>)
+<span class="hljs-keyword">RET</span>	
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; перевол 8-разрядного десятичного числа в двоично-десятичное (BCD)</span>
+<span class="hljs-comment">; вход: 	Temp1 десятичное число</span>
+<span class="hljs-comment">; выход:	Temp1 BCD число</span>
+<span class="hljs-symbol">DEC2BCD:</span> 
+    <span class="hljs-keyword">PUSH</span> 	Temp2
+    <span class="hljs-keyword">PUSH</span> 	Temp3
+    <span class="hljs-keyword">PUSH</span> 	Temp4
+    <span class="hljs-keyword">CPI</span> 	Temp1, <span class="hljs-number">10</span>
+    <span class="hljs-keyword">BRLO</span> 	Dec2Bcd_exit
+    <span class="hljs-keyword">PUSH</span> 	Temp1
+    <span class="hljs-keyword">CLR</span> 	Temp3
+    <span class="hljs-keyword">LDI</span> 	Temp2, <span class="hljs-number">10</span>   
+<span class="hljs-symbol">Dec2Bcd_1:</span> 
+    <span class="hljs-keyword">SUB</span> 	Temp1,Temp2 
+    <span class="hljs-keyword">INC</span> 	Temp3
+    <span class="hljs-keyword">CPI</span> 	Temp1, <span class="hljs-number">10</span>    
+    <span class="hljs-keyword">BRGE</span> 	Dec2Bcd_1
+    <span class="hljs-keyword">CLR</span> 	Temp4
+    <span class="hljs-keyword">CLR</span> 	Temp1 
+<span class="hljs-symbol">Dec2Bcd_2:</span> 
+    <span class="hljs-keyword">ADD</span> 	Temp4, Temp2 
+    <span class="hljs-keyword">INC</span> 	Temp1
+    <span class="hljs-keyword">CP</span> 		Temp1, Temp3
+    <span class="hljs-keyword">BRNE</span> 	Dec2Bcd_2  
+    
+    <span class="hljs-keyword">POP</span> 	Temp1
+    <span class="hljs-keyword">SUB</span> 	Temp1, Temp4 
+    <span class="hljs-keyword">SWAP</span> 	Temp3
+    <span class="hljs-keyword">ADD</span> 	Temp1, Temp3
+<span class="hljs-symbol">Dec2Bcd_exit:</span>
+    <span class="hljs-keyword">POP</span> 	Temp4
+    <span class="hljs-keyword">POP</span> 	Temp3
+    <span class="hljs-keyword">POP</span> 	Temp2
+<span class="hljs-keyword">RET</span>
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; перевол 8-разрядного двоично-десятичного (BCD) числа в десятичное</span>
+<span class="hljs-comment">; вход: 	Temp1 BCD число</span>
+<span class="hljs-comment">; выход:	Temp1 десятичное число</span>
+<span class="hljs-symbol">BCD2DEC:</span> 
+    <span class="hljs-keyword">PUSH</span> 	Temp2
+    <span class="hljs-keyword">PUSH</span> 	Temp3
+    <span class="hljs-keyword">PUSH</span> 	Temp1
+    <span class="hljs-keyword">SWAP</span> 	Temp1
+    <span class="hljs-keyword">CLR</span> 	Temp3
+    <span class="hljs-keyword">CBR</span> 	Temp1, <span class="hljs-number">0</span>b11110000
+    <span class="hljs-keyword">MOV</span> 	Temp3, Temp1
+    <span class="hljs-keyword">CLR</span> 	Temp2
+<span class="hljs-symbol">Bcd2Dec_1:</span>
+    <span class="hljs-keyword">ADD</span> 	Temp1, Temp3
+    <span class="hljs-keyword">INC</span> 	Temp2
+    <span class="hljs-keyword">CPI</span> 	Temp2, <span class="hljs-number">9</span>
+    <span class="hljs-keyword">BRNE</span> 	Bcd2Dec_1
+    <span class="hljs-keyword">MOV</span> 	Temp2, Temp1
+    <span class="hljs-keyword">POP</span> 	Temp1 
+    <span class="hljs-keyword">CBR</span> 	Temp1, <span class="hljs-number">0</span>b11110000
+    <span class="hljs-keyword">ADD</span> 	Temp1, Temp2
+    <span class="hljs-keyword">POP</span> 	Temp3
+    <span class="hljs-keyword">POP</span> 	Temp2
+<span class="hljs-keyword">RET</span>
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; сравнение 16-разрядных чисел</span>
+<span class="hljs-comment">; вход: 	Temp1-Temp2 первый аргумент от H к L</span>
+<span class="hljs-comment">; 		Temp3-Temp4 второй аргумент от H к L</span>
+<span class="hljs-comment">; выход:	смотри флаги</span>
+<span class="hljs-symbol">CP16X16:</span>
+    <span class="hljs-keyword">CP</span>		Temp2, Temp4
+    <span class="hljs-keyword">CPC</span>		Temp1, Temp3
+<span class="hljs-keyword">RET</span>
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; вычисление цифр 8-разрядного числа</span>
+<span class="hljs-comment">; вход: 	Temp1 аргумент</span>
+<span class="hljs-comment">; выход:	Temp1-Temp3 цифры от H к L</span>
+<span class="hljs-symbol">DIGITS8:</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R26</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R27</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R28</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R29</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R30</span>
+    <span class="hljs-keyword">LDI</span>		Temp2,<span class="hljs-number">100</span>
+<span class="hljs-symbol">DIG8_1:</span>
+    <span class="hljs-keyword">CP</span>		Temp1, Temp2
+    <span class="hljs-keyword">BRLO</span>	DIG8_2
+    <span class="hljs-keyword">SUB</span>		Temp1, Temp2
+    <span class="hljs-comment">; сотни</span>
+    <span class="hljs-keyword">INC</span>		<span class="hljs-built_in">R26</span>	
+    <span class="hljs-keyword">RJMP</span>	DIG8_1
+<span class="hljs-symbol">DIG8_2:</span>	
+    <span class="hljs-keyword">LDI</span>		Temp2,<span class="hljs-number">10</span>
+<span class="hljs-symbol">DIG8_3:</span>
+    <span class="hljs-keyword">CP</span>		Temp1, Temp2
+    <span class="hljs-keyword">BRLO</span>	DIG8_4
+    <span class="hljs-keyword">SUB</span>		Temp1, Temp2
+    <span class="hljs-comment">; тысячи</span>
+    <span class="hljs-keyword">INC</span>		<span class="hljs-built_in">R27</span>		
+    <span class="hljs-keyword">RJMP</span>	DIG8_3
+<span class="hljs-symbol">DIG8_4:</span>
+    <span class="hljs-comment">; в Temp1 остались только единицы</span>
+    <span class="hljs-keyword">MOV</span>		Temp3, Temp1
+    <span class="hljs-keyword">MOV</span>		Temp1, <span class="hljs-built_in">R26</span>		
+    <span class="hljs-keyword">MOV</span>		Temp2, <span class="hljs-built_in">R27</span>
+<span class="hljs-keyword">RET</span>
+<span class="hljs-comment">;=======================================================================</span>
+<span class="hljs-comment">; вычисление цифр 16-разрядного числа</span>
+<span class="hljs-comment">; вход: 	Temp1-Temp2 аргумент от H к L</span>
+<span class="hljs-comment">; выход:	Temp1-Temp5 цифры от H к L</span>
+<span class="hljs-symbol">DIGITS16:</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R26</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R27</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R28</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R29</span>
+    <span class="hljs-keyword">CLR</span>		<span class="hljs-built_in">R30</span>
+    <span class="hljs-keyword">LDI</span>		Temp3, HIGH(<span class="hljs-number">10000</span>)
+    <span class="hljs-keyword">LDI</span>		Temp4, LOW(<span class="hljs-number">10000</span>)
+<span class="hljs-symbol">DIG16_1:</span>
+    <span class="hljs-keyword">RCALL</span>	CP16X16	
+    <span class="hljs-keyword">BRLO</span>	DIG16_2
+    <span class="hljs-keyword">RCALL</span>	SUB16X16
+    <span class="hljs-comment">; десятки тысяч</span>
+    <span class="hljs-keyword">INC</span>		<span class="hljs-built_in">R26</span>	
+    <span class="hljs-keyword">RJMP</span>	DIG16_1
+<span class="hljs-symbol">DIG16_2:</span>	
+    <span class="hljs-keyword">LDI</span>		Temp3, HIGH(<span class="hljs-number">1000</span>)
+    <span class="hljs-keyword">LDI</span>		Temp4, LOW(<span class="hljs-number">1000</span>)
+<span class="hljs-symbol">DIG16_3:</span>
+    <span class="hljs-keyword">RCALL</span>	CP16X16	
+    <span class="hljs-keyword">BRLO</span>	DIG16_4
+    <span class="hljs-keyword">RCALL</span>	SUB16X16
+    <span class="hljs-comment">; тысячи</span>
+    <span class="hljs-keyword">INC</span>		<span class="hljs-built_in">R27</span>		
+    <span class="hljs-keyword">RJMP</span>	DIG16_3
+<span class="hljs-symbol">DIG16_4:</span>
+    <span class="hljs-keyword">LDI</span>		Temp3, HIGH(<span class="hljs-number">100</span>)
+    <span class="hljs-keyword">LDI</span>		Temp4, LOW(<span class="hljs-number">100</span>)
+<span class="hljs-symbol">DIG16_5:</span>
+    <span class="hljs-keyword">RCALL</span>	CP16X16	
+    <span class="hljs-keyword">BRLO</span>	DIG16_6
+    <span class="hljs-keyword">RCALL</span>	SUB16X16
+    <span class="hljs-comment">; сотни</span>
+    <span class="hljs-keyword">INC</span>		<span class="hljs-built_in">R28</span>	
+    <span class="hljs-keyword">RJMP</span>	DIG16_5
+<span class="hljs-symbol">DIG16_6:</span>
+    <span class="hljs-keyword">LDI</span>		Temp3, HIGH(<span class="hljs-number">10</span>)
+    <span class="hljs-keyword">LDI</span>		Temp4, LOW(<span class="hljs-number">10</span>)
+<span class="hljs-symbol">DIG16_7:</span>
+    <span class="hljs-keyword">RCALL</span>	CP16X16	
+    <span class="hljs-keyword">BRLO</span>	DIG16_8
+    <span class="hljs-keyword">RCALL</span>	SUB16X16
+    <span class="hljs-comment">; десятки</span>
+    <span class="hljs-keyword">INC</span>		<span class="hljs-built_in">R29</span>
+    <span class="hljs-keyword">RJMP</span>	DIG16_7
+<span class="hljs-symbol">DIG16_8:</span>
+    <span class="hljs-comment">; в Temp1-Temp2 остались только единицы</span>
+    <span class="hljs-keyword">MOV</span>		Temp5, Temp2
+    <span class="hljs-keyword">MOV</span>		Temp1, <span class="hljs-built_in">R26</span>		
+    <span class="hljs-keyword">MOV</span>		Temp2, <span class="hljs-built_in">R27</span>
+    <span class="hljs-keyword">MOV</span>		Temp3, <span class="hljs-built_in">R28</span>
+    <span class="hljs-keyword">MOV</span>		Temp4, <span class="hljs-built_in">R29</span>
+<span class="hljs-keyword">RET</span></code></pre>
+	    </div>
+	</div>
+	<a href="http://smartep.ru/projects/AVR_Assembler_Math.asm" class="btn btn-green">Скачать AVR Math.asm</a>
+
+	<p><span id="p4" class="seltext">IO Ports</span> – В данном примере 
+рассматривается работа с портами ввода-вывода. К порту А подключены 8 
+светодиодов (линии 0-7). К линии 0 порта С подключена кнопка, с 
+подтяжкой на землю. При нажатии кнопка выдает на линию 0 порта С уровень
+  логической единицы. Цикл программы организован следующим образом: при 
+запуске включается бегущий огонь, сначала загорается светодиод на линии 0
+ порта А, затем на линии 1 и т.д. По достижении линии 7 направление 
+бегущего огня меняется (от 7 к 0). При нажатии на кнопку бегущий огонь 
+останавливается и загораются одновременно все светодиоды. После 
+повторного нажатия на кнопку бегущий огонь продолжает перемещаться с 
+места остановки.</p>
+	<a href="http://smartep.ru/projects/AVR_Assembler_IO_Ports.zip" class="btn btn-green">Скачать пример</a>
+
+	<p><span id="p5" class="seltext">Dynamic Indication</span> – В данном 
+примере рассматривается работа с 7-сегментным индикатором. В моём случае
+ он имеет 4 разряда (цифры). Поскольку у меня на плате установлены 
+транзисторы для управления разрядами, то управление осуществляется 
+выводом логической единицы и на разряды и на сегменты. Схема подключения
+ следующая: к линиям 0-7 порта C подключены сегменты индикатора, а к 
+линиям 0-3 порта В разряды индикатора. При запуске на индикатор 
+выводятся цифры 1 2 3 4.</p>	
+	<a href="http://smartep.ru/projects/AVR_Assembler_Dynamic_Indication.zip" class="btn btn-green">Скачать пример</a>
+
+	<p><span id="p6" class="seltext">UART</span> – В данном примере 
+рассматривается периферийного модуля UART (универсальный асинхронный 
+приёмопередатчик). Модуль UART можно настроить как на работу с 
+прерываниями, так и без них (вручную, путём работы с флагами). Пример 
+работает следующим образом: при получении байта, МК переходит в 
+обработчик прерывания (используется только прерывание по приёму данных) и
+ разбирает численное значение байта (0-255) на  цифры, которые и 
+выводятся на 7-сегментный индикатор. Схема подключения аналогична 
+предыдущему примеру. Передача осуществляется по двум линиям UART (порт D
+ линии 0-1), к которым необходимо подключить линии RX и TX 
+преобразователя USB-UART. Для настройкки без прерываний необходимо 
+обнулить бит RXCIE в регистре UCSRB и вручную опрашивать интерфейс в 
+основном цикле программы.</p>	
+	<a href="http://smartep.ru/projects/AVR_Assembler_UART.zip" class="btn btn-green">Скачать пример</a>
+
+	<p><span id="p7" class="seltext">Clock</span> – В данном примере 
+рассматривается реализация простых часов с 7-сегментым индикатором и 
+парой кнопок. Только здесь уже требуется 6 разрядов, хотя секунды можно 
+опустить. Кнопки с подтяжкой на землю. При нажатии кнопка выдает на 
+линию высокий логический уровень. Индикатор подключается как и в 
+предыдущих примерах (сегменты к порту C, разряды к порту B), а кнопки к 
+линиям 2-3 порта D. Кнопка PD2 используется для установки минут, а PD3 
+для установки часов. По нажатию каждой из кнопок увеличивается значение 
+соответствующего разряда (минуты или часы).</p>	
+	<a href="http://smartep.ru/projects/AVR_Assembler_Clock.zip" class="btn btn-green">Скачать пример</a>
+
+	<p><span id="p8" class="seltext">DS18B20</span> – В данном примере 
+рассматривается работа с цифровым датчиком температуры DS18B20. 
+Показания температуры выводятся на 7-сегментый индикатор. Вывод DQ 
+датчика поключен к линии PC7. Линия должна быть подтянута к плюсу 
+питания резистором на 4.7-10 кОм (согласно документации). Датчик 
+опрашивается каждую секунду. Температура выводится на 4-разрядный 
+индикатор: знак, два разряда на целуюю часть и один на вещественную. 
+Документация к датчику <a href="http://smartep.ru/datasheets/sensors/DS18B20.pdf" style="text-decoration: underline;">здесь</a>.</p>	
+	<a href="http://smartep.ru/projects/AVR_Assembler_DS18B20.zip" class="btn btn-green">Скачать пример</a>
+
+	<p><span id="p9" class="seltext">ADC Indication</span> – Данный пример 
+аналогичен примеру с UART. Отличие в том, что байт берется с линии 0 
+порта А (линия 0 АЦП, ADC0). Микроконтроллер по таймеру производит 
+аналого-цифровое преобразование напряжения на линии 0 порта А, (младшие 2
+ бита отбрасываются как шум). При измерении используется внутренняя 
+опора 5 В. К линии PD2 порта D подключена кнопка, которая определяет 
+режим вывода показаний. При нажатии на кнопку выводится результат 
+измерений в виде числа от 0 до 255. Если кнопка не нажата, то результат 
+измерений переводится в вольты и выводится на индикатор (с точностью до 
+десятых).</p>	
+	<a href="http://smartep.ru/projects/AVR_Assembler_ADC_Indication.zip" class="btn btn-green">Скачать пример</a>
+	
+	<p><span id="p10" class="seltext">Fast PWM</span> – В данном примере 
+показана настройка аппаратного ШИМ (широтно-импульсная модуляция, англ. 
+PWM). К линиям 4 и 5 порта D подключены светодиоды, а к линиям 0-3 порта
+ С – кнопки. Кнопки с подтяжкой на землю (при нажатии кнопка выдает на 
+линию порта уровень логической единицы) подключены к линиям 2-5 порта C.
+ Кнопки на линях 2 и 3 соответственно увеличивают и уменьшают 
+коэффициент заполнения ШИМ (меняется яркость светодиода) канала А. 
+Кнопки на линях 4 и 5 соответственно увеличивают и уменьшают коэффициент
+ заполнения ШИМ канала B. Число сравнения для каждого из каналов 
+меняется в диапазоне от 0 до 255. Для канала А шаг изменения равен 10, 
+для канала В шаг равен 5.</p>	
+	<a href="http://smartep.ru/projects/AVR_Assembler_Fast_PWM.zip" class="btn btn-green">Скачать пример</a>
+
+	<p><span id="p11" class="seltext">HCSR04</span> – В данном примере рассматривается работа с ультразвуковым датчиком расстояния <a href="http://smartep.ru/images/HC-SR04.jpg"><u>HCSR04</u></a>.
+ К линии PD6 подключен вывод Trigger датчика, а к линии PD7 вывод Echo. 
+Поключение 7-сегментного индикатора аналогично предыдущим примерам. По 
+таймеру микроконтроллер раз в секунду опрашивает датчик и определяет 
+расстояние до препятсвия в миллиметрах. После этого число разбивается на
+ цифры и выводится на дисплей. Документация к датчику <a href="http://smartep.ru/datasheets/sensors/HC-SR04.pdf" style="text-decoration: underline;">здесь</a>.</p>	
+	<a href="http://smartep.ru/projects/AVR_Assembler_HCSR04.zip" class="btn btn-green">Скачать пример</a>	
+
+	<p><span id="p12" class="seltext">Matrix Keyboard</span> – В данном 
+примере показана работа с матричной клавиатурой. Микроконтроллер 
+динамически опрашивает клавиатуру, а затем определяет номер нажатой 
+клавиатуры. Размер поля 3 на 3 – получаем 9 кнопок. Нажатие первых 8-ми 
+приводит к зажиганию светодиода на соответствующей линии порта А, 
+нажатие 9-ой кнопки зажигает все светодиоды порта А. Матричная 
+клавиатура подключается к линиям 0-5 порта С (три столбца и три строки).
+ В архиве схема и печатная плата матричной клавиатуры (Diptrace).</p>	
+	<a href="http://smartep.ru/projects/AVR_Assembler_Matrix_Keyboard.zip" class="btn btn-green">Скачать пример</a>
+
+	<p><span id="p13" class="seltext">Shift Register</span> – В данном 
+примере рассматривается работа с модулем SPI на примере сдвигового 
+регистра 74HC595. К регистру подключены светодиоды, в качестве линии CS 
+используется линия 4 порта B (вывод not SS). Линия DS (14 нога) регистра
+ идет к MOSI (PB5), линия SHCP (11 нога) к линии SCK (PB7), линия STCP 
+(12 нога) к линии SS (PB4). Линии <span style="text-decoration: overline">MR</span> (10 нога) и <span style="text-decoration: overline">OE</span>
+ (13 нога) должны быть подтянуты к высокому и низкому логическим уровням
+ соответственно. По таймеру микроконтроллер меняет состояние 
+светодиодов: поочерёдно горят то чётные светодиоды, то нечётные. Если 
+при этом передать байт по UART'у, то он будет выведен в порт на 
+светодиоды. Чтобы обратно переключиться в режим мигания необходимо 
+послать по UART'у 0x00 (ноль). Документация к микросхеме 74HC595 <a href="http://smartep.ru/datasheets/logic/74HC595%2074HCT595.pdf" style="text-decoration: underline;">здесь</a>.</p>	
+	<a href="http://smartep.ru/projects/AVR_Assembler_Shift_Register.zip" class="btn btn-green">Скачать пример</a>
+
+	<p><span id="p14" class="seltext">SG-90 Servo</span> – В данном примере
+ рассматривается работа с сервоприводом SG-90. Используется аппаратный 
+ШИМ. Линия ШИМ сервпопривода подключена к каналу А аппаратного ШИМ. 
+Кнопки поворота подключены к линиям PD2 и PD3. Кнопка на линии PD2 
+увеличивает длительность импульса, кнопка на линии PD3 уменьшает 
+длительность импульса. Длительность импульса меняется от 1 до 2 мс. 
+Описание сервомотора <a href="http://smartep.ru/datasheets/motors/SG90%20Servo.pdf" style="text-decoration: underline;">здесь</a>.</p>	
+	<a href="http://smartep.ru/projects/AVR_Assembler_SG90_Servo.zip" class="btn btn-green">Скачать пример</a>
+
+	<p><span id="p15" class="seltext">RGB Lamp</span> – В данном примере 
+рассматривается работа с трехцветным RGB-светодиодом. Реализовано 
+плавное переливание цветов с использованием программного ШИМ. Линии 
+красного, зеленого и синего цветов подключаются соответственно к линиям 
+2, 3 и 4 порта D.</p>	
+	<a href="http://smartep.ru/projects/AVR_Assembler_RGB_Lamp.zip" class="btn btn-green">Скачать пример</a>				</div>
+			<!--
+			<div class="clear"></div>	
+			-->
+			<a id="footer" href="mailto:studfak@mail.ru">Copyright © 2014-2019 Design by Skyer</a>
+		</div>
+		<!-- =========================================================================================== -->
+		<link rel="stylesheet" type="text/css" href="AVR%20%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B%20%D0%BD%D0%B0%20%D0%90%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80%D0%B5_files/slide-style.css">
+		<link rel="stylesheet" type="text/css" href="AVR%20%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B%20%D0%BD%D0%B0%20%D0%90%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80%D0%B5_files/jquery.css">
+		<link rel="stylesheet" type="text/css" href="AVR%20%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B%20%D0%BD%D0%B0%20%D0%90%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80%D0%B5_files/monokai.css">
+		<!-- =========================================================================================== -->
+		<script type="text/javascript" src="AVR%20%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B%20%D0%BD%D0%B0%20%D0%90%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80%D0%B5_files/jquery-3.js"></script>
+		<!-- скрипт сворачивания / разворачивания блоков с кодом -->
+		<script type="text/javascript" src="AVR%20%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B%20%D0%BD%D0%B0%20%D0%90%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80%D0%B5_files/slide-script.js"></script>
+		<!-- скрипт галереи изображений -->
+		<script type="text/javascript" src="AVR%20%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B%20%D0%BD%D0%B0%20%D0%90%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80%D0%B5_files/jquery.js"></script>
+		<!-- скрипт кнопки прокрутки в начало страницы -->
+		<script type="text/javascript" src="AVR%20%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B%20%D0%BD%D0%B0%20%D0%90%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80%D0%B5_files/jquery-2.js"></script>
+		<script type="text/javascript" src="AVR%20%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B%20%D0%BD%D0%B0%20%D0%90%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80%D0%B5_files/go_top.js"></script>		
+		<!-- скрипт подстветки синтаксиса кода -->
+		<script type="text/javascript" src="AVR%20%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B%20%D0%BD%D0%B0%20%D0%90%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80%D0%B5_files/highlight.js"></script>
+		<!-- инциализация скрипта подстветки синтаксиса кода -->
+		<script type="text/javascript">
+			hljs.configure({tabReplace: '    '});
+			hljs.initHighlightingOnLoad();
+		</script>
+		<!-- Yandex.Metrika counter -->
+		<script type="text/javascript">
+		    (function (d, w, c) {
+		        (w[c] = w[c] || []).push(function() {
+		            try {
+		                w.yaCounter48802769 = new Ya.Metrika({
+		                    id:48802769,
+		                    clickmap:true,
+		                    trackLinks:true,
+		                    accurateTrackBounce:true
+		                });
+		            } catch(e) { }
+		        });
+
+		        var n = d.getElementsByTagName("script")[0],
+		            s = d.createElement("script"),
+		            f = function () { n.parentNode.insertBefore(s, n); };
+		        s.type = "text/javascript";
+		        s.async = true;
+		        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+		        if (w.opera == "[object Opera]") {
+		            d.addEventListener("DOMContentLoaded", f, false);
+		        } else { f(); }
+		    })(document, window, "yandex_metrika_callbacks");
+		</script>
+		<noscript><div><img src="https://mc.yandex.ru/watch/48802769" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+		<!-- /Yandex.Metrika counter -->
+
+		<!-- скрипт плавной прокрутки по внутренним ссылкам на странице -->
+		<script type="text/javascript">
+			$("body").on('click', '[href*="#"]', function(e) {
+			  var fixed_offset = 25;
+			  $('html,body').stop().animate({ scrollTop: $(this.hash).offset().top - fixed_offset }, 1000);
+			  e.preventDefault();
+			});
+		</script>
+	
+
+
+
+<a id="go-top" title="Вверх" style="display: block;">Вверх</a></body></html>

@@ -1,0 +1,597 @@
+;Программа предназначена для управления микросхемой FM приемника (Si4730)
+;и передачей всего обмена по RS-232 на компьютер
+;будем использовать штатный USART для передачи данных на компьютер 38400
+;Скорость обмена по I2C примерно 55кБит/сек
+;команды из компьютера:
+; 10 - транзакция:
+	; 2 байт - адрес устройства
+	; 3 байт - кол-во байт в команде
+	; 4 байт - кол-во байт принимать
+	; остальные байты составляют команду
+	; Пример: POWER_UP:
+		; 10 C6 03 01 01 10 05
+		
+; 05 - системный сброс 200мс
+
+.include "..\_AVR_ASSEMBLER\DEFs\tn2313def.inc"
+.equ 	t1			=$60
+.equ 	t2			=$61
+.equ 	t3			=$62
+
+; ==============================================
+; для F=8МГц (внутренний RC генератор)
+; Фьюзы: для USBASP и PonyProg 	1 => установленный бит => галки нет
+;								0 => сброшенный бит => отмечено галкой
+; все биты LOCK установлены
+;---- Fuse High Byte ----
+; DVEN - 
+; EESAVE -
+; SPIEN - V (недоступен)
+; WDTON -
+; BODLEVEL2 -
+; BODLEVEL1 -
+; BODLEVEL0 -
+; RSTDISBL -   (недоступен)
+;---- Fuse Low Byte ----
+; CKDIV8 -
+; CKOUT -
+; SUT1 - 
+; SUT0 - V
+; CKSEL3 - V
+; CKSEL2 -
+; CKSEL1 - V
+; CKSEL0 - V
+; ==============================================
+
+.dseg	;сектор ОЗУ 128 байт, здесь же и стек
+.org 0x063
+buffer: 		.byte 33	;буфер для приема ответов от компьютера (1 байт - кол-во символов)
+
+.def STATUS		= r25		;
+	;STATUS: 4бит - 1= процесс передачи команды и чтение байтов (0 - нет)
+	;STATUS: 3бит - 1= передача команды и чтение байтов (0 - нет)
+	;STATUS: 2бит - 1= блокировка буфера приема (0 - буфер свободен)
+	;STATUS: 1бит - 1= процесс приема (0 - прием свободен)
+	
+.def ADDRESS	= r24		;адрес устройства
+.def COMMCOUNT	= r23		;байт в команде
+.def READCOUNT	= r22		;байт читать с устройства
+
+.cseg
+.org 0x000
+	rjmp start
+; .org INT0addr	;0x001
+	; rjmp ChangeCLK			;при возникновении прерывания INT0
+; .org INT1addr	;0x002
+	; rjmp ChangeDAT	     	 ;при возникновении прерывания INT1
+; .org OVF2addr	;0x008
+	; rjmp over_82			;переполнение 2-го 8-разрядного счетчика (АСУ удерживает линию в низком состоянии очень долго) ~2мс
+; .org OVF1addr	;0x005
+	; rjmp over_16			;при переполнении счетчика(16бит)
+.org OVF0addr	;0x006
+	rjmp over_8				;при переполнении счетчика(8бит)
+.org URXCaddr	; 0x0007	USART, Rx Complete
+	rjmp USART_RX_Complete
+; .org UTXCaddr	; 0x0009	USART, Tx Complete
+	; rjmp USART_TX_Complete
+;===============================================
+.org 0x030
+start:
+	ldi r16,low(RAMEND)
+	out spl,r16
+	clr r10					;R10 - 00000000
+	ser r16
+	mov r11,r16				;R11 - 11111111
+	rcall d_200ms
+;===============================================
+; Настройка портов => DDRx = 1(out); 0 = (in)   PORTx = 1(подтянут к +); 0(в воздухе - 0)
+; Порт A (-,-,-,-,-,2,1,0)
+	; ldi r16,0b00000001
+	; out DDRA,r16
+	; ldi r16,0b00000001
+	; out PORTA,r16
+
+; Порт B (7,6,5,4,3,2,1,0)
+;SCL,SDA как выход с подтягивающими резисторами
+	ldi r16,0b11100000
+	out DDRB,r16
+	ldi r16,0b10100000
+	out PORTB,r16
+
+; Порт D (-,6,5,4,3,2,1)
+	ldi r16,0b01100000
+	out DDRD,r16
+	ldi r16,0b00010000
+	out PORTD,r16
+;===============================================
+; Аналоговый компаратор		(Отключение 0b10000000 => ACSR)
+	ldi r16,0b01000000
+	out ACSR,r16
+	ldi r16,0b00000010		; Блокируем цифровой ввод по AIN1
+	out DIDR,r16
+;===============================================
+; Настройка USART
+; скорость возьмем 38400
+	; установка скорости 
+	out UBRRH,r10
+	ldi r16,12
+	out UBRRL,r16
+	; ускоритель скорости на 2 выключим (U2X = 0 - 1 бит UCSRA)
+	out UCSRA,r10
+	; (для включения приемника тоже сделать: (1<<RXEN)|(1<<TXEN)
+	;TXEN - включения передатчика
+	;RXEN - включения приемника
+	;TXCIE - разрешить прерывание по окончании передачи байта	|(1<<TXCIE)
+	;RXCIE - разрешить прерывание по окончании приема байта
+	ldi r16,(1<<TXEN)|(1<<RXEN)|(1<<RXCIE)
+	out UCSRB,r16
+	; установка формата кадра (3<<UCSZ0)=011=8бит	(7<<UCSZ0)=111=9бит
+	ldi r16,(0<<UMSEL)|(0<<UPM0)|(0<<UPM1)|(0<<USBS)|(3<<UCSZ0)
+	out UCSRC,r16
+	out UDR,r10		;очистим буфер приема-передачи
+;===============================================
+; Настройка прерываний
+	; ldi r16,(3<<ISC00)|(1<<ISC10)		; установка прерываний по любому изменению уровня INT0 и INT1
+	; ;(3<<ISC00)11 - по переднему фронту,(2<<ISC00)10 - по заднему фронту,(1<<ISC00)01 - по любому изменению
+	; out MCUCR,r16
+	; ldi r16,(1<<INT0)|(1<<INT1)		; установка прерываний по INT0 и INT1
+	; out GIMSK,r16
+	
+	ldi r16,0b00000010		;0b00000010 разрешить прерывание по переполнению 0(8разр) счетчика
+	out TIMSK,r16			;или 0b10000010 разрешить прерывание по переполнению 0(8разр) и 1(16разр) счетчиков
+;===============================================
+	clr STATUS
+	
+	ldi zh,high(buffer)
+	ldi zl,low(buffer)
+	st z,r10		;кол-во байтов
+
+	cbi PORTB,6			;включим сброс 1 -> 0
+	rcall d_200ms
+	sbi PORTB,6			;выключим сброс 0 -> 1
+	sei
+;===============================================
+loop:
+; Основной цикл программы.
+; Отслеживаем регистр STATUS 3 и 4 бит
+			sbis PIND,4
+			rcall ButtonDown
+
+			sbrs STATUS,3		;передача команды и чтение байтов 
+			rjmp loop
+			
+			sbrc STATUS,4		;нет процесса передачи команды и чтение байтов
+			rjmp loop
+			
+			sbr STATUS,0b00010000	;начнем процесс передачи команды и чтение байтов
+			rcall I2C_start
+			
+			mov r16,ADDRESS
+			rcall I2C_Out
+			tst r17				;проверим на NASK
+			brne lop3
+			
+			; rcall I2C_stop
+			ldi zh,high(buffer)
+			ldi zl,low(buffer)
+			subi zl,-5			;переместили указатель z на позицию чтения команды
+			brcc lop1
+			inc zh
+	lop1:	tst COMMCOUNT
+			breq lop2
+			ld r16,z+			;взяли байт
+			rcall I2C_Out
+			tst r17				;проверим на NASK
+			breq lop4
+	lop3:	rcall I2C_stop
+			;отправим в компьютер NASK
+			ldi r17,0xFF
+			rcall out_byte
+			rcall I2C_stop
+			rjmp lopO
+			
+	lop4:	dec COMMCOUNT
+			rjmp lop1
+			
+	lop2:	;чтение
+			rcall I2C_stop
+			rcall d_4mks
+			tst READCOUNT
+			breq lopO
+			rcall I2C_start
+			inc ADDRESS
+			mov r16,ADDRESS
+			rcall I2C_Out
+			tst r17				;проверим на NASK
+			brne lop3
+
+			rcall I2C_In
+			rcall I2C_stop
+			
+	lopO:
+			cbi PORTD,6	;RED
+			ldi zh,high(buffer)
+			ldi zl,low(buffer)
+			st z,r10
+			clr STATUS
+rjmp loop
+;===============================================
+ButtonDown:
+			rcall reset
+ret
+;===============================================
+I2C_start:
+			cbi PORTB,5		;SDA -> 0
+			rcall d_4mks
+			cbi PORTB,7		;SCL -> 0
+			rcall d_4mks
+ret
+;===============================================
+I2C_stop:
+			sbi PORTB,7		;SCL -> 1
+			rcall d_4mks
+			sbi PORTB,5		;SDA -> 1
+			rcall d_4mks
+ret
+;===============================================
+I2C_Out:		;r16 - передаваемый байт, после выхода 0бит r17 - ответ Ask
+			ldi r17,8
+			;устанавливаем данные на линии SDA по старшему биту r16
+	ico1:	sbrs r16,7
+			cbi PORTB,5		;SDA -> 0
+			sbrc r16,7
+			sbi PORTB,5		;SDA -> 1
+			;формируем клок
+			rcall d_4mks
+			sbi PORTB,7		;SCL -> 1
+			rcall d_4mks
+			rcall d_4mks
+			cbi PORTB,7		;SCL -> 0
+			rcall d_4mks
+			rol r16
+			dec r17
+			brne ico1
+			;опрашиваем Ask
+			cbi DDRB,5		;SDA -> вход
+			cbi PORTB,5		;SDA -> 0
+			rcall d_4mks
+			sbi PORTB,7		;SCL -> 1
+			clr r17
+			rcall d_4mks
+			sbic PINB,5		;читаем что на данных
+			inc r17
+			rcall d_4mks
+			cbi PORTB,7		;SCL -> 0
+			sbi DDRB,5		;SDA -> выход
+ret
+;===============================================
+I2C_In:
+			cbi DDRB,5		;SDA -> вход
+			cbi PORTB,5		;SDA -> 0
+			
+			ldi r16,8		;счетчик битов
+			clr r17			;приемный байт
+
+	ici1:	rcall d_4mks
+			sbi PORTB,7		;SCL -> 1
+			rcall d_4mks
+			sbis PINB,5		;читаем что на данных
+			clc
+			sbic PINB,5		;читаем что на данных
+			sec
+			rol r17
+			rcall d_4mks
+			cbi PORTB,7		;SCL -> 0
+			rcall d_4mks
+			
+			dec r16
+			brne ici1
+			
+			rcall out_byte
+			sbi DDRB,5		;SDA -> выход
+			
+			cpi READCOUNT,1	;если последний байт - выставить NASK, нет - ASK
+			brne ici4
+			sbi PORTB,5		;SDA -> 1
+			rjmp ici5
+			
+	ici4:	cbi PORTB,5		;SDA -> 0
+			
+	ici5:	rcall d_4mks
+			sbi PORTB,7		;SCL -> 1
+			rcall d_4mks
+			rcall d_4mks
+			cbi PORTB,7		;SCL -> 0
+			rcall d_4mks
+			
+			dec READCOUNT
+			brne I2C_In
+
+			cbi PORTB,5		;SDA -> 0
+ret
+;===============================================
+USART_RX_Complete:	;очередной байт был принят
+			sbrc STATUS,2		;пропустить буфер не занят
+			reti
+			sbrs STATUS,1		;пропустить если прием
+			sbr STATUS,0b00000010	;процесс приема
+			
+			cli
+			push zh
+			push zl
+			push r17
+			push r16
+
+			; Останавливаем 8 битный счетчик.
+			out TCCR0B,r10
+
+			in r16,UDR             ;Считать байт из регистра данных приемника
+			
+			;сохраним байт в буфере
+			ldi zh,high(buffer)
+			ldi zl,low(buffer)
+			ld r17,z   			;загрузим указатель буфера	
+			inc r17				;чтобы запись не началась на указатель
+			cpi r17,32			;если случился перебор
+			brpl urc3
+	urc1:	st z,r17			;запишем указатель
+			add zl,r17
+			brcc urc2
+			inc zh
+	urc2:	st z,r16
+
+	urc3:	; Запускаем/перезапускаем 8 битный счетчик. Прерывание по переполнению.
+			out TCNT0,r10
+			ldi r16,0b00000011		; 0,125мкс*64*256 = 2,048мс (переполнение счетчика) а длительность байта 260мкс
+			out TCCR0B,r16
+
+			pop r16
+			pop r17
+			pop zl
+			pop zh
+			sei
+reti
+;===============================================
+over_8:			;при переполнении счетчика(8бит) - конец приема слова
+			sbrs STATUS,1		;пропустить если прием
+			reti
+
+			cli
+			push zh
+			push zl
+			push yh
+			push yl
+			push xh
+			push xl
+			push r20
+			push r19
+			push r18
+			push r17
+			push r16
+			; Останавливаем 8 битный счетчик.
+			out TCCR0B,r10
+			
+			sbr STATUS,0b00000100	;блокируем буфер, получен ответ от модуля
+			
+			ldi zh,high(buffer)
+			ldi zl,low(buffer)
+			ld r17,z+ 		;кол-во байт команды
+			ld r18,z+		;загрузим 1 байт команды
+			tst r17
+			breq ovr_out
+			
+			cpi r17,1
+			brne ovr1
+			cpi r18,5		;сброс
+			brne ovr_out
+			rcall reset
+			rjmp ovr_out
+			
+	ovr1:	
+	; sbi PORTD,6	;RED
+	; rcall d_200ms
+			cpi r18,0x10		;транзакция
+			brne ovr_out
+			ld ADDRESS,z+ 		;адрес устройства
+			ld COMMCOUNT,z+ 		;байт в команде
+			ld READCOUNT,z+ 		;байт читать с устройства
+			subi r17,4
+			sub r17,COMMCOUNT
+			tst r17
+			brne ovr_out		;ошибка в слове команды
+; 10 - транзакция:
+	; 2 байт - адрес устройства
+	; 3 байт - кол-во байт в команде
+	; 4 байт - кол-во байт принимать
+	; остальные байты составляют команду
+	; Пример: POWER_UP:
+		; 10 C6 03 01 01 10 05
+			
+; .def ADDRESS	= r24		;адрес устройства
+; .def COMMCOUNT	= r23		;байт в команде
+; .def READCOUNT	= r22		;байт в команде
+			
+			sbr STATUS,0b00001000
+			sbi PORTD,6	;RED
+			rjmp ovr_outX
+	
+	ovr_out:
+			ldi xh,high(buffer)
+			ldi xl,low(buffer)
+			st x,r10
+			clr STATUS
+			; cbr STATUS,0b00000100	;освободим буфер
+			; cbr STATUS,0b00000010	;процесс приема закончен
+			
+	ovr_outX:
+			pop r16
+			pop r17
+			pop r18
+			pop r19
+			pop r20
+			pop xl
+			pop xh
+			pop yl
+			pop yh
+			pop zl
+			pop zh
+			sei
+reti
+;===============================================
+out_str_dseg:		;вывод строки по RS из памяти dseg. zh,zl - адрес строки
+			; push r17
+			; push r18
+			ld r18,z+
+	o_str2:	ld r17,z+
+			rcall out_byte
+			dec r18
+			brne o_str2
+			; pop r18
+			; pop r17
+ret
+;===============================================
+out_byte:
+			sbis UCSRA,UDRE
+			rjmp out_byte
+			out UDR,r17
+ret
+;===============================================
+reset:
+			sbi PORTD,5	;GREEN
+			sbi PORTD,6	;RED
+			
+			cbi PORTB,6			;выключим сброс 0 -> 1
+			rcall d_200ms
+			sbi PORTB,6			;выключим сброс 0 -> 1
+			
+			cbi PORTD,5	;GREEN
+			cbi PORTD,6	;RED
+ret
+;===============================================
+; ----------------------------------------------
+;БЛОК ЗАДЕРЖЕК		расчет задержек включает вход и выход из подпрограммы задержки
+; ----------------------------------------------
+; d_1mks:	; 3(rcall)+1+4(ret) = 8*0,125 = 1.0 мкс
+		; nop
+		; ret
+; ----------------------------------------------
+d_4mks:	; 3(rcall)+25+4(ret) = 32*0,125 = 4.0 мкс
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		ret
+; ----------------------------------------------
+; d_10mks:	; 41+{ t1*(5+t2*(5+(t3*3-1))-1)-1 } = 81*0.125 = 10,125мкс
+		; push r16
+		; ldi r16,1
+		; sts t1,r16
+		; ldi r16,1
+		; sts t2,r16
+		; ldi r16,11
+		; sts t3,r16
+		; rcall delay
+		; pop r16
+		; ret
+; ----------------------------------------------
+; d_500mks:	; 41+{ t1*(5+t2*(5+(t3*3-1))-1)-1 } = 4028*0.125 = 503,5мкс
+		; push r16
+		; ldi r16,1
+		; sts t1,r16
+		; ldi r16,6
+		; sts t2,r16
+		; ldi r16,220
+		; sts t3,r16
+		; rcall delay
+		; pop r16
+		; ret
+; ----------------------------------------------
+; d_1ms:	; 41+{ t1*(5+t2*(5+(t3*3-1))-1)-1 } = 8012*0.125 = 1001,5мкс
+		; push r16
+		; ldi r16,1
+		; sts t1,r16
+		; ldi r16,12
+		; sts t2,r16
+		; ldi r16,220
+		; sts t3,r16
+		; rcall delay
+		; pop r16
+		; ret
+; ----------------------------------------------
+; d_20ms:	; 41+{ t1*(5+t2*(5+(t3*3-1))-1)-1 } = 160765*0.125 = 20095,625мкс = 20,096мс
+		; push r16
+		; ldi r16,1
+		; sts t1,r16
+		; ldi r16,21
+		; sts t2,r16
+		; ldi r16,254
+		; sts t3,r16
+		; rcall delay
+		; pop r16
+		; ret
+; ----------------------------------------------
+d_200ms:
+		push r16
+		ldi r16,9
+		sts t1,r16
+		ldi r16,232
+		sts t2,r16
+		ldi r16,255
+		sts t3,r16
+		rcall delay
+		pop r16
+		ret
+; ----------------------------------------------
+; d_800ms:	; 3(rcall)+2+1+2+1+2+1+2+3(rcall)+[2+2+2+2+{ t1*(5+t2*(5+(t3*3-1))-1)-1 }+2+2+2+4(ret)]+2+4(ret) = X*T(0.125) = 
+			; ; 41+{ t1*(5+t2*(5+(t3*3-1))-1)-1 } = 41+ 34*188504-1 = 6409176*0.125 = 801147мкс = 801,147мс
+		; push r16	;2
+		; ldi r16,34	;1
+		; sts t1,r16	;2
+		; ldi r16,250	;1
+		; sts t2,r16	;2
+		; ldi r16,250	;1
+		; sts t3,r16	;2
+		; rcall delay	;3
+		; pop r16		;2
+		; ret			;4
+; ----------------------------------------------
+;использование см. выше. минимум(1,1,1)= 41+{1*(5+1*(5+(1*3-1))-1)-1 } = 51*0.125 = 6.375мкс
+delay:	
+		push r13	;2
+		push r14	;2
+		push r15	;2
+		lds r15,t1	;2
+del3:	lds r14,t2	;2
+del2:	lds r13,t3	;2
+del1:	dec r13		;1
+		brne del1	;2/1
+		dec r14		;1
+		brne del2	;2/1
+		dec r15		;1
+		brne del3	;2/1
+		pop r15		;2
+		pop r14		;2
+		pop r13		;2
+		ret			;4
+; ----------------------------------------------

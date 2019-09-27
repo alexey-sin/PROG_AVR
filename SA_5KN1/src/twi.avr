@@ -1,0 +1,192 @@
+;; Библиотека для работы с I2C (TWI)
+;{ ;; Константы
+.equ TWI_SLAVE_ADDR_CONST			= 0b1010	;; Постоянная часть адреса ведомого устройства
+.equ TWI_SLAVE_ADDR_VAR				= 0b000		;; Переменная часть адреса ведомого устройства
+.equ TWI_WRITE_FLAG					= 0
+.equ TWI_READ_FLAG					= 1
+.equ TWI_SLAVE_ADDR_W				= (TWI_SLAVE_ADDR_CONST << 4)|(TWI_SLAVE_ADDR_VAR << 1)|TWI_WRITE_FLAG	;;адрес для записи
+.equ TWI_SLAVE_ADDR_R				= (TWI_SLAVE_ADDR_CONST << 4)|(TWI_SLAVE_ADDR_VAR << 1)|TWI_READ_FLAG	;;адрес для чтения
+
+.equ TWI_START						= 0x08	;; условие СТАРТ
+.equ TWI_REP_START					= 0x10	;; условие ПОВТОРНЫЙ СТАРТ (повтор условия начала передачи)
+;; Master Transmitter (Ведущий в роли передающего)
+.equ TWI_MT_SLA_ACK					= 0x18	;; Ведущий отправил адрес и бит записи. Ведомый подтвердил свой адрес
+.equ TWI_MT_SLA_NACK				= 0x20	;; Ведущий отправил адрес и бит записи. Нет подтверждения приема (ведомый с таким адресом не найден)
+.equ TWI_MT_DATA_ACK				= 0x28	;; Ведущий передал данные и ведомый подтвердил прием.
+.equ TWI_MT_DATA_NACK				= 0x30	;; Ведущий передал данные. Нет подтверждения приема
+.equ TWI_MT_ARB_LOST				= 0x38	;; Потеря приоритета
+;; Master Receiver (Ведущий в роли принимающего)
+.equ TWI_MR_ARB_LOST				= 0x38	;; Потеря приоритета
+.equ TWI_MR_SLA_ACK					= 0x40	;; Ведущий отправил адрес и бит чтения. Ведомый подтвердил свой адрес
+.equ TWI_MR_SLA_NACK				= 0x48	;; Ведущий отправил адрес и бит чтения. Нет подтверждения приема (ведомый с таким адресом не найден)
+.equ TWI_MR_DATA_ACK				= 0x50	;; Ведущий принял данные и передал подтверждение
+.equ TWI_MR_DATA_NACK				= 0x58	;; Ведущий принял данные и не передал подтверждение
+;; Slave Transmitter (Ведомый в роли передающего)
+.equ TWI_ST_SLA_ACK					= 0xA8	;; Получение адреса и бита чтения, возвращение подтверждения
+.equ TWI_ST_ARB_LOST_SLA_ACK		= 0xB0	;; Потеря приоритета, получение адреса и бита чтения, возвращение подтверждения
+.equ TWI_ST_DATA_ACK				= 0xB8	;; Данные переданы, подтверждение от ведущего принято
+.equ TWI_ST_DATA_NACK				= 0xC0	;; Данные переданы. Нет подтверждения приема от ведущего.
+.equ TWI_ST_LAST_DATA				= 0xC8	;; Последний переданный байт данных, получение подтверждения
+;; Slave Receiver (Ведомый в роли принимающего)
+.equ TWI_SR_SLA_ACK					= 0x60	;; Получение адреса и бита записи, возвращение подтверждения
+.equ TWI_SR_ARB_LOST_SLA_ACK		= 0x68	;; Потеря приоритета, получение адреса и бита записи, возвращение подтверждения
+.equ TWI_SR_GCALL_ACK				= 0x70	;; Прием общего запроса, возвращение подтверждения
+.equ TWI_SR_ARB_LOST_GCALL_ACK		= 0x78	;; Потеря приоритета, прием общего запроса, возвращение подтверждения
+.equ TWI_SR_DATA_ACK				= 0x80	;; Прием данных, возвращение подтверждения
+.equ TWI_SR_DATA_NACK				= 0x88	;; Данные переданы без подтверждения.
+.equ TWI_SR_GCALL_DATA_ACK			= 0x90	;; Прием данных при общем запросе, возвращение подтверждения
+.equ TWI_SR_GCALL_DATA_NACK			= 0x98	;; Прием данных при общем запросе, без подтверждения
+.equ TWI_SR_STOP					= 0xA0	;; Условие СТОП
+;; Misc (Ошибки интерфейса)
+.equ TWI_NO_INFO					= 0xF8	;; Информация о состоянии отсутствует
+.equ TWI_BUS_ERROR					= 0x00	;; Ошибка шины
+;}
+
+Write3_X_eeY: ;{			;; запись 3 байтов: с X(озу) => Y(адрес памяти внешнего EEPROM). указатели восстанавливаются
+;; по окончании указатели X(озу) и Y восстанавливаются.
+				push r16
+				push r17
+				
+				rcall TWI_SET_START	;; генерируем сигнал "Старт"
+				cpi r16,TWI_START
+				brne twiw_error
+				
+				ldi r16,TWI_SLAVE_ADDR_W	;; Передаем адрес ведомого
+				rcall TWI_SEND_BYTE_r16
+				cpi r16,TWI_MT_SLA_ACK
+				brne twiw_error
+				
+				mov r16,yh
+				out TWDR,r16	;; Передаем старший байт адреса ячейки памяти для записи
+				rcall TWI_SEND_BYTE_r16
+				cpi r16,TWI_MT_DATA_ACK
+				brne twiw_error
+				
+				mov r16,yl
+				out TWDR,r16	;; Передаем младший байт адреса ячейки памяти для записи
+				rcall TWI_SEND_BYTE_r16
+				cpi r16,TWI_MT_DATA_ACK
+				brne twiw_error
+				
+				ldi r17,3	;; Передаем данные 3 байта
+	woseexy01:
+				ld r16,x+
+				out TWDR,r16
+				rcall TWI_SEND_BYTE_r16
+				cpi r16,TWI_MT_DATA_ACK
+				brne twiw_error
+				dec r17
+				brne woseexy01
+				
+				rcall TWI_SET_STOP	;; Генерируем сигнал "Стоп"
+				;; запись в 24LC512 происходит по сигналу "Стоп", это около 5мс
+				rcall d_10ms
+				rjmp wxeey_exit
+	twiw_error:
+				SetBit ERROR,2	;; (2 бит)оошибка - чтение/запись во внешнее EEPROM
+	wxeey_exit:
+				sbiw xl,3
+				pop r17
+				pop r16
+ret ;}
+Read3_eeY_X: ;{			;; чтение 3 байтов: с Y(адрес памяти внешнего EEPROM) => X(озу). указатели восстанавливаются
+;; по окончании указатели X(озу) и Y восстанавливаются.
+				push r16
+				push r17
+				
+				rcall TWI_SET_START	;; генерируем сигнал "Старт"
+				cpi r16,TWI_START
+				brne twir_error
+				
+				ldi r16,TWI_SLAVE_ADDR_W	;; Передаем адрес ведомого
+				rcall TWI_SEND_BYTE_r16
+				cpi r16,TWI_MT_SLA_ACK
+				brne twir_error
+				
+				mov r16,yh
+				out TWDR,r16	;; Передаем старший байт адреса ячейки памяти для записи
+				rcall TWI_SEND_BYTE_r16
+				cpi r16,TWI_MT_DATA_ACK
+				brne twir_error
+				
+				mov r16,yl
+				out TWDR,r16	;; Передаем младший байт адреса ячейки памяти для записи
+				rcall TWI_SEND_BYTE_r16
+				cpi r16,TWI_MT_DATA_ACK
+				brne twir_error
+				
+				rcall TWI_SET_START	;; генерируем сигнал "РеСтарт"
+				cpi r16,TWI_REP_START
+				brne twir_error
+
+				ldi r16,TWI_SLAVE_ADDR_R	;; Передаем адрес ведомого
+				rcall TWI_SEND_BYTE_r16
+				cpi r16,TWI_MR_SLA_ACK
+				brne twir_error
+
+				ldi r17,2	;; Читаем данные 3 байта: сначала 2 байта с подтверждением
+	reeyx01:
+				ldi r16,(1<<TWINT)|(1<<TWEN)|(1<<TWEA)
+				out TWCR,r16
+				rcall TWI_WaitAndGetResult_r16
+				cpi r16,TWI_MR_DATA_ACK
+				brne twir_error
+				in r16,TWDR
+				st x+,r16
+				dec r17
+				brne reeyx01
+				;; и последний байт без подтверждения
+				ldi r16,(1<<TWINT)|(1<<TWEN)
+				out TWCR,r16
+				rcall TWI_WaitAndGetResult_r16
+				cpi r16,TWI_MR_DATA_NACK
+				brne twir_error
+				in r16,TWDR
+				st x+,r16
+
+				rcall TWI_SET_STOP	;; Генерируем сигнал "Стоп"
+				rjmp reeyx_exit
+	twir_error:
+				SetBit ERROR,2	;; (2 бит)оошибка - чтение/запись во внешнее EEPROM
+	reeyx_exit:
+				sbiw xl,3
+				pop r17
+				pop r16
+ret ;}
+TWI_WaitAndGetResult_r16: ;{	;;ждет завершения операции записи во внешнее EEPROM и возвращает (r16) результат
+				in r16,TWCR			;; TWINT бит устанавливается аппаратно, если TWI завершает текущее
+				sbrs r16,TWINT		;; задание и ожидает реакции программы
+				rjmp TWI_WaitAndGetResult_r16
+				;; Читаем регистр статуса, а точнее биты TWS3-7(only read) и оставляем результат в регистре
+				in r16,TWSR
+				andi r16,0xF8
+ret ;}
+TWI_SET_START: ;{	;; Установка состояния "Старт" на линиях TWI (I2C); Результат -> r16 = 0 - успешно, не 0 - ошибка
+				ldi r16,(1<<TWINT)|(1<<TWEN)|(1<<TWSTA)
+				out TWCR,r16
+				rcall TWI_WaitAndGetResult_r16
+ret ;}
+TWI_SET_STOP: ;{	;; Установка состояния "Стоп" на линиях TWI (I2C)
+				ldi r16,(1<<TWINT)|(1<<TWEN)|(1<<TWSTO)
+				out TWCR,r16
+twi_wait_set_stop:
+				in r16,TWCR			;; TWINT бит устанавливается аппаратно, если TWI завершает текущее
+				sbrc r16,TWSTO		;; задание и ожидает реакции программы
+				rjmp twi_wait_set_stop
+ret ;}
+TWI_SEND_BYTE_r16: ;{	;; Передача на линию TWI (I2C) байта из r16 ; Результат -> r16
+				push r17
+				out TWDR,r16		;;загружаем для передачи адрес ведомого с битом записи
+				ldi r17,(1<<TWINT)|(1<<TWEN)
+				out TWCR,r17
+				rcall TWI_WaitAndGetResult_r16
+				pop r17
+ret ;}
+
+
+
+
+
+
+
+

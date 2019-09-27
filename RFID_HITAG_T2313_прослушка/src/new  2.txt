@@ -1,0 +1,49 @@
+low A4	656
+high 26	152
+
+low 3D	244
+high 44	272
+low 7C	496
+high 84	528
+low 7C	496
+high 83	524
+low 3D	244
+high 44	272
+low 7C	496
+high 44	272
+low 3C	240
+high 84	258
+low 7C	496
+high 43	268
+low 3D	244
+high 43	268
+low 3D	244
+high 44	272
+low 3D	244
+high 83	524
+low 7C	496
+high 43	268
+low 3D	244
+high 84	258
+low 7C	496
+high 84	258
+low 7C	496
+high 43	268
+low 3D	244
+high 84	258
+
+
+256   от 240 до 272 -16 +16 +/-6
+
+
+512   от 496 до 528 -16 +16 +/-3%
+
+
+
+
+
+
+
+
+
+

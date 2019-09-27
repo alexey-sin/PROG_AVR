@@ -1,0 +1,53 @@
+div.NavFrame {
+	margin-top: 0px;
+}
+
+div.NavFrame {
+	margin : 0;
+	padding : 2px;
+	border : 1px solid  #66CCFF;
+	text-align : left;
+	border-collapse : collapse;
+	margin-bottom: 0px;
+}
+
+div.NavFrame {
+	border-style : none;
+	border-style : hidden;
+}
+
+div.NavFrame + div.NavFrame {
+	border-top-style : none;
+	border-top-style : hidden;
+}
+
+div.NavPic {
+	background : #fff;
+	margin : 0;
+	padding : 2px;
+	float : left;
+}
+
+div.NavFrame div.NavHead {
+	background :   #66CCFF;
+	position : relative;
+}
+
+div.NavFrame p,
+div.NavFrame div.NavContent,
+div.NavFrame div.NavContent p {
+	font-size :  100%;
+}
+
+div.NavEnd {
+	margin : 0;
+	padding : 0;
+	line-height : 1px;
+	clear : both;
+}
+
+a.NavToggle {
+	position : absolute;
+	top : 0;
+	right : 0.6em;
+}
