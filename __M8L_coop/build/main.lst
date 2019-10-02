@@ -1,0 +1,56 @@
+   1               		.file	"main.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.text
+   9               	.global	main
+  11               	main:
+  12               	/* prologue: function */
+  13               	/* frame size = 0 */
+  14               	/* #APP */
+  15               	 ;  73 "c:\PROG_AVR\__M8L_coop\src\main.c" 1
+  16 0000 7894      		sei
+  17               	 ;  0 "" 2
+  18               	/* #NOAPP */
+  19 0002 88E8      		ldi r24,lo8(5000)
+  20 0004 93E1      		ldi r25,hi8(5000)
+  21 0006 29E1      		ldi r18,lo8(25)
+  22 0008 30E0      		ldi r19,hi8(25)
+  23               	.L2:
+  24 000a F901      		movw r30,r18
+  25               	/* #APP */
+  26               	 ;  105 "c:/winavr/lib/gcc/../../avr/include/util/delay_basic.h" 1
+  27 000c 3197      		1: sbiw r30,1
+  28 000e 01F4      		brne 1b
+  29               	 ;  0 "" 2
+  30               	/* #NOAPP */
+  31 0010 0197      		sbiw r24,1
+  32 0012 01F4      		brne .L2
+  33               	.L6:
+  34 0014 00C0      		rjmp .L6
+  36               	.global	init
+  38               	init:
+  39               	/* prologue: function */
+  40               	/* frame size = 0 */
+  41               	/* #APP */
+  42               	 ;  73 "c:\PROG_AVR\__M8L_coop\src\main.c" 1
+  43 0016 7894      		sei
+  44               	 ;  0 "" 2
+  45               	/* epilogue start */
+  46               	/* #NOAPP */
+  47 0018 0895      		ret
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\WINDOWS\TEMP/cc0W0zEF.s:2      *ABS*:0000003f __SREG__
+C:\WINDOWS\TEMP/cc0W0zEF.s:3      *ABS*:0000003e __SP_H__
+C:\WINDOWS\TEMP/cc0W0zEF.s:4      *ABS*:0000003d __SP_L__
+C:\WINDOWS\TEMP/cc0W0zEF.s:5      *ABS*:00000034 __CCP__
+C:\WINDOWS\TEMP/cc0W0zEF.s:6      *ABS*:00000000 __tmp_reg__
+C:\WINDOWS\TEMP/cc0W0zEF.s:7      *ABS*:00000001 __zero_reg__
+C:\WINDOWS\TEMP/cc0W0zEF.s:11     .text:00000000 main
+C:\WINDOWS\TEMP/cc0W0zEF.s:38     .text:00000016 init
+
+NO UNDEFINED SYMBOLS
