@@ -1,0 +1,63 @@
+/* 15px/24px Open Sans (Default) */
+body{font: 15px/24px "Open Sans", Arial, sans-serif;}
+.tooltip{font-family: "Open Sans", Arial, sans-serif;}
+
+.logo_and_menu-row .personal-link .title{font-size:13px;}
+.logo-row .top-description .js_city_chooser{font-size:14px;}
+
+.right_info_block .brand .preview .link.icons_fa:after{top:6px;}
+
+.mega-menu td .wrap > a .line-wrapper .line{bottom: -39px;}
+.menu-row.middle-block.bglight .mega-menu td .wrap > a .line-wrapper .line{bottom: -21px;}
+
+body .items-services.item-views .item .body-info .previewtext, .item-views.table-elements .item .body-info .previewtext, .item-views .item .previewtext p{font-size:14px;}
+.introtext, .preview-text-detail{font-size:15px;}
+
+.middle_info .top_props .title{font-weight: 600;}
+
+/*catalog*/
+.sections_wrapper .list .item .name a{font-size:15px;}
+.bx_filter .bx_filter_parameters_box_title:after{top:4px;}
+.stickers .stickers-wrapper > div{font-size:10px;}
+.main-block .prop_title_table .item .prop-block, .main-block .item .prop-block{font-size:13px;}
+.side-menu .submenu{font-size:13px;}
+.bx_item_detail_inc_two .list-type-block.item-views .item > .body-info .title{font-size:13px;}
+.item-views .item .price .price_old .price_val, .item-views .item .price .price_old .fa, .order-block .price .price_old .price_val, .order-block .price .price_old .fa{font-size:14px;}
+.item-views .item .price .price_val, .order-block .price .price_val{font-size:18px;}
+.additional_block p{font-size:15px;}
+.catalog_detail .item-stock > span{font-size:14px;}
+
+.item-views.sections .item .title a{}
+header.header-v8 .svg-search.white{top:-2px;}
+
+.title_block{font-size:21px;}
+.title_block.sm{font-size:19px;}
+
+/*filter*/
+.bx_filter_select_popup ul li label{font-family: "Open Sans", Arial, sans-serif;}
+
+/*basket*/
+.bx_ordercart .bx_ordercart_order_table_container .bx_ordercart_itemtitle,
+.bx_ordercart .bx_ordercart_order_table_container tbody td.price .current_price,
+.bx_ordercart .bx_ordercart_order_table_container tbody td.custom>div:not(.centered){font-size:16px;}
+
+/*basket2*/
+#basket-root .basket-item-info-name, #basket-root .basket-item-info-name-link,
+#basket-root .basket-items-list-header-filter-item, #basket-root .basket-item-property-value, #basket-root .basket-item-property-custom-value,
+#basket-root .basket-item-property-name, #basket-root .basket-item-property-custom-name, #basket-root .basket-item-price-current-text,
+#basket-root .basket-item-price-title, #basket-root .basket-item-amount-field-description,
+#basket-root .basket-coupon-block-field-description, #basket-root .basket-coupon-alert, #basket-root .basket-coupon-alert .close-link,
+#basket-root .basket-checkout-block-total-title, #basket-root .basket-checkout-block-total-description, #basket-root .basket-coupon-block-total-price-current,
+#basket-root .basket-coupon-block-total-price-difference, #basket-root .basket-coupon-block-total-price-old,
+#basket-root .basket-item-price-old-text, #basket-root .basket-item-price-difference, #basket-root .basket-item-property-scu-text .basket-item-scu-item-inner{font-family: "Open Sans", Arial, sans-serif;}
+
+/*order*/
+body .bx-soa-section-title{font-size:22px;}
+#bx-soa-order .bx-sls .bx-ui-sls-fake, #bx-soa-order .bx-sls .bx-ui-sls-route{font-family: "Open Sans", Arial, Helvetica, sans-serif;}
+.personal_wrapper .orders_wrapper .sale-order-list-button, .personal_wrapper .orders_wrapper .sale-order-detail-about-order-inner-container-repeat > a, .sale-order-detail-payment-options-methods-button-element, .sale-order-detail-payment-options-methods-button-element-new-window{font-family: "Open Sans", Arial, Helvetica, sans-serif;}
+.personal_wrapper .orders_wrapper .row.col-md-12.col-sm-12 > a,
+.sale-order-list-accomplished-date, .sale-order-list-accomplished-date-number,
+.personal_wrapper .orders_wrapper .sale-order-title,
+.personal_wrapper .orders_wrapper .sale-order-list-container .sale-order-list-accomplished-title, .personal_wrapper .orders_wrapper .sale-order-list-container .sale-order-list-title, .personal_wrapper .orders_wrapper .sale-order-detail-general-item,
+.personal_wrapper .orders_wrapper .sale-order-list-inner-row > div > a, .personal_wrapper .sale-personal-account-wallet-container .sale-personal-account-wallet-title,
+.btn.sale-account-pay-button, .bx-sls .bx-ui-sls-fake, .bx-sls .bx-ui-sls-route{font-family: "Open Sans", Arial, Helvetica, sans-serif;}

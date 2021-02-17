@@ -1,0 +1,2868 @@
+.catalog_detail .tizers_block_detail {
+    margin-bottom: 40px;
+    border: 1px solid #f2f2f2;
+}
+.slides_block .video_link,
+.video-popup .video_link_custom {
+    font-size: 12px;
+    color: #222;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: block;
+    position: relative;
+    line-height: normal;
+    padding: 8px 0 0;
+}
+.slides_block .video_link:before,
+.video-popup .video_link_custom:before {
+    content: "";
+    position: relative;
+    background: url(/bitrix/templates/aspro_next/images/video.png) 0 0 no-repeat;
+    width: 14px;
+    height: 23px;
+    display: block;
+    margin: auto;
+}
+.video-popup {
+    text-align: center;
+    padding-bottom: 10px;
+}
+body .item_slider .thumbs .slides_block li {
+    padding-left: 0;
+}
+.rating div {
+    display: inline-block;
+}
+#reviewLink {
+    margin-top: 0px !important;
+}
+.recall-f textarea {
+    width: 100% !important;
+}
+.catalog-reviews {
+    font-size: 13px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 2px;
+    margin-left: 7px;
+}
+.menu_top_block.catalog_block .dropdown>li.full.v_bottom>.dropdown>li>.dropdown>li>.dropdown {
+    opacity: 1;
+    visibility: visible;
+}
+.menu_top_block.catalog_block .dropdown>li.full.v_bottom>.dropdown>li>.dropdown>li .toggle_block.subsect {
+    height: 17px;
+}
+.menu_top_block li.full .dropdown li .dropdown {
+    margin-top: 0;
+}
+.menu_top_block.catalog_block .dropdown>li.full.v_bottom>.dropdown>li>.dropdown>li>.dropdown {
+    padding-left: 10px;
+}
+.block-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    margin-top: 40px;
+}
+.block-info__left {
+    width: 80px;
+    padding-right: 20px;
+}
+.block-info__right {
+    width: 90%;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 20px;
+}
+.block-info h3 {
+    margin-top: 0;
+}
+.block-info hr {
+    margin-top: 0;
+}
+.block-info.last .block-info__right {
+    border-bottom: 0;
+}
+.scroll {
+    max-width: 100%;
+    overflow-x: auto;
+}
+.delimiter {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+.news-project.table-elements .items .item:hover .dark_block_animate {
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=1)";
+}
+.news-project.table-elements .item .body-info {
+    padding: 20px;
+}
+body .items-services.item-views .item .body-info .title {
+    height: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-overflow: -o-ellipsis-lastline;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+body .items-services.item-views .item .body-info .previewtext {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-overflow: -o-ellipsis-lastline;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+body .menu_top_block li.full .dropdown>li>a.section1 {
+    margin-bottom: 5px;
+}
+.sort_filter .close {
+    display: none;
+}
+.sort_filter__title {
+    display: none;
+}
+.bx-constructor-result-table-value {
+    white-space: nowrap;
+}
+.psk_360_open_popup {
+    position: absolute;
+    left: 0;
+    width: 54px;
+    height: 54px;
+    text-indent: -9999px;
+    overflow: hidden;
+    border: 1px solid #888;
+    background: url(/upload/360.png) center no-repeat;
+    background-size: 80%;
+}
+.wrapp_thumbs.block {
+    display: block !important;
+}
+.rotate-wrapper {
+    position: relative;
+}
+.rotate-wrapper .psk_360_open_popup {
+    left: 10px;
+    top: -64px;
+}
+.advantagesTizers{
+    padding: 30px 0;
+    padding: 100px 0;
+    margin-top: -40px;
+    border-bottom: 2px solid #3a94c6;
+}
+/*.advantagesTizers:after{
+        content: " ";
+    background-color: #ccc;
+    position: absolute;
+    display: block;
+    height: 100%;
+    top: 0;
+    right: 50%;
+    left: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    z-index: -1;
+}*/
+.advantagesTizers .advantagesTizer.item{
+    padding: 20px;
+    text-align: center;
+}
+.advantagesTizers .advantagesTizer.item .img{
+    height: 120px;
+}
+.advantagesTizers .advantagesTizer.item .title{
+
+    margin: 5px 0;
+    font-size: 22px;
+    text-transform: uppercase;
+    line-height: 28px;
+}
+.advantagesTizers .advantagesTizer.item .descr{
+
+
+}
+.advantagesTizers .advantagesTizer.item .descr span{
+
+    border-top: 2px solid #3a94c6;
+    display: inline-block;
+}
+.advantagesText{
+    margin:30px 0;
+}
+.advantagesText.block1{
+    border-bottom: 2px solid #3a94c6;
+}
+.advantagesText.block1 .title{
+    font-size: 40px;
+    text-align: right;
+    line-height: normal;
+    text-transform: uppercase;
+}
+.advantagesText.block1 .text{
+    margin-top: 70px;
+    margin-bottom: 60px;
+}
+body .advantagesText.block1 .item{
+    position: relative;
+    padding-right: 100px;
+    padding-bottom: 19px;
+    margin-bottom: 40px;
+    border-top: 0 !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    background: url(/include/bizon2/line.png) right bottom no-repeat;
+}
+.advantagesText.block1 .item:after{
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 4px;
+    width: 80px;
+    height: 76px;
+}
+.advantagesText.block1 .item.m70:after{
+    background: #f6f6f7 url(/include/bizon2/icon/sizes.svg) center no-repeat;
+    background-size: 60%;
+}
+.advantagesText.block1 .item.m190:after{
+    background: #f6f6f7 url(/include/bizon2/icon/volume.svg) 12px center no-repeat;
+    background-size: 60%;
+}
+.advantagesText.block1 .item.m310:after{
+    background: #f6f6f7 url(/include/bizon2/icon/metal.svg) center no-repeat;
+    background-size: 60%;
+}
+.advantagesText.block1 .item.m420:after{
+    background: #f6f6f7 url(/include/bizon2/icon/lock.svg) center no-repeat;
+    background-size: 60%;
+}
+.advantagesText.block1 .item.m70{
+    margin-right: 70px;
+}
+.advantagesText.block1 .item.m190{
+    margin-right: 170px;
+}
+.advantagesText.block1 .item.m310{
+    margin-right: 280px;
+    background: url(/include/bizon2/line.png) -40px bottom no-repeat;
+}
+.advantagesText.block1 .item.m420{
+    margin-right: 400px;
+    background: url(/include/bizon2/line.png) -130px bottom no-repeat;
+}
+.advantagesText.block1 .item__size{
+    text-align: right;
+    font-weight: 700;
+    font-size: 28px;
+    color: #3c93c7;
+    line-height: 40px;
+}
+.advantagesText.block1 .item__text{
+    text-align: right;
+    font-size: 18px;
+    color: #555555;
+    line-height: normal;
+}
+.advantagesText.block1 .bottom-text{
+    font-weight: 700;
+    font-size: 30px;
+    line-height: normal;
+    text-align: right;
+    color: #3c93c7;
+}
+.advantagesText.block1 .bottom-text__inner{
+    display: inline-block;
+    max-width: 440px;
+}
+.advantagesText.block1 .text .textInner{
+    border-left: 5px solid #e5b827;
+    padding-left: 20px;
+}
+.advantagesText.block1 .text .textInner .titleText{
+    font-size: 3em;
+    text-transform: uppercase;
+    line-height: 1.3em;
+    margin-bottom: 20px;
+}
+.advantagesText.block1 .text .textInner .firstText{
+    font-size: 3em;
+    line-height: 1.3em;
+    font-weight: bold;
+}
+.advantagesText.block1 .text .textInner .nextText{
+    font-size: 3em;
+    line-height: 1.3em;
+    margin-left: 50px;
+    padding-left: 10px;
+    border-left: 5px solid #e5b827;
+    font-weight: bold;
+}
+.advantagesText.block1 .text .overText{
+    line-height: 1.3em;
+    font-size: 2em;
+    margin-top: 30px;
+    font-weight: bold;
+}
+
+
+.advantagesText.block3{padding: 30px 0 0;border-bottom: 2px solid #3a94c6;}
+.advantagesText.block3 .title{font-size: 40px;line-height: normal;text-transform: uppercase;margin-bottom: 44px;}
+.advantagesText.block3 .textBlock{width: 100%;position: relative; padding-top: 60px;}
+.advantagesText.block3 .textBlock .picBlok{width:100%;float: right;}
+.advantagesText.block3 .textBlock .pic{width: 100%;background-image: url(/include/bizon2/block8_img.png);background-position: center bottom; background-size: 74%;background-repeat: no-repeat;position: relative;height:546px;}
+.advantagesText.block3 .textBlock .picMobile{display:none;}
+.advantagesText.block3 .textBlock .overText div{position: absolute;line-height: 12pt;padding: 5px 0;width: 260px;}
+.advantagesText.block3 .textBlock .overText div.text1{top: -10px; left: 229px;}
+.advantagesText.block3 .textBlock .overText div.text2{top: -65px;left: 595px;}
+.advantagesText.block3 .textBlock .overText div.text3{top: -10px;right: 229px;}
+.advantagesText.block3 .textBlock .overText div.text4{top: 155px;left: 67px;}
+.advantagesText.block3 .textBlock .overText div.text5{top: 155px;right: 4px;}
+
+
+.advantagesText.block3.BizonMini{padding: 30px 0;border-bottom: 2px solid #3a94c6;}
+.advantagesText.block3.BizonMini .title{text-align: left;}
+.advantagesText.block3.BizonMini .textBlock{width: 100%;position: relative; padding-top: 0;}
+.advantagesText.block3.BizonMini .textBlock .picBlok{width:100%;float: right;}
+.advantagesText.block3.BizonMini .textBlock .pic{width: 100%;background-image: url(/include/bizon2_mini/block6_5-img.png);margin: 20px 0;background-position: 100% 0;background-size: 64%;background-repeat: no-repeat;max-width: 100%;position: relative;height: 710px;}
+.advantagesText.block3.BizonMini .textBlock .picMobile{display:none;}
+.advantagesText.block3.BizonMini .textBlock .overText div{position: absolute;line-height: 15pt;padding: 5px 0; width: 290px; line-height: 24px;}
+.advantagesText.block3.BizonMini .textBlock .overText div.text1{top: 38px; right: 0; left: auto; }
+.advantagesText.block3.BizonMini .textBlock .overText div.text2{top: 152px; right: 0; left: auto; }
+.advantagesText.block3.BizonMini .textBlock .overText div.text3{top: 280px; right: 0; left: auto; }
+.advantagesText.block3.BizonMini .textBlock .overText div.text4{top: 389px; right: 0; left: auto; }
+.advantagesText.block3.BizonMini .textBlock .overText div.text5{top: 518px; right: 0; left: auto; }
+.advantagesText.block3.BizonMini .textBlock .overText div.text6{top: 625px; right: 0; left: auto; }
+.advantagesText.block3.BizonMini .textBlock .pic .overText{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 65%;
+    left: 0;
+}
+
+.advantagesText.block4{border-bottom: 2px solid #3a94c6;}
+.advantagesText.block4 .title{font-size: 30pt;text-align: right;line-height: 35pt;text-transform: uppercase;}
+.advantagesText.block4 .textBlock41{margin-top: 50px;}
+.advantagesText.block4 .textBlock41 .textBlock411{
+    float:left;
+    width:40%;
+    padding-top: 40%;
+    background-image: url(/include/bizon2/bizon_pic41.png);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.advantagesText.block4.BizonMini .textBlock41 .textBlock411{
+    background-image: url(/include/prusa/2451/bizon_pic41.png);
+}
+.advantagesText.block4 .textBlock41 .textBlock411.new{
+    background-image: url(/include/prusa/2451/bizon_pic41.png);
+}
+.advantagesText.block4 .textBlock41 .textBlock412{
+    float:right;
+    width:60%;
+}
+.advantagesText.block4 .textBlock41 .textBlock412 .textBlock4121{
+
+    border-left: 5px solid #e5b827;
+    padding-left: 10px;
+    font-size: 15pt;
+}
+.advantagesText.block4 .textBlock41 .textBlock412 .textBlock4122{
+
+    margin-top: 50px;
+}
+
+.advantagesText.block4 .textBlock41 .textBlock412 .textBlock4122 .textBlock41221{
+
+    width: 50%;
+    float: left;
+    padding-top: 50%;
+    background-image: url(/include/bizon2/bizon_pic42.png);
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+    background-size: contain;
+}
+.advantagesText.block4 .textBlock41 .textBlock412 .textBlock4122 .textBlock41222{
+
+    width: 50%;
+    float: right;
+}
+.advantagesText.block4 .textBlock41 .textBlock412 .textBlock4122 .textBlock41222 ul{
+
+}
+.advantagesText.block4 .textBlock41 .textBlock412 .textBlock4122 .textBlock41222 ul li{
+
+    line-height: 12pt;
+    margin-bottom: 20px;
+}
+.advantagesText.block4 .textBlock41 .textBlock412 .textBlock4122 .textBlock41222 ul > li::before {
+    background-color: #e5b827;
+    content: " ";
+    display: block;
+    float: left;
+    height: 5px;
+    margin: 6px 10px 6px 2px;
+    width: 5px;
+    border-radius:0;
+}
+.advantagesText.block5{
+    border-bottom: 2px solid #3a94c6;
+}
+.advantagesText.block5 .title{
+    font-size: 30pt;
+    text-align: center;
+    line-height: 35pt;
+    text-transform: uppercase;
+    color:#e5b827;
+}
+.advantagesText.block5 .title2{
+    text-align:center;
+    margin:30px 0 50px;
+}
+
+.advantagesText.block5 .textBlock5{
+
+}
+.advantagesText.block5 .textBlock5 .bizonTab{
+
+    border-top: 1px solid #e5b827;
+    border-bottom: 1px solid #e5b827;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom:30px;
+}
+.advantagesText.block5 .textBlock5 .bizonTab li{
+
+    display: inline-block;
+    padding: 11px 50px;
+    margin: 0;
+    cursor:pointer;
+}
+.advantagesText.block5 .textBlock5 .bizonTab li:before{
+    display:none !important;
+}
+.advantagesText.block5 .textBlock5 .bizonTab li.active, .advantagesText.block5 .textBlock5 .bizonTab li:hover{
+
+    color: #fff;
+    background-color: #e5b827;
+}
+.advantagesText.block5 .bizonTabText{}
+.advantagesText.block5 .bizonTabText .bizonTabTextItems{
+    display:none;
+}
+.advantagesText.block5 .bizonTabText .bizonTabTextItems.active{
+    display:block;
+}
+.advantagesText.block5 .bizonTabText .titleTab{padding: 0 30px;
+                                               font-size: 4em;
+                                               line-height: 2.5em;}
+.advantagesText.block5 .bizonTabText .titleTabFull{
+    font-size: 4em;
+    padding-top: 45%;
+    padding-left: 30px;
+}
+
+.advantagesText.block5 .bizonTabText .textTab{padding: 0 30px 80px 30px;}
+.advantagesText.block5 .bizonTabText .textPic{
+    width: 100%;
+    padding-top: 50%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: contain;
+}
+.advantagesText.block5 .bizonTabText .textPic.pic1{
+    background-image: url(/include/bizon2/material_ABS.png);
+}
+.advantagesText.block5 .bizonTabText .textPic.pic2{
+    background-image: url(/include/bizon2/material_PLA.png);
+}
+.advantagesText.block5 .bizonTabText .textPic.pic3{
+    background-image: url(/include/bizon2/material_PETG.png);
+}
+.advantagesText.block5 .bizonTabText .textPic.pic4{
+    background-image: url(/include/bizon2/material_HIPS.jpg);
+}
+.advantagesText.block5 .bizonTabText .textPic.pic5{
+    background-image: url(/include/bizon2/material_CARBON.png);
+}
+.advantagesText.block5 .bizonTabText .textPic.pic6{
+    background-image: url(/include/bizon2/material_NYLON.jpg);
+}
+.advantagesText.block5 .bizonTabText .textPic.pic7{
+    background-image: url(/include/bizon2/material_OVER1.png);
+}
+.advantagesText.block5 .bizonTabText .textPic.pic8{
+    background-image: url(/include/bizon2/material_OVER.png);
+}
+
+.advantagesText.block6{
+}
+.advantagesText.block6 .title{
+    font-size: 30pt;
+    text-align: center;
+    line-height: 35pt;
+    text-transform: uppercase;
+}
+.advantagesText.block6 .technicalParameters{
+    margin: 30px 0;
+}
+.advantagesText.block6 .technicalParameters .titleParametrs{
+    color: #167ac5;
+    font-size:1.4em;
+    text-transform: uppercase;
+    padding: 20px;
+    position:relative;
+}
+.advantagesText.block6 .technicalParameters .titleParametrs::before{
+    padding: 0px;
+    margin-left: 0px;
+    width: 20px;
+    display: inline-block;
+    vertical-align: top;
+    *display: inline;
+    zoom: 1;
+    position: absolute;
+    top: 18px;
+    left: 0px;
+    color: #167ac5;
+    content: "\25CF";
+    position: absolute;
+    left: 0;
+    font-size: 0.6em;
+}
+.advantagesText.block6 .technicalParameters ul{}
+.advantagesText.block6 .technicalParameters ul li{
+    padding: 0;
+    margin: 10px 0;
+    line-height: 1.1em;
+    font-weight:bold;
+}
+.advantagesText.block6 .technicalParameters ul li::before{
+    display:none;
+}
+.advantagesText.block6 .technicalParameters ul li span{
+    display:block;
+    font-weight:normal;
+}
+/*prusa*/
+.advantagesText.prusa1{border-bottom: 2px solid #3a94c6;}
+.advantagesText.prusa1 .title {
+    font-size: 30pt;
+    text-align: center;
+    line-height: 35pt;
+    text-transform: uppercase;
+}
+.advantagesText.prusa1 .textBlock{display:flex;justify-content:space-between; margin-top:30px;margin-bottom:50px;}
+.advantagesText.prusa1 .prusaBlock1Left{width:30%;}
+.advantagesText.prusa1 .prusaBlock1Center{width:35%;background-repeat: no-repeat;background-image: url(/include/prusa/prusa.jpg);background-size: contain;background-position: center;}
+.advantagesText.prusa1 .prusaBlock1Center.new {background-image: url(/include/prusa/2451/prusa.jpg);}
+.advantagesText.prusa1 .prusaBlock1Right{width:30%;}
+.advantagesText.prusa1 .prusaBlock1Content{margin:100px 0;}
+.advantagesText.prusa1 .prusaBlock1Left .prusaBlock1Content > div, .advantagesText.prusa1 .prusaBlock1Right .prusaBlock1Content > div{border:1px solid #f2f2f2;padding:30px 20px;position:relative}
+.advantagesText.prusa1 .prusaBlock1Left .prusaBlock1Content > div span, .advantagesText.prusa1 .prusaBlock1Right .prusaBlock1Content > div span{
+    padding-left: 60px;
+    display: table-cell;
+    line-height: 15px;
+    height: 30px;
+    vertical-align: middle;
+}
+.advantagesText.prusa1 .prusaBlock1Left .prusaBlock1Content > div:before, .advantagesText.prusa1 .prusaBlock1Right .prusaBlock1Content > div:before{
+    content: "";
+    display: block;
+    width: 34px;
+    height: 28px;
+    position: absolute;
+    background-repeat:no-repeat;
+    background-image: url(/include/prusa/numbers.png);
+}
+.advantagesText.prusa1 .prusaBlock1Left .prusaBlock1Content .prusaBlock1Left2:before{
+    background-position:-35px 0px;
+    width: 39px;
+}
+.advantagesText.prusa1 .prusaBlock1Left .prusaBlock1Content .prusaBlock1Left3:before{
+    background-position:-74px 0;
+    width: 40px;
+}
+.advantagesText.prusa1 .prusaBlock1Left .prusaBlock1Content .prusaBlock1Left4:before{
+    background-position:-115px 0;
+    width: 40px;
+}
+.advantagesText.prusa1 .prusaBlock1Right .prusaBlock1Content .prusaBlock1Right5:before{
+    background-position:-156px 0px;
+    width: 39px;
+}
+.advantagesText.prusa1 .prusaBlock1Right .prusaBlock1Content .prusaBlock1Right6:before{
+    background-position:-196px 0;
+    width: 40px;
+}
+.advantagesText.prusa1 .prusaBlock1Right .prusaBlock1Content .prusaBlock1Right7:before{
+    background-position:-236px 0;
+    width: 40px;
+}
+.advantagesText.prusa1 .prusaBlock1Right .prusaBlock1Content .prusaBlock1Right8:before{
+    background-position:-276px 0;
+    width: 40px;
+}
+.advantagesText.prusa1 .prusaBlock1Left .prusaBlock1Content > div:after{
+    content: "";
+    display: block;
+    width: 67px;
+    height: 4px;
+    position: absolute;
+    background-repeat: no-repeat;
+    background-image: url(/include/prusa/tochki.png);
+    right: -61px;
+    top: 50%;
+    margin-top: -2px;
+}
+.advantagesText.prusa1 .prusaBlock1Right .prusaBlock1Content > div:after{
+    content: "";
+    display: block;
+    width: 92px;
+    height: 4px;
+    position: absolute;
+    background-repeat: no-repeat;
+    background-image: url(/include/prusa/tochki2.png);
+    left: -86px;
+    top: 50%;
+    margin-top: -2px;
+}
+
+
+
+.advantagesText.prusa2{border-bottom: 2px solid #3a94c6;}
+.advantagesText.prusa2 .title {
+    font-size: 30pt;
+    text-align: center;
+    line-height: 35pt;
+    text-transform: uppercase;
+    font-weight:bold;
+}
+.advantagesText.prusa2 .title2 {
+    font-size: 26pt;
+    text-align: center;
+    line-height: 30pt;
+    margin-top: 30px;
+}
+.advantagesText.prusa2 .prusaBlock2Plata{}
+.advantagesText.prusa2 .prusaBlock2Plata .prusaBlock2PlataContent{display:flex;justify-content:space-between; margin-top:30px;margin-bottom:50px;}
+.advantagesText.prusa2 .prusaBlock2Plata .prusaBlock2PlataContent .prusaBlock2PlataLeft{position:relative;width: 50%;padding-top: 30%;background-repeat: no-repeat;background-image: url(/include/prusa/plata_left.jpg);background-size:contain;background-position: center;}
+.advantagesText.prusa2 .prusaBlock2Plata .prusaBlock2PlataContent .prusaBlock2PlataRight{position:relative;width: 50%;padding-top: 30%;background-repeat: no-repeat;background-image: url(/include/prusa/plata_right.jpg);background-size:contain;background-position: center;}
+.advantagesText.prusa2 .prusaBlock2Plata .prusaBlock2PlataContent .prusaBlock2Platabit{
+    position: absolute;
+    width: 196px;
+    height: 106px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    color: #fff;
+    background-image: url(/include/prusa/bit.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    text-align: center;
+    display: table-cell;
+    vertical-align: bottom;
+    font-size: 35pt;
+    line-height: 70pt;
+}
+
+.advantagesText.prusa2 .prusaBlock2Plata{margin-top:50px;margin-bottom:30px;}
+.advantagesText.prusa2 .prusaBlock2PlataText{width: 100%;text-align: center;}
+.advantagesText.prusa2 .prusaBlock2PlataText span{position:relative; font-size:30pt;display: inline-block;}
+.advantagesText.prusa2 .prusaBlock2PlataText span:before{
+    content: "";
+    display: block;
+    width: 190px;
+    height: 109px;
+    position: absolute;
+    background-repeat: no-repeat;
+    background-image: url(/include/prusa/arrow_right.png);
+    right: -210px;
+    top: -79px;
+}
+.advantagesText.prusa2 .prusaBlock2PlataText span:after{
+    content: "";
+    display: block;
+    width: 190px;
+    height: 109px;
+    position: absolute;
+    background-repeat: no-repeat;
+    background-image: url(/include/prusa/arrow_left.png);
+    left: -210px;
+    top: -79px;
+}
+.advantagesText.prusa2 .prusaBlock2Over{display: flex;margin: 80px 0;}
+.advantagesText.prusa2 .prusaBlock2Over > div{width: 20%;border-right: 1px solid #e5e5e5;}
+.advantagesText.prusa2 .prusaBlock2Over .prusaBlock2OverPic{width: 100%;padding-top: 50%;background-repeat: no-repeat;background-position: center;}
+.advantagesText.prusa2 .prusaBlock2Over .prusaBlock2OverText{text-align: center;padding: 0 20px;}
+.advantagesText.prusa2 .prusaBlock2Over > div:last-child{border:none;}
+
+.advantagesText.prusa2 .prusaBlock2Over .prusaBlock2Over1 .prusaBlock2OverPic{background-image: url(/include/prusa/over1.png);}
+.advantagesText.prusa2 .prusaBlock2Over .prusaBlock2Over2 .prusaBlock2OverPic{background-image: url(/include/prusa/over2.png);}
+.advantagesText.prusa2 .prusaBlock2Over .prusaBlock2Over3 .prusaBlock2OverPic{background-image: url(/include/prusa/over3.png);}
+.advantagesText.prusa2 .prusaBlock2Over .prusaBlock2Over4 .prusaBlock2OverPic{background-image: url(/include/prusa/over4.png);}
+.advantagesText.prusa2 .prusaBlock2Over .prusaBlock2Over5 .prusaBlock2OverPic{background-image: url(/include/prusa/over5.png);}
+
+.advantagesText.prusa {border-bottom: 2px solid #3a94c6; margin-top:0;}
+.advantagesText.prusa .prusaBlockNew{display: flex;margin: 30px 0;}
+.advantagesText.prusa .prusaBlockNew > div{width: 33%;}
+.advantagesText.prusa .prusaBlockNew .prusaBlockNewPic{width: 100%;padding-top: 50%;background-repeat: no-repeat;background-position: center;background-size: contain;}
+.advantagesText.prusa .prusaBlockNew .prusaBlockNewText{text-align: center;padding: 20px;}
+.advantagesText.prusa .prusaBlockNew .prusaBlockNewText .prusaBlockNewTextTitle{text-align: center;font-weight:bold;font-size:15px;}
+
+.advantagesText.prusa .prusaBlockNew .prusaBlockNew1 .prusaBlockNewPic{background-image: url(/include/prusa/new01.png);}
+.advantagesText.prusa .prusaBlockNew .prusaBlockNew2 .prusaBlockNewPic{background-image: url(/include/prusa/new02.png);}
+.advantagesText.prusa .prusaBlockNew .prusaBlockNew3 .prusaBlockNewPic{background-image: url(/include/prusa/new03.png);}
+
+.advantagesText.prusa2401 {border-bottom: 2px solid #3a94c6; margin-top:0;}
+.advantagesText.prusa2401 .prusaBlockNew{display: flex;margin: 30px 0;}
+.advantagesText.prusa2401 .prusaBlockNew > div{width: 33%;}
+.advantagesText.prusa2401 .prusaBlockNew .prusaBlockNewPic{width: 100%;padding-top: 50%;background-repeat: no-repeat;background-position: center;background-size: contain;}
+.advantagesText.prusa2401 .prusaBlockNew .prusaBlockNewText{text-align: center;padding: 20px;}
+.advantagesText.prusa2401 .prusaBlockNew .prusaBlockNewText .prusaBlockNewTextTitle{text-align: center;font-weight:bold;font-size:15px;}
+
+.advantagesText.prusa2401 .prusaBlockNew .prusaBlockNew1 .prusaBlockNewPic{background-image: url(/include/prusa/2401/new01.png);}
+.advantagesText.prusa2401 .prusaBlockNew .prusaBlockNew2 .prusaBlockNewPic{background-image: url(/include/prusa/new02.png);}
+.advantagesText.prusa2401 .prusaBlockNew .prusaBlockNew3 .prusaBlockNewPic{background-image: url(/include/prusa/new03.png);}
+
+
+
+.advantagesText.prusa3{border-bottom: 2px solid #3a94c6;}
+.advantagesText.prusa3 .title {
+    font-size: 30pt;
+    text-align: center;
+    line-height: 35pt;
+    text-transform: uppercase;
+    font-weight:bold;
+}
+.advantagesText.prusa3 .title2 {
+    font-size: 15pt;
+    text-align: center;
+    line-height: 20pt;
+    width: 70%;
+    margin: 30px auto 0;
+}
+.advantagesText.prusa3 .prusaBlock3Over{
+    margin: 30px 0;
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row wrap;
+}
+.advantagesText.prusa3 .prusaBlock3Over .prusaBlock3OverItem{
+    width: 30%;
+    border: 2px solid #e5e5e5;
+    margin: 20px 0;
+    overflow: hidden;
+}
+.advantagesText.prusa3 .prusaBlock3Over .prusaBlock3OverItem .prusaBlock3OverTitle{
+    background-image: url(/include/prusa/bg1.png);
+    padding: 20px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 13pt;
+}
+.advantagesText.prusa3 .prusaBlock3Over .prusaBlock3OverItem .prusaBlock3OverPic{
+    width: 100%;
+    padding-top: 50%;
+    background-image: url(/include/prusa/modif.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.advantagesText.prusa3 .prusaBlock3Over .prusaBlock3OverItem .prusaBlock3OverText{
+    padding: 20px;
+    color: #fff;
+    background-image: url(/include/prusa/bg2.png);
+    height: 100%;
+    background-repeat: repeat-x;
+    background-color: #3d6585;
+}
+.top-block .top-block-item.col-lg-4{
+    width: 37%;
+}
+
+
+
+.advantagesText.prusa5{
+    border-bottom: 2px solid #3a94c6;
+}
+.advantagesText.prusa5 .title{
+    font-size: 30pt;
+    text-align: center;
+    line-height: 35pt;
+    text-transform: uppercase;
+}
+.advantagesText.prusa5 .textBlock51{
+    margin-top: 50px;
+}
+.advantagesText.prusa5 .textBlock51 .textBlock511{
+    float:right;
+    width:40%;
+    padding-top: 40%;
+    background-image: url(/include/prusa/prusa5_2.png);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.advantagesText.prusa5 .textBlock51 .textBlock512{
+    float:left;
+    width:60%;
+}
+.advantagesText.prusa5 .textBlock51 .textBlock512 .textBlock5121{
+    border-left: 5px solid #e5b827;
+    padding-left: 10px;
+    font-size: 15pt;
+}
+.advantagesText.prusa5 .textBlock51 .textBlock512 .textBlock5122{
+    margin-top: 50px;
+}
+
+.advantagesText.prusa5 .textBlock51 .textBlock512 .textBlock5122 .textBlock51221{
+    width: 40%;
+    float: left;
+    padding-top: 50%;
+    background-image: url(/include/prusa/prusa5_1.png);
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+    background-size: contain;
+}
+.advantagesText.prusa5 .textBlock51 .textBlock512 .textBlock5122 .textBlock51222{
+
+    width: 50%;
+    float: right;
+    margin-top:40px;
+}
+.advantagesText.prusa5 .textBlock51 .textBlock512 .textBlock5122 .textBlock51222 .titleSmall{
+    font-weight: bold;
+    line-height: 1em;
+    font-size: 1.5em;
+    margin-bottom: 40px;
+}
+.advantagesText.prusa5 .textBlock51 .textBlock512 .textBlock5122 .textBlock51222 ul li{
+    line-height: 12pt;
+    margin-bottom: 20px;
+    padding-left:40px;
+}
+.advantagesText.prusa5 .textBlock51 .textBlock512 .textBlock5122 .textBlock51222 ul > li::before {
+    content: " ";
+    display: block;
+    float: left;
+    height: 30px;
+    margin: 0 64px 0 2px;
+    width: 34px;
+    border-radius: 0;
+    background-image: url(/include/prusa/prusa53.png);
+    background-repeat: no-repeat;
+    background-position: 0 0;
+}
+.advantagesText.prusa5 .textBlock51 .textBlock512 .textBlock5122 .textBlock51222 ul li:last-child{
+    padding-top:10px;
+}
+
+.advantagesText.prusa6{
+    border-bottom: 2px solid #3a94c6;
+}
+.advantagesText.prusa6 .title{
+    font-size: 30pt;
+    text-align: center;
+    line-height: 35pt;
+    text-transform: uppercase;
+}
+.advantagesText.prusa6 .titleDop{text-align: center;font-size: 15pt;margin-bottom: 40px;}
+.advantagesText.prusa6 .textBlock6Row{display: flex;justify-content: space-between;}
+.advantagesText.prusa6 .textBlock6Row .textBlock6Col{width: 48%;}
+.advantagesText.prusa6 .textBlock6Row .textBlock6Col .textBlock6InfoLeft{border-left: 5px solid #3c93c7;padding-left: 10px;font-size: 11pt;margin-bottom:20px;}
+.advantagesText.prusa6 .textBlock6Row .textBlock6Col .textBlock6InfoLeftPic{margin-bottom: 20px; padding-top: 50%;background-image: url(/include/prusa/prusa61.png);background-repeat: no-repeat;background-position: 50% 0;background-size: contain;}
+.advantagesText.prusa6 .textBlock6Row .textBlock6Col .textBlock6InfoLeftPic .textBlock6InfoLeftPicText{display: flex;justify-content: space-between;margin-top:20px}
+.advantagesText.prusa6 .textBlock6Row .textBlock6Col .textBlock6InfoLeftPic .textBlock6InfoLeftPicText .textBlock6InfoLeftPicTextLeft{width: 50%;text-align:center;text-transform: uppercase;color:#3c93c7;}
+.advantagesText.prusa6 .textBlock6Row .textBlock6Col .textBlock6InfoLeftPic .textBlock6InfoLeftPicText .textBlock6InfoLeftPicTextRight{width: 50%;text-align:center;text-transform: uppercase;color:#e0b700;}
+.advantagesText.prusa6 .textBlock6Row .textBlock6Col .textBlock6InfoRightPic{padding-top: 50%;background-image: url(/include/prusa/prusa62.jpg);background-repeat: no-repeat;background-position: 50% 0;background-size: contain;}
+.advantagesText.prusa6 .textBlock6Row .textBlock6Col .textBlock6InfoRight{border-left: 5px solid #3c93c7;padding-left: 10px;font-size: 11pt;}
+.advantagesText.prusa6 .textBlock6Row .textBlock6Col .textBlock6OverRight{color:#3c93c7; text-align:right; margin:20px 0; font-size:13pt;}
+
+.advantagesText.copy{border-top: 2px solid #3a94c6;padding-top: 30px; font-size:10pt; line-height:10pt;}
+.advantagesText.prusa2451_1 .flexBlock{display: flex;justify-content: space-between;}
+.advantagesText.prusa2451_1{border-bottom: 2px solid #3a94c6;padding-bottom: 30px;}
+.advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left.width-60{width:60%}
+.advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left.width-40{width:40%}
+.advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .title{font-size: 30pt;line-height: 30pt;text-transform: uppercase;}
+.advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs{color: #3c93c7;font-size: 35pt;line-height: 35pt;font-weight: bold;margin: 8% 0;}
+.advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs span{color: #555555;font-size: 14pt;line-height: 10pt;font-weight: normal;display:block;}
+.advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr1{padding: 30px 0 30px 140px; margin:20px 0;border-left:2px solid #3c93c7;background-color:#f6f6f7;width: 100%;max-width: 750px;float: right; background-image: url(/include/prusa/2451/icon1.png);background-position: 40px 50%;background-repeat: no-repeat;}
+.advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr2{padding: 30px 0 30px 140px; margin:20px 0;border-left:2px solid #3c93c7;background-color:#f6f6f7;float: right;max-width: 450px;width: 100%; background-image: url(/include/prusa/2451/icon2.png);background-position: 40px 50%;background-repeat: no-repeat;}
+.advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .slogan{color: #3c93c7;font-size: 20pt;line-height: 20pt;font-weight: bold;text-align:left;}
+.advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .pic{width: 100%;padding-top: 100%;background-image: url(/include/prusa/2451/prusa1_img.png);background-repeat: no-repeat;background-size: contain;}
+
+.advantagesText.copy{border-top: 2px solid #3a94c6;padding-top: 30px; font-size:10pt; line-height:10pt;}
+.advantagesText.prusa2401_1 .flexBlock{display: flex;justify-content: space-between;}
+.advantagesText.prusa2401_1{border-bottom: 2px solid #3a94c6;padding-bottom: 30px;}
+.advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left.width-60{width:50%}
+.advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left.width-40{width:50%}
+.advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .title{font-size: 30pt;line-height: 30pt;text-transform: uppercase; text-align:right;}
+.advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs{color: #3c93c7;font-size: 35pt;line-height: 35pt;font-weight: bold;margin: 8% 0;}
+.advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs .inner{margin-left:40px;}
+.advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs span{color: #555555;font-size: 14pt;line-height: 10pt;font-weight: normal;display:block;}
+.advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr1{padding: 30px 140px 30px 0; margin:20px 0;border-right:2px solid #3c93c7;background-color:#f6f6f7;width: 100%;max-width: 560px;float: right; background-image: url(/include/prusa/2451/icon1.png);background-position: right 40px top 50%;background-repeat: no-repeat;}
+.advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr2{padding: 30px 140px 30px 0; margin:20px 0;border-right:2px solid #3c93c7;background-color:#f6f6f7;float: right;max-width: 320px;width: 100%; background-image: url(/include/prusa/2451/icon2.png);background-position: right 40px top 50%;background-repeat: no-repeat;}
+.advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .slogan{color: #3c93c7;font-size: 20pt;line-height: 20pt;font-weight: bold;text-align:right;}
+.advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .pic{width: 100%;padding-top: 90%;background-image: url(/include/prusa/2401/prusa2_img.png);background-repeat: no-repeat;background-size: contain;background-position: center right;}
+
+
+.advantagesText.block7{border-bottom: 2px solid #3a94c6;}
+.advantagesText.block7 .title{font-size: 30pt;text-align: center;line-height: 35pt;text-transform: uppercase;}
+.advantagesText.block7 .subtitle{text-align: center;font-size: 15pt;margin-bottom: 40px;}
+.advantagesText.block7 .rowtext{position:relative; width:1200px; margin:0 auto;}
+.advantagesText.block7 .rowtext .schema{
+    width: 100%;
+    padding-top: 25%;
+    background-image: url(/include/bizon2/bizon2block7.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin-bottom: 25%;
+    background-size: contain;
+}
+.advantagesText.block7 .rowtext .schemaBlocks{
+    position: absolute;
+    width: 100%;
+    padding-top: 40%;
+    background-image: url(/include/bizon2/bizon2block72.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    z-index: 10;
+    top: 0;
+    background-size: contain;
+}
+.advantagesText.block7 .rowtext .schemaBlocks > div{position: absolute;line-height: 16pt;font-size: 13pt;}
+.advantagesText.block7 .rowtext .schemaBlocks .schema1{
+    top: 60px;
+    text-align: right;
+    width: 230px;
+}
+.advantagesText.block7 .rowtext .schemaBlocks .schema2{
+    top: 250px;
+    text-align: right;
+    width: 230px;
+}
+.advantagesText.block7 .rowtext .schemaBlocks .schema3{
+    right: 0;
+    left: 0;
+    margin: auto;
+    text-align: center;
+}
+.advantagesText.block7 .rowtext .schemaBlocks .schema4{
+    width: 230px;
+    right: 0;
+    top: 60px;
+}
+.advantagesText.block7 .rowtext .schemaBlocks .schema5{
+    width: 230px;
+    right: 0;
+    top: 250px;
+}
+
+.start_promo.wiki .item{
+    padding-bottom: 14%;
+}
+.start_promo.wiki .item a{
+    margin-top: 10%;
+    height: 90%;
+    background-color: #f3f3f5;
+    opacity: 1;
+}
+.start_promo.wiki .item .wrap_tizer{}
+.start_promo.wiki .item .wrap_tizer .wrap_outer .outer_text{
+    background-color: transparent;
+    text-decoration: underline;
+    text-decoration: none;
+    border-bottom: 2px solid #4b95c8;
+}
+.start_promo.wiki .item .wrap_tizer .wrap_outer .inner_text{
+    background-color: transparent;
+    color: #555555;
+    text-transform: uppercase;
+    left:0;
+}
+.start_promo.wiki .item .img_block{
+    z-index: 10;
+    background-size: inherit;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+.start_promo.wiki .item .wrap_tizer .wrap_outer.title{background-color: transparent;}
+.start_promo.wiki .item:not(.touch_class):hover .scale_block_animate, .start_promo.wiki .touch_class .scale_block_animate{transform: none;}
+.start_promo.wiki .item:not(.touch_class):hover .wrap_tizer .wrap_outer .outer_text{border: none;}
+
+
+.Printery{}
+.Printery .Printery_block{margin:20px 0;}
+.Printery .Printery_block .Printery_header{
+    display: flex;
+    margin: 50px 0;
+}
+.Printery .Printery_block .Printery_header .title{
+    color:#fff;
+    font-weight:bold;
+    display: flex;
+    max-height: 64px;
+}
+.Printery .Printery_block .Printery_header .title span{
+    display: flex;
+    width: 350px;
+    background-color: #3277d5;
+    padding: 20px 30px;
+    font-size: 26px;
+}
+.Printery .Printery_block .Printery_header .title .d7{
+    width: 0;
+    height: 0;
+    border-top: 64px solid #3277d5;
+    border-right: 40px solid transparent;
+}
+.Printery .Printery_block .Printery_header .description{line-height: 17px;font-weight: bold;margin: 5px 40px 5px 100px;}
+
+.Printery .Printery_block .items{}
+.Printery .Printery_block .items .item{}
+
+.Printery .Printery_list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin:10px 0;
+}
+.Printery .Printery_list .PrinteryItem{
+    width: 31%;
+    margin: 10px;
+    border: 1px solid #f2f2f2;
+    padding: 20px;
+    position: relative;
+    padding-bottom: 80px;
+}
+.Printery .Printery_list .PrinteryItem .PrinteryItemPic{
+    width: 100%;
+    padding-top: 60%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50% 50%;
+    position: relative;
+}
+.Printery .Printery_list .PrinteryItem .PrinteryItemPic a{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+}
+.Printery .Printery_list .PrinteryItem .PrinteryItemName{
+    margin: 10px 0;
+    font-size: 16px;
+}
+.Printery .Printery_list .PrinteryItem .PrinteryItemName a{
+    color: #383838;
+    font-weight: bold;
+}
+.Printery .Printery_list .PrinteryItem .PrinteryItemDescr{
+    color: #383838;
+    line-height: 18px;
+    font-size: 14px;
+    margin: 10px 0;
+}
+.Printery .Printery_list .PrinteryItem .PrinteryItemProp {
+    color: #818181;
+    font-size: 12px;
+    line-height: 17px;
+    margin: 20px 0;
+}
+.Printery .Printery_list .PrinteryItem .PrinteryItemProp .PrinteryItemPropItems{font-weight: bold;}
+.Printery .Printery_list .PrinteryItem .PrinteryItemProp .PrinteryItemPropItems span{
+    margin: 0 10px;
+    font-weight: normal;
+}
+.Printery .Printery_list .PrinteryItem .PrinteryItemPrice {
+    font-family: Roboto;
+    font-weight: bold;
+    color: #2c6abf;
+    font-size: 18px;
+    position: absolute;
+    bottom: 60px;
+}
+.Printery .Printery_list .PrinteryItem .PrinteryItemLink{
+    position: absolute;
+    bottom: 20px;
+}
+.Printery .Printery_list .PrinteryItem .PrinteryItemLink a{
+    padding: 10px 40px;
+    background-color: #3277d5;
+    color: #fff;
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+.flex {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+.flex-between {
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+.flex-wrap {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+.flex-center {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+.flex-end {
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+}
+.flex-v-center {
+    -webkit-box-align:center;
+    -ms-flex-align:center;
+    -ms-grid-row-align:center;
+    align-items:center;
+}
+.flex-v-end{
+    -webkit-box-align:flex-end;
+    align-items:flex-end;
+}
+.row-30{
+    margin-left: -15px;
+    margin-right: -15px;
+}
+.sections{
+    padding-bottom: 50px;
+}
+.sections__border{
+    border-bottom: 4px solid #e9e9e9;
+}
+.sections__items{
+    width: 33.333333%;
+    max-width: 400px;
+}
+.sections__image{
+    max-height: 300px;
+    width: 100%;
+}
+.sections__image img{
+    max-width: 100%;
+    max-height: 100%;
+    display: inline-block;
+}
+.sections__items-30{
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 30px;
+}
+.sections__header{
+    margin-bottom: 70px;
+}
+.sections__header-title{
+    font-weight: 700;
+    font-size: 26px;
+    display: inline-flex;
+    color: #fff;
+}
+.sections__header-text{
+    display: inline-flex;
+    max-width: 845px;
+    font-size: 15px;
+    color: rgb(56, 56, 56);
+    line-height: 1.467;
+    font-weight: 700;
+    padding-left: 30px;
+    width: 70%;
+}
+.sections__title-text{
+    background: #3277d5;
+    padding: 28px 40px;
+}
+.sections__title-border{
+    width: 0;
+    height: 0;
+    border-top: 80px solid #3277d5;
+    border-right: 40px solid transparent;
+}
+.sections__title{
+  font-size: 16px;
+  color: rgb(56, 56, 56);
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+.sections__text{
+  font-size: 14px;
+  color: rgb(56, 56, 56);
+  line-height: 1.571;
+  margin-bottom: 40px;
+}
+.sections__wrapper{
+    background: #f9f9f9;
+    padding: 30px 40px;
+    position: relative;
+    transition: background ease .5s;
+}
+.sections__wrapper:hover, .sections__wrapper.active {
+    background: #3277d5 url(/images/check-01.svg) center bottom no-repeat;
+}
+.sections__wrapper:hover .sections__title, .sections__wrapper:hover .sections__text,
+.sections__wrapper.active .sections__title, .sections__wrapper.active .sections__text{
+    color: #fff;
+}
+.sections__items-link{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+.sections-items{
+    margin-top: 70px;
+}
+.spisok__items{
+    width: 50%;
+}
+.spisok__items .counter_wrapp{
+    padding-top: 0;
+}
+.spisok__items .information .cost.prices .price{
+    font-size: 18px;
+    color: rgb(44, 106, 191);
+    font-weight: 700;
+    line-height: 1.111;
+    padding: 0;
+    margin: 0;
+}
+.spisok__items .description{
+    margin-bottom: 25px;
+}
+.spisok__items .btn.btn-default{
+    font-size: 13px;
+    color: rgb(255, 255, 255);
+    text-transform: uppercase;
+    line-height: 1.538;
+    padding: 6px 18px 8px;
+}
+.spisok__items .counter_block{
+    width: 122px;
+}
+.spisok__items .counter_block input[type="text"]{
+    width: 72px;
+}
+.spisok__items div.item-title{
+    margin-bottom: 10px;
+}
+.spisok__items div.item-title a, .spisok__items div.item-title a span{
+    font-size: 16px;
+    color: rgb(56, 56, 56);
+    font-weight: 700;
+    line-height: 1.5;
+}
+.spisok__items .product-quantity {
+    font-size: 14px;
+    color: rgb(56, 56, 56);
+    line-height: 1.571;
+}
+.display_list.spisok{
+    padding-bottom: 40px;
+}
+.display_list .spisok__items .information_wrapp .information{
+    padding: 0;
+}
+.spisok__items .cost.prices{
+    min-width: 110px;
+}
+.display_list .spisok__items .item_wrap{
+    height: 100%;
+}
+.display_list .spisok__items .image_block{
+    min-height: min-content;
+}
+.display_list .spisok__items .list_item{
+    min-height: min-content;
+}
+.spisok__items .image_wrapper_block, .spisok__items .image_wrapper_block a{
+    height: 140px;
+}
+.spisok__items .information .sku_props{
+    width: 100%;
+    margin-bottom: 10px;
+}
+.spisok__items .item_wrap:hover{
+    border-color: #f2f2f2 !important;
+}
+.sections__description{
+    margin-top: 50px;
+}
+.sections__description-title{
+    font-size: 26px;
+    color: rgb(56, 56, 56);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 30px;
+}
+.sections__description-text{
+    font-size: 15px;
+    color: rgb(56, 56, 56);
+    line-height: 1.6;
+}
+.prop-section{
+    padding: 15px;
+    border: 1px solid #eee;
+    margin-bottom: 40px;
+}
+.prop-section__info{
+    flex: 1 0 0;
+}
+.prop-section__title{
+    width: 100%;
+    font-size: 15px;
+    font-weight:  700;
+    margin-bottom: 10px;
+    line-height: normal;
+}
+.prop-section__image{
+    width: 74px;
+}
+.projects-blocks.item:hover .info a.read_more{
+    color: #fff !important;
+}
+.wiki-title{
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.projects-blocks.item .catalog_item{
+    min-height: 355px;
+}
+.projects-blocks.item .tab.content_inner:not(.absolute) .flex-viewport{
+    /*padding-bottom: 0;*/
+}
+
+@media (max-width: 1500px) {
+    .top-block .top-block-item .address .hideAdress{display:none;}
+}
+@media (max-width: 1450px) {
+    .advantagesText.block3.BizonMini .textBlock .pic .overText{
+        top: -6px;
+    }
+}
+@media (max-width: 1440px) {
+    .advantagesText.block3.BizonMini .textBlock .pic{width: 100%;margin: 20px 0;background-repeat: no-repeat;position: relative;}
+    .advantagesText.block3.BizonMini .textBlock .overText div{position: absolute;padding: 5px 0;width:276px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text1{top: 42px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2{top: 152px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3{top: 279px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4{top: 385px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5{top: 510px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text6{top: 617px;}
+    .start_promo.wiki .item{
+        padding-bottom: 16%;
+    }
+    .start_promo.wiki .item a{
+        margin-top: 15%;
+        height: 85%;
+    }
+}
+@media (max-width: 1420px) {
+    .advantagesText.block3.BizonMini .textBlock .pic .overText{
+        top: -4px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .pic .overText{
+        top: -18px;
+        right: 65%;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text1{
+        top: 56px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2{
+        top: 164px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3{
+        top: 285px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4{
+        top: 390px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5{
+        top: 510px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text6{
+        top: 614px;
+    }
+}
+@media (max-width: 1410px) {
+    .advantagesText.block3 .textBlock .overText div.text1{
+        left: 219px;
+        top: 0;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        left: 572px;
+        top: -55px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text3{
+        top: 0;
+    }
+}
+@media (max-width: 1390px) {
+    .advantagesText.block3.BizonMini .textBlock .pic .overText{
+        top: -18px;
+        right: 65%;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text1{
+        top: 57px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2{
+        top: 162px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3{
+        top: 282px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4{
+        top: 382px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5{
+        top: 503px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text6{
+        top: 604px;
+    }
+}
+@media (max-width: 1360px) {
+    .advantagesText.block3.BizonMini .textBlock .overText div.text1{
+        top: 55px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2{
+        top: 158px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3{
+        top: 275px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4{
+        top: 375px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5{
+        top: 492px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text6{
+        top: 591px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text1{
+        left: 209px;
+        top: 28px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        left: 540px;
+        top: -25px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text3{
+        top: 28px;
+        right: 185px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text4{
+        top: 170px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text5{
+        top: 170px;
+        right: 0px;
+    }
+}
+@media (max-width: 1340px) {
+    .advantagesText.block3.BizonMini .textBlock .pic .overText{
+        right: 65%;
+    }
+    .advantagesText.block3.BizonMini .textBlock .pic{width: 100%;margin: 20px 0;background-repeat: no-repeat;position: relative;height: 660px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div{position: absolute;line-height: 11pt;padding: 5px 0;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text1{top: 55px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2{top: 156px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3{top: 274px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4{top: 370px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5{top: 485px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text6{top: 583px;}
+}
+@media (max-width: 1320px) {
+    .advantagesText.block3.BizonMini .textBlock .overText div.text1{
+        top: 56px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2{
+        top: 154px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3{
+        top: 269px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4{
+        top: 364px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5{
+        top: 477px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text6{
+        top: 573px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text1{
+        left: 199px;
+        top: 40px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        left: 522px;
+        top: -15px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text3{
+        top: 40px;
+    }
+}
+@media (max-width: 1300px) {
+    .advantagesText.block1 .item.m70{
+        margin-right: 0;
+        background-position: right bottom;
+    }
+    .advantagesText.block1 .item.m190{
+        margin-right: 0;
+        background-position: right bottom;
+    }
+    .advantagesText.block1 .item.m310{
+        margin-right: 0;
+        background-position: right bottom;
+    }
+    .advantagesText.block1 .item.m420{
+        margin-right: 0;
+        background-position: right bottom;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text1{
+        top: 56px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2{
+        top: 152px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3{
+        top: 264px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4{
+        top: 358px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5{
+        top: 469px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text6{
+        top: 563px;
+    }
+}
+@media (max-width: 1280px) {
+    .Printery .Printery_block .Printery_header .description{line-height: 17px;font-weight: bold;margin: 5px 40px 5px 60px;}
+    .advantagesText.block3 .textBlock .overText div.text1{
+        top: 9%;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        top: -10px;
+        left: 498px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text3{
+        top: 9%;
+        right: 158px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text4{
+        top: 34%;
+        left: 40px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text5{
+        top: 34%;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text1{
+        top: 53px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2{
+        top: 147px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3{
+        top: 258px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4{
+        top: 349px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5{
+        top: 458px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text6{
+        top: 550px;
+    }
+}
+@media (max-width: 1270px) {
+    .top-block .top-block-item.visible-lg{
+        display:none !important;
+    }
+    .top-block .top-block-item.col-lg-4{
+        width: 50%;
+    }
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs{
+        margin:4% 0;
+    }
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr1{
+        padding: 20px 0 20px 140px;
+    }
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr2{
+        padding: 20px 0 20px 140px;
+    }
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .title{
+        font-size: 25pt;
+        line-height: 25pt;
+    }
+
+
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr1{
+        padding: 20px 140px 20px 0;
+    }
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr2{
+        padding: 20px 140px 20px 0;
+    }
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .title{
+        font-size: 25pt;
+        line-height: 25pt;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text1{
+        top: 53px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2{
+        top: 147px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3{
+        top: 258px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4{
+        top: 349px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5{
+        top: 458px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text6{
+        top: 550px;
+    }
+}
+@media (max-width: 1260px) {
+    .menu-catalog-top {
+        max-width: 760px;
+    }
+}
+@media (max-width: 1250px) {
+    .menu-catalog-top {
+        max-width: 760px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text1{
+        top: 50px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2{
+        top: 143px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3{
+        top: 250px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4{
+        top: 339px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5{
+        top: 444px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div.text6{
+        top: 534px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        left: 487px;
+    }
+}
+@media (max-width: 1230px) {
+    .advantagesText.block3 .textBlock .overText div.text1{
+        left: 150px;
+        top: 12%;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        top: 15px;
+        left: 470px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text3{
+        top: 12%;
+        right: 147px;
+    }
+}
+@media (max-width: 1240px) {
+    .Printery .Printery_block .Printery_header .description{margin: 5px 30px 5px 30px;}	
+}
+@media (max-width: 1200px) {
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs{margin: 4% 0;}
+    .advantagesText.block3.BizonMini .textBlock .pic .overText{
+        right: 10%;
+    }
+    .advantagesText.block7 .rowtext{width:1100px;}
+    .advantagesText.block7 .rowtext .schema{
+        padding-top: 20%;
+        margin-bottom: 25%;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks{
+        padding-top: 35%;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema1{
+        top: 45px;
+        width: 250px;
+        text-align: right;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema2{
+        top: 190px;
+        width: 250px;
+        text-align: right;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema3{
+        right: 0;
+        left: 0;
+        margin: auto;
+        text-align: center;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema4{
+        top: 45px;
+        width: 250px;
+        right: 0;
+
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema5{
+        top: 190px;
+        width: 250px;
+        right: 0;
+
+    }
+    .start_promo.wiki .item .img_block{
+        background-size: contain;
+        height: 70%;
+    }
+    .advantagesText.block3.BizonMini .textBlock .pic{background: none;height: auto;max-width: 100%;width: 60%;}
+    .advantagesText.block3.BizonMini .textBlock .picBlok{display: inline-flex;}
+    .advantagesText.block3.BizonMini .textBlock .picMobile{display:block;background-image: url(/include/bizon2_mini/block6_5-img-s.png);width: 40%;padding-top: 50%;background-position: 0 0;background-repeat: no-repeat;background-size: cover;}
+    /*.advantagesText.block3.BizonMini .textBlock .overText {padding-right: 100px;}*/
+    .advantagesText.block3.BizonMini .textBlock .overText div{position: relative;line-height: 15pt;padding: 5px 0 5px 0;width: 100% !important; top:auto !important; left:auto !important;margin: 20px 0;}
+/*    .advantagesText.block3.BizonMini .textBlock .overText div:after{display:block; content:" ";position: absolute;top: 0;right: 0;width: 70px;height: 70px;background-size: contain;background-repeat: no-repeat;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text1:after{background-image: url(/include/bizon2_mini/num1.png);}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2:after{background-image: url(/include/bizon2_mini/num2.png);margin-top:10px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3:after{background-image: url(/include/bizon2_mini/num3.png);}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4:after{background-image: url(/include/bizon2_mini/num4.png);}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5:after{background-image: url(/include/bizon2_mini/num5.png);}*/
+    .advantagesText.block3.BizonMini .textBlock .overText div{
+        border-left: 3px solid #2292c4;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .advantagesText.block3.BizonMini .textBlock .pic{
+        display: flex;
+        align-items: center;
+    }
+    .advantagesText.block3.BizonMini .textBlock .pic .overText{
+        position: relative;
+    }
+}
+@media (max-width: 1190px) {
+    .advantagesText.block3 .textBlock .overText div.text1{
+        left: 135px;
+        top: 15%;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        left: 449px;
+        top: 32px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text3{
+        top: 15%;
+        right: 134px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text5{
+        top: 37%;
+        right: -27px;
+    }
+}
+@media (max-width: 1170px) {
+    .advantagesText.block3 .textBlock .overText div.text1{
+        top: 17%;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        left: 444px;
+        top: 40px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text3{
+        top: 17%;
+        right: 134px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text4{
+        top: 39%;
+        left: 10px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text5{
+        top: 39%;
+        right: -29px;
+    }
+}
+@media (max-width: 1160px) {
+    .advantagesText.block3 .textBlock .overText div.text1{
+        top: 18%;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        left: 436px;
+        top: 40px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text3{
+        top: 18%;
+        right: 125px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text4{
+        top: 39%;
+        left: 10px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text5{
+        top: 39%;
+        right: -29px;
+    }
+}
+@media (max-width: 1130px) {
+    .advantagesText.block3 .textBlock .overText div.text1{
+        top: 20%;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        left: 424px;
+        top: 40px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text3 {
+        top: 20%;
+        right: 120px;
+    }
+}
+@media (max-width: 1120px) {
+    .psk_360_open_popup {
+        left: -46px;
+    }
+    .start_promo.wiki .item{
+        padding-bottom: 18%;
+    }
+    .start_promo.wiki .item a{
+        margin-top: 15%;
+        height: 85%;
+    }
+    .advantagesText.block1 .title{
+        font-size: 32px;
+    }
+    .advantagesText.block1 .item__size{
+        font-size: 22px;
+    }
+    .advantagesText.block1 .item__text{
+        font-size: 16px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        left: 413px;
+    }
+}
+@media (max-width: 1110px) {
+    .display_list .spisok__items .list_item td.image_block{
+        display: block;
+        width: 100%;
+    }
+    .display_list .spisok__items .list_item td.description_wrapp{
+        display: block;
+        width: 100%;
+    }
+}
+@media (max-width: 1100px) {
+    .advantagesText.block7 .rowtext{width:900px;}
+    .advantagesText.block7 .rowtext .schemaBlocks > div{position: absolute;line-height: 12pt;font-size: 10pt;}
+    .advantagesText.block7 .rowtext .schema{
+        padding-top: 20%;
+        margin-bottom: 25%;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks{
+        padding-top: 35%;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema1{
+        top: 35px;
+        width: 200px;
+        text-align: right;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema2{
+        top: 155px;
+        width: 200px;
+        text-align: right;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema3{
+        right: 0;
+        left: 0;
+        margin: auto;
+        text-align: center;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema4{
+        top: 35px;
+        width: 200px;
+        right: 0;
+
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema5{
+        top: 155px;
+        width: 200px;
+        right: 0;
+    }
+    .advantagesText.block3 .textBlock .overText div.text1{
+        top: 22%;
+        left: 115px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        top: 72px;
+        left: 405px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text3{
+        top: 22%;
+        right: 108px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text4{
+        left: 0;
+        top: 45%;
+        width: 240px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text5{
+        width: 240px;
+        right: -30px;
+        top: 39%;
+    }
+}
+@media (max-width: 1070px) {
+    .advantagesText.block3 .textBlock .overText div.text1{
+        top: 25%;
+        left: 97px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        top: 88px;
+        left: 367px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text3{
+        top: 26%;
+        right: 82px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text4{
+        top: 47%;
+    }
+    .advantagesText.block3 .textBlock .overText div.text5{
+        top: 42%;
+    }
+    .advantagesText.block3 .textBlock{
+        padding-top: 0;
+    }
+    .project-left, .project-right{
+        float: none;
+        width: 100%;
+    }
+}
+@media (max-width: 1000px) {
+    .advantagesText.block3 .textBlock .overText div.text1{
+        top: 27%;
+        left: 89px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text2{
+        top: 104px;
+        left: 358px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text3{
+        top: 27%;
+        right: 74px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text4{
+        left: 0;
+        top: 49%;
+        width: 240px;
+    }
+    .advantagesText.block3 .textBlock .overText div.text5{
+        width: 240px;
+        right: -30px;
+        top: 46%;
+        padding-left: 39px
+    }
+}
+@media (max-width: 999px) {
+    .advantagesText.block3 .textBlock{
+        padding-top: 60px;
+    }
+    .advantagesText.block1 .item:after{
+        width: 70px;
+        height: 66px;
+    }
+    body .advantagesText.block1 .item{
+        padding-bottom: 14px;
+        margin-bottom: 20px;
+    }
+    .advantagesText.block1 .item__size{
+        font-size: 18px;
+    }
+    .advantagesText.block1 .title{
+        text-align:center;
+        margin-bottom: 20px;
+    }
+    .advantagesText.block1 .text .textInner .nextText{
+        border:none;
+        margin:0;
+        padding:0;
+        display: block;
+    }
+    .advantagesText.block1 .text .textInner .titleText{
+        font-size:2em;
+    }
+    .advantagesText.block1 .text{
+        margin-top: 30px;
+    }
+    .advantagesText.block1 .text .overText{
+        text-align:center;
+        font-size:1.5em;
+        margin-bottom:30px;
+    }
+    .advantagesText.block1 .text .textInner .firstText{
+        font-size: 2em;
+    }
+    .advantagesText.block1 .text .textInner .nextText{
+        font-size: 2em;
+    }
+    .advantagesText.block3{
+        padding-top: 0;
+    }
+    .advantagesText.block3 .textBlock .picBlok{display: inline-flex;}
+
+    .advantagesText.block3 .textBlock .pic{
+        background: none;
+    }
+    .advantagesText.block3 .textBlock .picMobile{
+        display:block;
+        background-image: url(/include/bizon2/bizon2_pic3.png);
+        width: 100%;
+        height: 546px;
+        background-position: 0 0;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .advantagesText.block3.BizonMini .textBlock .pic .overText {
+        right: 10%;
+    }
+    .advantagesText.block3 .textBlock .overText div.text1{width: 300px;position: relative;float: right;margin-right: 30px;border-right: 3px solid #2292c4;padding: 0 10px;left: 0;}
+    .advantagesText.block3 .textBlock .overText div.text2{width: 300px;position: relative;float: right;margin-right: 30px;border-right: 3px solid #2292c4;padding: 0 10px;left: 0;top:50px;}
+    .advantagesText.block3 .textBlock .overText div.text3{width: 300px;position: relative;float: right;margin-right: 30px;border-right: 3px solid #2292c4;padding: 0 10px;left: 0;top:100px;}
+    .advantagesText.block3 .textBlock .overText div.text4{width: 300px;position: relative;float: right;margin-right: 30px;border-right: 3px solid #2292c4;padding: 0 10px;left: 0;top:150px;}
+    .advantagesText.block3 .textBlock .overText div.text5{width: 300px;position: relative;float: right;margin-right: 30px;border-right: 3px solid #2292c4;padding: 0 10px;left: 0;top:200px;}
+
+    .advantagesText.block3.BizonMini .textBlock .overText div.text1{width: 100%;position: relative;float: none;margin-right: 0;border-right: none;padding: 5px 0 5px 10px;left: auto;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2{width: 100%;position: relative;float: none;margin-right: 0;border-right: none;padding: 5px 0 5px 10px;left: auto;top:auto;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3{width: 100%;position: relative;float: none;margin-right: 0;border-right: none;padding: 5px 0 5px 10px;left: auto;top:auto;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4{width: 100%;position: relative;float: none;margin-right: 0;border-right: none;padding: 5px 0 5px 10px;left: auto;top:auto;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5{width: 100%;position: relative;float: none;margin-right: 0;border-right: none;padding: 5px 0 5px 10px;left: auto;top:auto;}
+
+
+    .advantagesText.block5 .bizonTabText .titleTabFull{
+        padding:30px;
+        text-align:center;
+    }
+    .advantagesText.block5 .textBlock5 .bizonTab li{
+        width: 33%;
+        text-align: center;
+    }
+    .advantagesText.block5 .textBlock5 .bizonTab li:last-child{
+        flex-basis: 66%;
+    }
+
+    .advantagesText.prusa3 .prusaBlock3Over .prusaBlock3OverItem .prusaBlock3OverTitle{background-repeat:no-repeat; background-color:#2f97c7;min-height:88px;}
+
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs{
+        margin:10px 0;
+        font-size:30pt;
+        line-height:30pt;
+    }
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr1{
+        margin:10px 0;
+    }
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr2{
+        margin:10px 0;
+    }
+
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs{
+        margin:10px 0;
+        font-size:30pt;
+        line-height:30pt;
+    }
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr1{
+        margin:10px 0;
+    }
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr2{
+        margin:10px 0;
+    }
+
+}
+@media (max-width: 992px) {
+    .sections__items{
+        width: 50%;
+    }
+}
+@media (max-width: 960px) {
+    .advantagesText.block3.BizonMini .textBlock .pic{width:70%}
+    .advantagesText.block3.BizonMini .textBlock .picMobile{width:30%}
+}
+@media (max-width: 930px) {
+    .psk_360_open_popup {
+        top: -65px;
+        z-index: 100;
+    }
+    .advantagesText.block4 .textBlock41 .textBlock411{
+        width:100%;
+        float:none;
+    }
+    .advantagesText.block4 .textBlock41 .textBlock412{
+        width:100%;
+        float:none;
+    }
+    .advantagesText.block4 .textBlock41 .textBlock412 .textBlock4121{
+        font-size:13pt;
+    }
+    .advantagesText.block4 .textBlock41 .textBlock412 .textBlock4122 .textBlock41221{
+        width:100%;
+        float:none;
+        padding-top: 30%;
+    }
+    .advantagesText.block4 .textBlock41 .textBlock412 .textBlock4122 .textBlock41222{
+        width:100%;
+        float:none;
+    }
+
+    .advantagesText.prusa5 .textBlock51 .textBlock511{
+        width:100%;
+        float:none;
+        margin-bottom:40px;
+    }
+    .advantagesText.prusa5 .textBlock51 .textBlock512{
+        width:100%;
+        float:none;
+    }
+    .advantagesText.prusa5 .textBlock51 .textBlock512 .textBlock5121{
+        font-size:13pt;
+    }
+    .advantagesText.prusa5 .textBlock51 .textBlock512 .textBlock5122 .textBlock51221{
+        width:100%;
+        float:none;
+        padding-top: 30%;
+    }
+    .advantagesText.prusa5 .textBlock51 .textBlock512 .textBlock5122 .textBlock51222{
+        width:100%;
+        float:none;
+    }
+
+    .advantagesText.prusa6 .textBlock6Row{display: block;}
+    .advantagesText.prusa6 .textBlock6Row .textBlock6Col{width: 100%;}
+
+    .advantagesText.prusa2 .prusaBlock2PlataText span{font-size:20pt;}
+    .advantagesText.prusa1 .textBlock{flex-direction: column;}
+    .advantagesText.prusa1 .prusaBlock1Left{width:100%;}
+    .advantagesText.prusa1 .prusaBlock1Center{width:100%;padding-top: 100%;}
+    .advantagesText.prusa1 .prusaBlock1Right{width:100%;}
+    .advantagesText.prusa1 .prusaBlock1Left .prusaBlock1Content > div:after{display: none;}
+    .advantagesText.prusa1 .prusaBlock1Right .prusaBlock1Content > div:after{display: none;}
+    .advantagesText.prusa1 .prusaBlock1Content{margin:20px 0;}
+
+    .advantagesText.prusa2 .prusaBlock2Over{flex-wrap: wrap;}
+    .advantagesText.prusa2 .prusaBlock2Over > div{width:33%; margin-bottom:20px;}
+    .advantagesText.prusa2 .prusaBlock2Over > div:last-child{border-right: 1px solid #e5e5e5;}
+
+    .Printery .Printery_list .PrinteryItem{
+        width: 46%;
+    }
+}
+@media (max-width: 901px) {
+    .advantagesText.block7 .rowtext{width:auto;}
+    .advantagesText.block7 .rowtext .schemaBlocks .schemaText{
+        text-align: center;
+        padding: 0 20px;
+    }
+    .advantagesText.block7 .rowtext .schema{
+        padding-top: 40%;
+        margin-bottom: 0;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks{
+        background: none;
+        padding:0;
+        position:relative;
+        display: flex;
+        margin: 80px 0;
+        flex-wrap: wrap;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schemaPic{
+        width: 100%;
+        padding-top: 50%;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks > div{width: 33%;margin-bottom: 20px; position:relative;line-height: 12pt;font-size: 10pt;}
+    .advantagesText.block7 .rowtext .schemaBlocks .schema1{
+        top: auto;
+        left: auto;
+        right: auto;
+        text-align: left;
+        width: 33%;
+        line-height: 16pt;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema2{
+        top: auto;
+        left: auto;
+        right: auto;
+        text-align: left;
+        width: 33%;
+        line-height: 16pt;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema3{
+        top: auto;
+        left: auto;
+        right: auto;
+        text-align: left;
+        width: 33%;
+        line-height: 16pt;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema4{	
+        top: auto;
+        left: auto;
+        right: auto;
+        text-align: left;
+        width: 33%;
+        line-height: 16pt;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema5{
+        top: auto;
+        left: auto;
+        right: auto;
+        text-align: left;
+        width: 33%;
+        line-height: 16pt;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema1 .schemaPic{
+        background-image: url(/include/bizon2/bizon2block7icon1.png);
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema2 .schemaPic{
+        background-image: url(/include/bizon2/bizon2block7icon2.png);
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema3 .schemaPic{
+        background-image: url(/include/bizon2/bizon2block7icon3.png);
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema4 .schemaPic{
+        background-image: url(/include/bizon2/bizon2block7icon4.png);
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema5 .schemaPic{
+        background-image: url(/include/bizon2/bizon2block7icon5.png);
+    }
+
+
+}
+@media (max-width: 850px) {
+    .advantagesText.prusa2451_1 .flexBlock{
+        display:block;
+    }
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left.width-60, .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left.width-40{
+        width:100%;
+    }
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr2{max-width:100%}
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr1{max-width:100%}
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .pic{
+        width: 100%;
+        padding-top: 80%;
+        background-image: url(/include/prusa/2451/prusa1_img.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        max-width: 550px;
+        background-position: 50% 0;
+        margin: 20px auto;
+    }
+
+    .advantagesText.prusa2401_1 .flexBlock{
+        display:block;
+    }
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left.width-60, .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left.width-40{
+        width:100%;
+    }
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr2{max-width:100%}
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs .parametr1{max-width:100%}
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .pic{
+        width: 100%;
+        padding-top: 80%;
+        background-repeat: no-repeat;
+        background-size: contain;
+        max-width: 550px;
+        background-position: 50% 0;
+        margin: 20px auto;
+    }
+
+
+
+    .advantagesText.block3.BizonMini .textBlock .pic{width: 100%;height: 490px;}
+    .advantagesText.block3.BizonMini .textBlock .picMobile{width: 100%;height: 490px;}
+    .advantagesText.block3.BizonMini .textBlock .overText{padding:0;}
+    .advantagesText.block3.BizonMini .textBlock .overText div{font-size: 12px;line-height: 15px;}
+    /*.advantagesText.block3.BizonMini .textBlock .overText div:after{width:60px; height:60px;}*/
+/*    .advantagesText.block3.BizonMini .textBlock .overText div.text1{width:370px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2{width:370px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3{width:370px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4{width:370px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5{width:370px;}*/
+
+
+}
+@media (max-width: 830px) {
+    .advantagesText.prusa3 .prusaBlock3Over .prusaBlock3OverItem{width:48%;}
+    .start_promo.wiki .item .wrap_tizer{
+        text-align:center;
+    }
+    .start_promo.wiki .item{margin: 5px 0;}
+    .Printery .Printery_block .Printery_header{display:block;}
+    .Printery .Printery_block .Printery_header .description{margin: 10px 0px}
+}
+@media (max-width: 768px) {
+    .advantagesText.block1 .img{
+        text-align: center;
+        margin-top: 30px;
+    }
+    .advantagesText.block1 .title {
+        font-size: 29px;
+    }
+    .sections__header{
+        flex-wrap: wrap;
+    }
+    .sections__header-title{
+        display: flex;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .sections__header-text{
+        display: flex;
+        width: 100%;
+        padding-left: 0;
+    }
+    .prop-section__image{
+        display: none;
+    }
+}
+@media (max-width: 700px) {
+    .advantagesText.prusa2 .title2 {font-size: 14pt;line-height: 20pt;}
+    .advantagesText.prusa2 .prusaBlock2Plata .prusaBlock2PlataContent{flex-direction: column;margin-bottom: 10px;}
+    .advantagesText.prusa2 .prusaBlock2Plata .prusaBlock2PlataContent .prusaBlock2PlataLeft{width: 100%;padding-top:60%; margin-bottom:20px;}
+    .advantagesText.prusa2 .prusaBlock2Plata .prusaBlock2PlataContent .prusaBlock2PlataRight{width: 100%;padding-top:64%; margin-bottom:20px;}
+    .advantagesText.prusa2 .prusaBlock2Plata .prusaBlock2PlataContent .prusaBlock2Platabit{font-size: 14pt;line-height: 38pt;width: 98px;height: 53px;}
+    .advantagesText.prusa2 .prusaBlock2PlataText{margin-bottom:80px;}
+    .advantagesText.prusa2 .prusaBlock2PlataText span{font-size:25pt;}
+    .advantagesText.prusa2 .prusaBlock2PlataText span:before{display:none;}
+    .advantagesText.prusa2 .prusaBlock2PlataText span:after{display:none;}
+
+}
+@media(min-width: 651px) {
+    .sort_header .sort_filter_mobile {
+        display: none;
+    }
+    .sort_toggle {
+        display: none;
+    }
+}
+@media (max-width: 650px) {
+    .sort_display {
+        display: none;
+    }
+    .adaptive_filter {
+        width: 50%;
+        padding-right: 0;
+        margin-right: -1px;
+    }
+    .sort_header {
+        float: left;
+        width: 50%;
+    }
+    .filter_opener {
+        position: relative;
+        display: block;
+        margin: 0;
+        padding-right: 0;
+        padding-bottom: 13px;
+        box-shadow: 0px 0px 0px 1px #F2F2F2 inset;
+    }
+    .filter_opener:not(.opened) {
+        background: #fff;
+    }
+    .filter_opener:after {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        content: "\f105";
+        position: absolute;
+        font-weight: normal;
+        top: 50%;
+        font-size: 18px;
+        position: absolute;
+        right: 12px;
+        margin-top: -9px;
+        color: #383838;
+    }
+    .filter_opener.opened:after {
+        color: #fff;
+        content: "\f107";
+    }
+    .filter_opener i {
+        display: none;
+    }
+    body .filter_opener span {
+        display: block;
+    }
+    .sort_header .sort_filter {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 40px;
+        z-index: 100;
+        margin-top: 0;
+        box-shadow: 0px 0px 0px 1px #F2F2F2 inset;
+        background: #fff;
+        padding: 7px 9px 7px;
+        margin-bottom: 10px;
+    }
+    .sort_header .sort_filter_mobile {
+        background: #f9f9f9;
+        box-shadow: 0 0 10px rgba(0,0,0,.15);
+        -moz-box-shadow: 0 0 10px rgba(0,0,0,.15);
+        -webkit-box-shadow: 0 0 10px rgba(0,0,0,.15);
+    }
+    .sort_header .sort_filter_mobile a {
+        display: block;
+        overflow: hidden;
+        margin-bottom: 6px;
+        font-size: 16px;
+        padding: 4px 0;
+        color: #333;
+    }
+    .sort_header .sort_filter a .icon {
+        display: none;
+    }
+    body .sort_header .sort_filter a span {
+        display: block;
+    }
+    .sort_header .sort_filter a.current i.arr, .sort_header .sort_filter a.current i.arr:after,
+    .sort_header .sort_filter a i.arr {
+        display: none;
+    }
+    .sort_toggle {
+        float: left;
+        width: 100%;
+    }
+    .sort_toggle.opened {
+        color: #FFF;
+        background: #1773cf;
+    }
+    .sort_toggle.opened .sort_toggle__title:after {
+        color: #fff;
+        content: "\f107";
+    }
+    .sort_toggle__title {
+        display: block;
+        font-size: 13px;
+        padding: 7px 9px 7px;
+        cursor: pointer;
+        box-shadow: 0px 0px 0px 1px #F2F2F2 inset;
+        position: relative;
+    }
+    .sort_toggle__title:after {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        content: "\f105";
+        position: absolute;
+        font-weight: normal;
+        top: 50%;
+        font-size: 18px;
+        position: absolute;
+        right: 12px;
+        margin-top: -9px;
+        color: #383838;
+    }
+    .sort_filter .close {
+        position: relative;
+        height: 14px;
+        display: block;
+        z-index: 10;
+        opacity: 1;
+        cursor: pointer;
+    }
+    .sort_filter .close i {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        line-height: 14px;
+        background: url(/bitrix/templates/aspro_next/images/close_icons.png) -1px -1px no-repeat;
+    }
+    .sort_filter__title {
+        display: block;
+        font-size: 14px;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+    .sort_header .sort_filter_mobile .sort_btn {
+        position: relative;
+        margin-right: 0;
+    }
+    .sort_filter_mobile .sort_btn .sort_filter__icon {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -7px;
+        width: 14px;
+        height: 14px;
+        border: 1px solid #333;
+        border-radius: 50%;
+        background: #fff;
+    }
+    .sort_filter_mobile .sort_btn .sort_filter__icon i {
+        display: none;
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: #333;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        margin-top: -3px;
+        margin-left: -3px;
+    }
+    .sort_filter_mobile .sort_btn.current i {
+        display: block;
+    }
+    .advantagesText.prusa2 .prusaBlock2Over > div{width:50%;flex-grow: 5;}	
+    .advantagesText.prusa .prusaBlockNew{flex-wrap:wrap;}
+    .advantagesText.prusa .prusaBlockNew > div{width: 100%;}
+    .advantagesText.prusa2401 .prusaBlockNew{flex-wrap:wrap;}
+    .advantagesText.prusa2401 .prusaBlockNew > div{width: 100%;}
+    .advantagesText.block7 .rowtext .schemaBlocks .schema1{
+        width: 50%;
+        flex-grow: 5;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema2{
+        width: 50%;
+        flex-grow: 5;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema3{
+        width: 50%;
+        flex-grow: 5;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema4{	
+        width: 50%;
+        flex-grow: 5;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema5{
+        width: 50%;
+        flex-grow: 5;
+    }
+    .start_promo.wiki .item .img_block {
+        background-size: contain;
+        height: 65%;
+    }
+    .start_promo.wiki .item {
+        padding-bottom: 22%;
+    }
+    .sections__items{
+        width: 100%;
+    }
+    .sections__header-title{
+        font-size: 16px;
+    }
+    .sections__title-text{
+        padding: 15px 20px;
+    }
+    .spisok__items{
+        width: 100%;
+    }
+    .display_list .description_wrapp .wrapp_stockers > div{
+        display: block;
+        padding: 0;
+    }
+}
+@media (max-width: 601px) {
+    .block-info h3 {
+        text-align: left;
+    }
+    .advantagesText.block3 .title, .advantagesText.block4 .title{font-size:25pt;line-height:30pt;}
+    .advantagesText.block3 .textBlock .overText div{line-height:8pt;font-size:8pt;}
+    .advantagesText.block3 .textBlock .pic{height: 420px;}
+    .advantagesText.block3 .textBlock .picMobile{height: 420px;}
+    .advantagesText.block3 .textBlock .overText div.text1{width: 250px;}
+    .advantagesText.block3 .textBlock .overText div.text2{width: 250px;}
+    .advantagesText.block3 .textBlock .overText div.text3{width: 250px;}
+    .advantagesText.block3 .textBlock .overText div.text4{width: 250px;}
+    .advantagesText.block3 .textBlock .overText div.text5{width: 250px;}
+
+    .advantagesText.block3.BizonMini .title, .advantagesText.block4 .title{font-size:25pt;line-height:30pt;}
+    .advantagesText.block3.BizonMini .textBlock .pic .overText{
+        right: 10%;
+    }
+    .advantagesText.block3.BizonMini .textBlock .overText div{line-height:8pt;font-size:8pt;}
+    .advantagesText.block3.BizonMini .textBlock .pic{height: 420px;}
+    .advantagesText.block3.BizonMini .textBlock .picMobile{height: 420px;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text1{width: 100%;padding-right:0;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text2{width: 100%;padding-right:0;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text3{width: 100%;padding-right:0;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text4{width: 100%;padding-right:0;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text5{width: 100%;padding-right:0;}
+    .advantagesText.block3.BizonMini .textBlock .overText div.text6{width: 100%;padding-right:0;}
+
+}
+@media (max-width: 550px) {
+    .advantagesText.block1 .title {
+        font-size: 25pt;
+    }
+    .advantagesText.block1 .bottom-text__inner{
+        display: block;
+        max-width: 100%;
+        text-align: center;
+    }
+    body .catalog_block.block_list .item_block {
+        width: 50%;
+    }
+    .section_block .sections_wrapper .list .row>div {
+        width: 50%;
+        float: left;
+    }
+    .catalog_item .item-title a, .catalog_item .item-title a span, .view-item .item-title a span {
+        font-size: 12px;
+    }
+    div.item-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-overflow: -o-ellipsis-lastline;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        white-space: normal;
+        height: 60px;
+    }
+    .catalog_block .article_block {
+        display: none;
+    }
+    .catalog_block .catalog_item {
+        padding: 15px;
+    }
+    .catalog_block .sku_props + .counter_wrapp {
+        padding-top: 0;
+    }
+    .ajax_load.block .counter_wrapp .counter_block,
+    .ajax_load.block .counter_wrapp .button_block {
+        margin: 0px 5px 10px 5px;
+    }
+    .catalog_block .cost.prices .price {
+        margin-bottom: 0 !important;
+    }
+    .mobile .catalog_item .item_info {
+        padding-bottom: 13px;
+    }
+    .cost .price.discount .values_wrapper {
+        display: block;
+        margin-bottom: 5px;
+    }
+    .advantagesText.block5 .textBlock5 .bizonTab li{
+        width: 50%;
+        text-align: center;
+    }
+    .advantagesText.block5 .textBlock5 .bizonTab li:last-child{
+        flex-basis: 50%;
+    }
+    .advantagesText.prusa3 .prusaBlock3Over .prusaBlock3OverItem {width:100%}
+    .advantagesText.prusa3 .prusaBlock3Over .prusaBlock3OverItem .prusaBlock3OverTitle{font-size:12pt;}
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .pic{
+        padding-top:100%;
+    }
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .pic{
+        padding-top:100%;
+    }
+    .Printery .Printery_list .PrinteryItem{
+        width: 100%;
+        margin:10px 0;
+    }
+}
+@media (min-width: 600px) {
+    .mobileonly {
+        display: none;
+    }
+    .rotate-wrapper {
+        display: none;
+    }
+}
+@media (max-width: 450px) {
+    .block-info {
+        display: block;
+    }
+    .block-info__left {
+        float: left;
+    }
+    .block-info__right {
+        width: 100%;
+    }
+    .block-info h3 {
+        min-height: 50px;
+    }
+    div.edost span.edost_format_price {
+        font-size: 11px !important;
+        white-space: nowrap;
+    }
+    .bx_filter_vertical input[type="checkbox"] + label:not(.dib) {
+        float: none;
+        display: block;
+        margin-right: 0;
+    }
+
+    .advantagesText.prusa5 .title{font-size: 20pt;line-height: 25pt;}
+    .advantagesText.prusa6 .title{font-size: 25pt; margin-bottom:30px;}
+
+
+    .advantagesText.prusa2 .prusaBlock2Over{flex-direction: column;margin: 0 0 20px 0;}
+    .advantagesText.prusa2 .prusaBlock2Over > div{width: 100%;border-right: none;border-top: 1px solid #e5e5e5;padding-bottom: 30px;}
+    .advantagesText.prusa2 .prusaBlock2Over .prusaBlock2OverPic{padding-top: 40%;}
+
+    .advantagesText.prusa3 .title {font-size: 21pt;line-height: 25pt;}
+    .advantagesText.prusa3 .title2 {font-size: 12pt;line-height: 18pt;width: 100%;}
+    .advantagesText.prusa3 .prusaBlock3Over {flex-direction: column;}
+
+    .advantagesText.prusa .prusaBlockNew > div{width: 100%;}
+    .advantagesText.prusa2401 .prusaBlockNew > div{width: 100%;}
+
+    .advantagesText.block7 .rowtext .schemaBlocks{
+        margin:40px 0;
+    }
+    .advantagesText.block7 .rowtext .schema{
+        padding-top: 65%;
+        margin-bottom: 0;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema1{
+        width: 100%;
+        flex-grow: 5;
+        padding: 10px 0;
+        border-top: 1px solid #e5e5e5;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema2{
+        width: 100%;
+        flex-grow: 5;
+        padding: 10px 0;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema3{
+        width: 100%;
+        flex-grow: 5;
+        padding: 10px 0;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema4{	
+        width: 100%;
+        flex-grow: 5;
+        padding: 10px 0;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    .advantagesText.block7 .rowtext .schemaBlocks .schema5{
+        width: 100%;
+        flex-grow: 5;
+        padding: 10px 0;
+
+    }
+    .start_promo.wiki .item a{
+        margin-top: 10%;
+        height: 90%;
+        background-color: #f3f3f5;
+        opacity: 1;
+    }
+    .start_promo.wiki .item {
+        width: 100%;
+        margin: 10px 0;
+        padding-bottom: 48%;
+    }
+    .start_promo.wiki .item .wrap_tizer{
+        bottom:20px;
+    }
+    .start_promo.wiki .item .img_block {
+        background-size: contain;
+        height: 70%;
+    }
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs{
+        font-size: 20pt;
+        line-height: 15pt;
+    }
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs span{
+        margin: 10px 0;
+    }
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs{
+        font-size: 20pt;
+        line-height: 15pt;
+    }
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs span{
+        margin: 10px 0;
+    }
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .title{
+        font-size: 19pt;
+        line-height: 20pt;
+    }
+}
+.top-block-item.col-md-4{
+    width:30%;
+}
+@media (max-width: 550px){
+    .ajax_load.block .counter_wrapp .counter_block {
+        display:none;
+    }
+    .ajax_load.block .counter_wrapp .button_block{
+        margin: 0px 5px 0 5px;
+    }
+    div.beono-flashmessage {
+        width: 100%;
+        margin-left: 0;
+        left: 0;
+    }
+}
+@media (max-width: 410px){
+    .Printery .Printery_block .Printery_header .title span{
+        font-size: 21px;
+    }
+}
+
+@media (max-width: 380px){
+    .start_promo.wiki .item .wrap_tizer{
+        bottom:20px;
+    }
+    .start_promo.wiki .item {
+        padding-bottom: 60%;
+    }
+    .start_promo.wiki .item .img_block {
+        background-size: contain;
+        height: 70%;
+    }
+    .advantagesText.prusa2451_1 .flexBlock .prusaFlexBlock1Left .parametrs {
+        font-size: 16pt;
+        line-height: 15pt;
+    }
+    .advantagesText.prusa2401_1 .flexBlock .prusaFlexBlock1Left .parametrs {
+        font-size: 16pt;
+        line-height: 15pt;
+    }
+    .Printery .Printery_block .Printery_header .title span{
+        font-size: 18px;
+    }
+}
+@media (max-width: 340px){
+    .Printery .Printery_block .Printery_header .title span{
+        font-size: 16px;
+    }
+}
+@media (max-width: 320px){
+    .Printery .Printery_block .Printery_header .title span{
+        font-size: 14px;
+    }
+}

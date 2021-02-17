@@ -63,20 +63,25 @@ void ExecuteBVK(void){
 				SetBit(PortKL,PinKL_L);
 			}
 		}
-	}else{
+	}else if(STATUS == 1){	//если "в работе"
 		if(RIGTH == 1 && BVK_R == 1){
 			_delay_ms(500);
-			STATUS = 0;
+			STATUS = 2;	//"отработал ход"
 			RIGTH = 0;
 			ClrBit(PortKL,PinKL_R);
-			_delay_ms(1000);
+			_delay_ms(500);
 		}
 		if(LEFT == 1 && BVK_L == 1){
 			_delay_ms(500);
-			STATUS = 0;
+			STATUS = 2;	//"отработал ход"
 			LEFT = 0;
 			ClrBit(PortKL,PinKL_L);
-			_delay_ms(1000);
+			_delay_ms(500);
+		}
+	}else{	//если "отработал ход" ждем когда выключится БВК транспортера
+		if(BVK_T == 0){
+			STATUS = 0;	//цикл завершился, начинаем сначала
+			_delay_ms(500);
 		}
 	}
 }	

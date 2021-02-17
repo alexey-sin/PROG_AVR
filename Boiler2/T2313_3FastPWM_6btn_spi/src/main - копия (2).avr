@@ -1,0 +1,521 @@
+;{ ;; ************************************************************************************* 
+;; Прошивка для контроллера ATtiny2313 
+;; схема в Proteus`е прилагается.
+;; 
+;; схема состоит из 3-х каналов ШИМ (вентиляторы W1-W3), шести кнопок (+ и - для ручного управления каждым каналом ШИМ)
+;; и порт USI для связи с центральным контроллером
+;; 
+;; PA2 RESET
+;; PB4 (16 выв.) OC1B - ШИМ канал W1
+;; PB3 (15 выв.) OC1A - ШИМ канал W2
+;; PB2 (14 выв.) OC0A - ШИМ канал W3
+;; 
+;; PD4 (8 выв.)	Светодиод (ошибочное состояние пакета)
+;; 
+;; PB7 (19 выв.) SCK	- прием синхроимпульсов
+;; PB6 (18 выв.) MISO	- не используется
+;; PB5 (17 выв.) MOSI	- прием данных
+;; 
+;; PD0 (2 выв.) +W1 для ручного управления
+;; PD1 (3 выв.) -W1 для ручного управления
+;; PA1 (2 выв.) +W2 для ручного управления
+;; PA0 (3 выв.) -W2 для ручного управления
+;; PD2 (6 выв.) +W3 для ручного управления
+;; PD3 (7 выв.) -W3 для ручного управления
+;; 
+;; *************************************************************************************
+;; Протокол обмена с центральным контроллером:
+;; принимаемые пакеты состоят из 3-х байтов: 1 - номер канала 1,2,3; 2 - заполнение ШИМ 0-255; 3 - контрольная сумма (арифм.)
+;; Пакеты передаются старшим байтом вперед и младшим битом вперед.
+;; Линия SCK в низком уровне, данные с вывода MOSI принимаем по растущему фронту.
+;; Буфер состоит из 3-х байтов, байт принимаемого бита(BitPack) и байт принимаемого байта(BytePack).
+;; При приеме каждого бита перезапускаем таймер1(16бит) настроенный на 2мс
+;; По срабатыванию таймера анализируем что приняли и обнуляем BitPack и BytePack
+;; 
+;; 
+;; 
+;; 
+;}
+;;=========================================================================================================
+ ;{		;; Фьюзы
+ ;; для F = 8 МГц (внутренний RC генератор) и медленный старт
+;; Фьюзы: для USBASP 1 => установленный бит => галки нет
+;;					0 => сброшенный бит => отмечено галкой
+;; все биты LOCK установлены
+;;---- Fuse High BYTE ----
+;; DWEN - 1				(если V и LOCK не установлены влючается режим отладки debugWIRE через вывод RESET
+;; EESAVE - 1
+;; SPIEN - 0 (недоступен)
+;; WDTON - 1
+;; BODLEVEL2 - 1
+;; BODLEVEL1 - 1
+;; BODLEVEL0 - 1
+;; RSTDISBL - 1
+;;---- Fuse Low BYTE ----
+;; CKDIV8 - 1
+;; CKOUT - 1
+;; SUT1 - 1
+;; SUT0 - 0
+;; CKSEL3 - 0
+;; CKSEL2 - 1
+;; CKSEL1 - 0
+;; CKSEL0 - 0
+;;---- Fuse Extended BYTE ----
+;;
+;; SELFPRGEN - 1
+;;
+;; он-лайн калькулятор по фьюзам
+;; https://eleccelerator.com/fusecalc/fusecalc.php?chip=attiny2313
+;}
+;; *************************************************************************************
+.EQU	set_value_start	= 250		;; начальная уставка температуры
+;; *************************************************************************************
+.INCLUDE "macros.avr"
+.INCLUDE "..\..\_AVR_ASSEMBLER\DEFs\tn2313def.INC"
+.EQU 	t1			=$60
+.EQU 	t2			=$61
+.EQU 	t3			=$62
+;;=========================================================================================================
+.ESEG ;{	;;сектор EEPROM энергоНЕзависимая память 128 байт
+;; .ORG 0x000	;; EEPROM прошивать ненадо, эти номера контроллер запишет сам при настройке
+;; ;; значения частот и шага записаны с младшего байта к старшему
+;; eFstart:	.db 0x98,0x3A,0x00	;; стартовая частота 15000 (1500.0 кГц)
+;; .ORG 0x003
+;; eFstop:		.db 0xDF,0x93,0x04	;; конечная частота 299999 (29999.9 кГц)
+;; .ORG 0x006
+;; eFstep:		.db 0x64,0x00,0x00	;; шаг перестройки 100 (10.0 кГц)
+;; .ORG 0x009
+;; e:	.db 0x98,0x3A,0x00	;; 
+;}
+;;=========================================================================================================
+.DSEG ;{	;;сектор ОЗУ
+.ORG 0x063
+bf_pack:		.BYTE 3		;; буфер принимаемой команды (первый байт - старший разряд)
+BitPack:		.BYTE 1		;; номер обновляемого бита
+BytePack:		.BYTE 1		;; номер обновляемого байта
+;}
+;;=========================================================================================================
+.DEF STATUS			= r15 ;{		;; регистр состояния
+	;; STATUS: 7бит - 1 = 
+	;; STATUS: 6бит - 1 = 
+	;; STATUS: 5бит - 1 = 
+	;; STATUS: 4бит - 1 = 
+	;; STATUS: 3бит - 1 = ошибка приема по SPI
+	;; STATUS: 2бит - 0 или 1 - принятый бит по SPI
+	;; STATUS: 1бит - 1 = есть принятый бит по SPI
+	;; STATUS: 0бит - 1 = переполнение счетчика 1(16бит) 2мс
+;}
+;{ 
+.DEF CntPWM			= r6 		;; регистр счета каналов PWM
+;; регистры сравнения 0 - 255:
+;; если 0 то на выходе нет импульсов (низкий уровень)
+;; и если 255 то полное заполнение (всегда высокий уровень)
+.DEF PWM1			= r7 		;; регистр сравнения канала PWM1
+.DEF PWM2			= r8 		;; регистр сравнения канала PWM2
+.DEF PWM3			= r9 		;; регистр сравнения канала PWM3
+;}
+;;=========================================================================================================
+.CSEG ;{	;; Таблица прерываний  - каждый адрес/ссылка = 2 байта
+.ORG 0x0000		RJMP start
+.ORG	INT0addr		RETI	;; External Interrupt Request 0
+.ORG	INT1addr		RETI	;; External Interrupt Request 1
+.ORG	ICP1addr		RETI	;; Timer/Counter1 Capture Event
+.ORG	OC1Aaddr		RETI	;; Timer/Counter1 Compare Match A
+.ORG	OVF1addr		RJMP Interrupt_OverFlow_161		;; Timer/Counter1 Overflow (при переполнении счетчика(16бит))
+.ORG	OVF0addr		RETI	;; RJMP Interrupt_OverFlow_80		;; Timer/Counter0 Overflow (при переполнении счетчика(8бит))
+.ORG	URXCaddr		RETI	;; RJMP Interrupt_USART_RX_Complete	;; USART, Rx Complete (при возникновении прерывания RXC)
+.ORG	UDREaddr		RETI	;; USART Data Register Empty
+.ORG	UTXCaddr		RETI	;; USART, Tx Complete
+.ORG	ACIaddr			RETI	;; Analog Comparator
+.ORG	PCIaddr			RJMP Interrupt_PCINT	;; при изменении сигналов на выводах PB0-7
+.ORG	OC1Baddr		RETI	;; 
+.ORG	OC0Aaddr		RETI	;; 
+.ORG	OC0Baddr		RETI	;; 
+.ORG	USI_STARTaddr	RETI	;; USI Start Condition
+.ORG	USI_OVFaddr		RETI	;; USI Overflow
+.ORG	ERDYaddr		RETI	;; 
+.ORG	WDTaddr			RETI	;; Watchdog Timer Overflow
+;}	
+;;=========================================================================================================
+.ORG 0x018
+start: ;{
+	LDI r16,low(RAMEND)
+	OUT spl,r16
+
+	CLR r10					;; R10 - 00000000
+	SER r16
+	MOV r11,r16				;; R11 - 11111111
+;;=========================================================================================================
+;; Настройка портов => DDRx = 1(OUT); 0 = (IN)   PORTx = 1(подтянут к +); 0(в воздухе - 0)
+;; Порт A (-,-,-,-,-,2,1,0) см.выше
+	LDI r16,0b00000000
+	OUT DDRA,r16
+	LDI r16,0b00000011
+	OUT PORTA,r16
+
+;; Порт B (7,6,5,4,3,2,1,0) см.выше
+	LDI r16,0b00011100
+	OUT DDRB,r16
+	LDI r16,0b00000000
+	OUT PORTB,r16
+
+;; Порт D (-,6,5,4,3,2,1,0)	см.выше
+	LDI r16,0b00010000
+	OUT DDRD,r16
+	LDI r16,0b00001111
+	OUT PORTD,r16
+;;=========================================================================================================
+;; Аналоговый компаратор		(Отключение 0b10000000 => ACSR)
+	LDI r16,0b01000000
+	OUT ACSR,r16
+	LDI r16,0b00000010		;; Блокируем цифровой ввод по AIN1
+	OUT DIDR,r16
+;;=========================================================================================================
+;; Настройка UART на 38400 bps(бод)
+	;; OUT UBRRH,r10	;; предделитель старший разряд
+	;; LDI r16,25		;; UBRR = 16000000/(16 * 38400) - 1 = 25,04 //при U2X = 0
+	;; OUT UBRRL,r16	;; предделитель младший разряд
+	;; OUT UCSRA,r10	;; ускоритель скорости на 2 выключим (U2X = 0 - 1 бит UCSRA)
+	;; LDI r16,(1 << TXEN)|(1 << RXEN)|(1 << RXCIE)	;; вкл приемник(RXEN=1),вкл передатчик(TXEN=1),вкл прерывание по приему(RXCIE=1)
+	;; OUT UCSRB,r16
+	;; LDI r16,(3 << UCSZ0)	;; асинхронный режим(UMSEL=0), 8 бит(UCSZ2-0=011), 1 стоп-бит(USBS=0),без контроля четности(UPM1-0=00)
+	;; OUT UCSRC,r16
+;;=========================================================================================================
+;; Настройка таймеров
+	;; LDI r16,(1 << TOIE0 | 1 << TOIE1)		;; TOIE0 разрешить прерывание по переполнению 0(8разр) счетчика
+	;; OUT TIMSK,r16				;; TOIE1 разрешить прерывание по переполнению 1(16разр) счетчика
+	;; LDI r16,(1 << PSR10)		;; сброс прескалера таймеров 1 и 0
+	;; OUT GTCCR,r16
+	
+	;; ;; Запускаем 8 битный счетчик. Прерывание по переполнению.
+	;; OUT TCNT0,r10			;; сброс счетного регистра
+	;; OUT TCCR0A,r10
+	;; LDI r16,0b00000001		;; (8М)0,125мкс*256 = 32мкс (переполнение счетчика)
+	;; OUT TCCR0B,r16
+
+	;; ;; Запускаем 16 битный счетчик. Прерывание по переполнению.
+	;; OUT TCNT1H,r10			;; сброс счетных регистров
+	;; OUT TCNT1L,r10
+	;; OUT TCCR1A,r10
+	;; LDI r16,0b00000101		;; (8М)0,125мкс*65535*1024 = 2,048мс (переполнение счетчика)
+	;; OUT TCCR1B,r16
+;;=========================================================================================================
+;; Прерывания по выводам PCINT7-0
+	LDI r16,(1 << PCIE)		;; PCIE разрешить прерывание по выводам PCINT7-0
+	OUT GIMSK,r16
+	LDI r16,(1 << PCINT7)	;; прерывание по SCK
+	OUT PCMSK,r16
+;;=========================================================================================================
+;; инициализация буферов и переменных
+	CLR STATUS
+	;; CLR BUTTON		;; обнулим состояние кнопок
+	
+	MOV CntPWM,r10
+	MOV PWM1,r10
+	MOV PWM2,r10
+	MOV PWM3,r10
+	RCALL d_1sec
+	
+	;; обнуляем значение буфера и счетчиков бит и байтов
+	LdiX bf_pack	;; записываем в озу
+	ST x+,r10
+	ST x+,r10
+	ST x,r10
+	LdiX BitPack
+	ST x,r10
+	LdiX BytePack
+	ST x,r10
+	
+	
+	SEI
+;}
+;;=========================================================================================================
+loop: ;{
+				RCALL ShimRegulator
+				RCALL CheckButton
+
+				SBRC STATUS,0		;; переполнение счетчика 1(16бит) 2мс
+				RCALL CheckPacket
+				
+				SBRC STATUS,1		;; есть принятый бит по SPI
+				RCALL SaveBitToBuffer
+				
+				SBRC STATUS,3		;; ошибка приема по SPI
+				RCALL ErrorSPI
+				
+
+RJMP loop ;}
+;;=========================================================================================================
+ShimRegulator: ;{
+				MOV r16,CntPWM
+				INC r16
+				MOV CntPWM,r16
+				TST CntPWM
+				BRNE shrg_01
+				;; включаем каналы 
+				TST PWM1
+				BREQ shrg_011
+				SBI PORTB,4			;; канал 1 PWM
+	shrg_011:	
+				TST PWM2
+				BREQ shrg_012
+				SBI PORTB,3			;; канал 2 PWM
+	shrg_012:	
+				TST PWM3
+				BREQ shrg_exit
+				SBI PORTB,2			;; канал 3 PWM
+				RJMP shrg_exit
+	shrg_01:	;; проверяем - не пора ли выключать
+				CP PWM1,CntPWM
+				BRSH shrg_02
+				CBI PORTB,4			;; канал 1 PWM
+	shrg_02:	
+				CP PWM2,CntPWM
+				BRSH shrg_03
+				CBI PORTB,3			;; канал 2 PWM
+	shrg_03:	
+				CP PWM3,CntPWM
+				BRSH shrg_exit
+				CBI PORTB,2			;; канал 3 PWM
+	shrg_exit:
+RET ;}
+ErrorSPI: ;{	;; 
+				SBI PORTD,4
+				RCALL d_1sec
+				CBI PORTD,4
+				ClrBit STATUS,3			;; сбросим флаг
+RET ;}
+CheckPacket: ;{	;; 
+;; Проверка буфера приема:
+;; BitPack = 0
+;; BytePack = 4
+;; bf_pack[2] = арифметическая сумма bf_pack[0] и bf_pack[1]
+;; если эти условия не соблюдаются - ошибка приема
+				LdiY BitPack
+				LD r16,y
+				LdiZ BytePack
+				LD r17,z
+				TST r16
+				BRNE chpck_err
+				CPI r17,4
+				BRNE chpck_err
+				LdiX bf_pack
+				LD r16,x				;; номер канала ШИМ
+				LD r19,x+				;; номер канала ШИМ (копия)
+				LD r17,x+				;; заполнение ШИМ
+				LD r18,x				;; контрольный байт
+				ADD r16,r17
+				CP r16,r18
+				BRNE chpck_err
+				;; пакет проверен
+				CPI r19,1
+				BRNE chpck_01
+				MOV PWM1,r17
+				RJMP chpck_exit
+	chpck_01:	CPI r19,2
+				BRNE chpck_02
+				MOV PWM2,r17
+				RJMP chpck_exit
+	chpck_02:	CPI r19,3
+				BRNE chpck_err
+				MOV PWM3,r17
+				RJMP chpck_exit
+	chpck_err:
+				SetBit STATUS,3			;; ошибка приема по SPI
+	chpck_exit:
+				ST y,r10
+				ST z,r10
+
+				ClrBit STATUS,0			;; сбросим флаг
+RET ;}
+CheckButton: ;{	;; 
+				SBIC PIND,0			;; +W1
+				RJMP chbt_01
+				CP PWM1,r11
+				BREQ chbt_06
+				MOV r16,PWM1
+				INC r16
+				MOV PWM1,r16
+				RJMP chbt_06
+	chbt_01:
+				SBIC PINA,1			;; +W2
+				RJMP chbt_02
+				CP PWM2,r11
+				BREQ chbt_06
+				MOV r16,PWM2
+				INC r16
+				MOV PWM2,r16
+				RJMP chbt_06
+	chbt_02:
+				SBIC PIND,2			;; +W3
+				RJMP chbt_03
+				CP PWM3,r11
+				BREQ chbt_06
+				MOV r16,PWM3
+				INC r16
+				MOV PWM3,r16
+				RJMP chbt_06
+	chbt_03:
+				SBIC PIND,1			;; -W1
+				RJMP chbt_04
+				TST PWM1
+				BREQ chbt_06
+				MOV r16,PWM1
+				DEC r16
+				MOV PWM1,r16
+				RJMP chbt_06
+	chbt_04:
+				SBIC PINA,0			;; -W2
+				RJMP chbt_05
+				TST PWM2
+				BREQ chbt_06
+				MOV r16,PWM2
+				DEC r16
+				MOV PWM2,r16
+				RJMP chbt_06
+	chbt_05:
+				SBIC PIND,3			;; -W3
+				RJMP chbt_exit
+				TST PWM3
+				BREQ chbt_06
+				MOV r16,PWM3
+				DEC r16
+				MOV PWM3,r16
+	chbt_06:
+				RCALL d_20ms
+	chbt_exit:
+RET ;}
+SaveBitToBuffer: ;{	;; 
+				LdiY BitPack
+				LD r17,y
+				LdiZ BytePack
+				LD r16,z
+				LdiX bf_pack
+				AdrX r16
+				LD r18,x		;; загрузили обновляемый байт
+				CLC				;; очистить флаг переноса С
+				SBRC STATUS,2	;; принятый бит
+				SEC				;; установить флаг переноса С
+				ROL r18			;; сдвиг влево через С
+				INC r17
+				CPI r17,8
+				BRNE sbtbf_01
+				CLR r17
+				INC r16
+	sbtbf_01:
+				ST x,r18		;; сохраним принятый бит в байте
+				ST y,r17		;; сохраним номер следующего принимаемого бита
+				ST z,r16		;; сохраним номер принимаемого байта
+				
+				RCALL Start_Timer1	;;запустим(перезапустим) таймер
+				ClrBit STATUS,1
+RET ;}
+Start_Timer1: ;{	;; Запускаем 16 битный счетчик. Прерывание по переполнению.
+				LDI r16,0xC1
+				OUT TCNT1H,r16
+				LDI r16,0x7F
+				OUT TCNT1L,r16
+				OUT TCCR1A,r10
+				LDI r16,0b00000001		;; (8М)0,125мкс*(65535-0xC17F) = 2,048мс (переполнение счетчика)
+				OUT TCCR1B,r16
+RET ;}
+;;=========================================================================================================
+Interrupt_OverFlow_80: ;{	;;
+				;; CLI
+				;; pushSREGr16
+				;; PUSH r17
+				
+				;; MOV r16,CntPWM
+				;; INC r16
+				;; MOV CntPWM,r16
+				;; TST CntPWM
+				;; BRNE iof8_01
+				;; ;; включаем каналы 
+				;; TST PWM1
+				;; BREQ iof8_011
+				;; SBI PORTB,4			;; канал 1 PWM
+	;; iof8_011:	
+				;; TST PWM2
+				;; BREQ iof8_012
+				;; SBI PORTB,3			;; канал 2 PWM
+	;; iof8_012:	
+				;; TST PWM3
+				;; BREQ iof8_exit
+				;; SBI PORTB,2			;; канал 3 PWM
+				;; RJMP iof8_exit
+	;; iof8_01:	;; проверяем - не пора ли выключать
+				;; CP PWM1,CntPWM
+				;; BRSH iof8_02
+				;; CBI PORTB,4			;; канал 1 PWM
+	;; iof8_02:	
+				;; CP PWM2,CntPWM
+				;; BRSH iof8_03
+				;; CBI PORTB,3			;; канал 2 PWM
+	;; iof8_03:	
+				;; CP PWM3,CntPWM
+				;; BRSH iof8_exit
+				;; CBI PORTB,2			;; канал 3 PWM
+	;; iof8_exit:
+
+				;; POP r17
+				;; popSREGr16
+				;; SEI
+RETI ;}
+Interrupt_OverFlow_161: ;{	;;
+				CLI
+				pushSREGr16
+				
+				OUT TCCR1B,r10		;; стоп таймер
+				SetBit STATUS,0
+
+				popSREGr16
+				SEI
+RETI ;}
+Interrupt_PCINT: ;{	;; прерывание по SCK
+				CLI
+				SBIS PINB,7
+				RJMP ipcint_exit
+				;; значит растущий фронт
+				pushSREGr16
+				
+				;; MOV r16,STATUS
+				;; CBR r16,(1 << 2)	;; очистим принятый бит
+				;; SBIC PINB,5			;; MOSI
+				;; SBR r16,(1 << 2)	;; установим принятый бит
+				;; SBR r16,(1 << 1)	;; установим флаг принятого бита
+				;; MOV STATUS,r16
+
+				popSREGr16
+	ipcint_exit:
+				SEI
+RETI ;}
+;;=========================================================================================================
+.INCLUDE "delay16.avr"
+;;=========================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -4,11 +4,13 @@ int main(void){
 	LoadValuesFromEEPROM();
     init();
 	_delay_ms(500);
+	ADCSRA |= (1 << ADSC);	//запуск первого измерени€
 	
     while(1){
-		if(BitIsSet(FLAGS2, FL2_ADC)){
+		if(BitIsClr(ADCSRA, ADSC)){	//если бит сброшен - преобразование закончено
 			CalculateVoltage();
-			ClrBit(FLAGS2, FL2_ADC);
+			// ClrBit(FLAGS2, FL2_ADC);
+			ADCSRA |= (1 << ADSC);	//запуск следующего измерени€
 		}
 		CheckButton();
 		if(BitIsSet(FLAGS1,FL1_BTN)){
@@ -68,8 +70,8 @@ void init(void){
 	
 	//настраиваем ј÷ѕ
 	ADMUX = (1 << REFS0 | 1 << REFS1 | 1 << MUX0 | 1 << MUX1 | 1 << MUX2);	//ADC7 и внутренн€€ опора 1,1в
-	ADCSRA = (1 << ADEN | 1 << ADSC | 1 << ADIE | 1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);	//ADC включЄн, запуск преобразовани€, прерывание, прескалер 128 (1ћ√ц / 128 = ~8к√ц)
-	
+	ADCSRA = (1 << ADEN | 1 << ADPS2 | 1 << ADPS1 | 1 << ADPS0);	//ADC включЄн, запуск преобразовани€, прескалер 128 (1ћ√ц / 128 = ~8к√ц)
+	 // | 1 << ADSC  1 << ADIE |прерывание,
 	sei();
 }
 void Tick2(void){
@@ -81,7 +83,8 @@ void Tick2(void){
 	}
 	switch(STATUS){
 		case 1:{
-			if(BitIsSet(FLAGS2, FL2_ADC_OK)) LCDvolume = ADCvolume; else LCDvolume = 200;
+			// if(BitIsSet(FLAGS2, FL2_ADC_OK)) LCDvolume = ADCvolume; else LCDvolume = 200;
+			LCDvolume = ADCvolume;
 			OutLCD();
 			break;
 		}
@@ -92,7 +95,7 @@ void Tick2(void){
 	}
 }
 void Tick250(void){
-	if(BitIsSet(FLAGS2, FL2_ADC_OK)){	//если напр€жение измерено работаем с реле по уставкам 
+	// if(BitIsSet(FLAGS2, FL2_ADC_OK)){	//если напр€жение измерено работаем с реле по уставкам 
 		if(ADCvolume >= SETVAL_HIGH){
 			if(BitIsClr(PIND, PinD_RELE)) SetBit(PORTD, PinD_RELE);
 			ClrBit(FLAGS2, FL2_RELE_DELAY);
@@ -109,7 +112,7 @@ void Tick250(void){
 				SetBit(FLAGS2, FL2_RELE_DELAY);
 			}
 		}
-	}
+	// }
 	switch(STATUS){
 		case 0: break;
 		case 1:{
@@ -145,17 +148,15 @@ void CalculateVoltage(void){
 		dtmp = ADCbuffer * ADC_COEFFICIENT;	//17.603 1023 10 64
 		ADCvolume = (uint8_t)dtmp;
 		ADCbuffer = 0;
-		if(ADCvolume > 100 && ADCvolume < (ADC_MAX_VOLTAGE * 10)) SetBit(FLAGS2, FL2_ADC_OK);
-		else{
-			ADCvolume = 200;
-			ClrBit(FLAGS2, FL2_ADC_OK);
-		}
+		// if(ADCvolume > 100 && ADCvolume < (ADC_MAX_VOLTAGE * 10)) SetBit(FLAGS2, FL2_ADC_OK);
+		// else{
+			// ADCvolume = 200;
+			// ClrBit(FLAGS2, FL2_ADC_OK);
+		// }
 	}else{
 		ADCcntBuff--;
 		ADCbuffer += res;
 	}
-	
-	ADCSRA |= (1 << ADSC);	//запуск следующего измерени€
 }
 void CheckButton(void){
 	if(BitIsSet(FLAGS1,FL1_BTN_WAIT)) return;
@@ -235,6 +236,7 @@ void ExecuteButton(void){
 				break;
 			}
 			case 1:{
+				ClrBit(FLAGS2, FL2_RELE_DELAY);
 				PORTD |= (1 << PinD_RELE);
 				break;
 			}
@@ -247,7 +249,7 @@ void ExecuteButton(void){
 						break;
 					}
 					case 1:{
-						if(SETVAL_LOW >= DEF_SETVAL_LOW_MAX || (SETVAL_LOW + DEF_SETVAL_MIN_INT) >= SETVAL_HIGH) break;
+						if(SETVAL_LOW >= DEF_SETVAL_LOW_MAX || SETVAL_LOW >= (SETVAL_HIGH - DEF_SETVAL_MIN_INT)) break;
 						SETVAL_LOW += DEF_SETVAL_LOW_STEP;
 						LCDvolume = SETVAL_LOW;
 						break;
@@ -277,7 +279,7 @@ void ExecuteButton(void){
 			case 2:{
 				switch(MENU){
 					case 0:{
-						if(SETVAL_HIGH <= DEF_SETVAL_HIGH_MIN || (SETVAL_LOW + DEF_SETVAL_MIN_INT) <= SETVAL_HIGH) break;
+						if(SETVAL_HIGH <= DEF_SETVAL_HIGH_MIN || SETVAL_HIGH <= (SETVAL_LOW + DEF_SETVAL_MIN_INT)) break;
 						SETVAL_HIGH -= DEF_SETVAL_HIGH_STEP;
 						LCDvolume = SETVAL_HIGH;
 						break;
@@ -475,9 +477,9 @@ ISR(TIMER1_COMPA_vect){	//~0,25сек
 	TCNT1L = 0;
 	SetBit(FLAGS1, FL1_BLC250);
 }
-ISR(ADC_vect){	//~125к√ц
-	SetBit(FLAGS2, FL2_ADC);
-}
+// ISR(ADC_vect){	//~125к√ц
+	// SetBit(FLAGS2, FL2_ADC);
+// }
 //===============================================================================
 //===============================================================================
 			

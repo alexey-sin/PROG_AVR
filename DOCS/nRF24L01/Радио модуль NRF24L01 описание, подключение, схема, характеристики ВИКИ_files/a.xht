@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="ru">
+  <head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src chrome:; object-src 'none'" />
+    <title>Проблема при загрузке страницы</title>
+    <link rel="stylesheet" href="chrome://browser/skin/aboutNetError.css" type="text/css" media="all" />
+    <!-- If the location of the favicon is changed here, the FAVICON_ERRORPAGE_URL symbol in
+         toolkit/components/places/src/nsFaviconService.h should be updated. -->
+    <link rel="icon" id="favicon" href="chrome://global/skin/icons/warning.svg" />
+    <link rel="localization" href="browser/aboutCertError.ftl" />
+    <link rel="localization" href="browser/nsserrors.ftl" />
+    <link rel="localization" href="branding/brand.ftl" />
+  </head>
+
+  <body dir="ltr" class="neterror">
+    <!-- ERROR ITEM CONTAINER (removed during loading to avoid bug 39098) -->
+    
+
+    <!-- PAGE CONTAINER (for styling purposes only) -->
+    <div id="errorPageContainer" class="container">
+      <div id="text-container">
+        <!-- Error Title -->
+        <div class="title">
+          <h1 class="title-text" data-l10n-id="csp-xfo-error-title">Firefox не может открыть эту страницу</h1>
+        </div>
+
+        <!-- LONG CONTENT (the section most likely to require scrolling) -->
+        <div id="errorLongContent">
+
+          <!-- Short Description -->
+          <div id="errorShortDesc" style="display: none;">
+            <p id="errorShortDescText" data-l10n-id="ssl-connection-error" data-l10n-args="{&quot;errorMessage&quot;:&quot;&quot;,&quot;hostname&quot;:&quot;best.aliexpress.ru&quot;}">При соединении с best.aliexpress.ru произошла ошибка. </p>
+          </div>
+
+          <div id="errorShortDesc2">
+              <p id="errorShortDescText2"></p>
+          </div>
+
+          <div id="errorWhatToDoTitle">
+              <p id="errorWhatToDoTitleText"></p>
+          </div>
+
+          <div id="errorWhatToDo">
+              <p id="badStsCertExplanation" hidden="true"><span class="hostname"></span>
+ имеет политику безопасности называемую Форсированное защищённое 
+соединение HTTP (HSTS), что означает, что Firefox может подключиться к 
+нему только через защищённое соединение. Вы не можете добавить 
+исключение, чтобы посетить этот сайт.</p>
+              <p id="errorWhatToDoText"></p>
+          </div>
+
+          <div id="errorWhatToDo2">
+              <p id="errorWhatToDoText2"></p>
+              <p id="badStsCertExplanation" hidden="true"><span class="hostname"></span>
+ имеет политику безопасности называемую Форсированное защищённое 
+соединение HTTP (HSTS), что означает, что Firefox может подключиться к 
+нему только через защищённое соединение. Вы не можете добавить 
+исключение, чтобы посетить этот сайт.</p>
+          </div>
+
+          <!-- Long Description (Note: See netError.dtd for used XHTML tags) -->
+          <div id="errorLongDesc" data-l10n-id="csp-xfo-blocked-long-desc" data-l10n-args="{&quot;hostname&quot;:&quot;best.aliexpress.ru&quot;}">Для
+ обеспечения вашей безопасности best.aliexpress.ru не разрешил Firefox 
+отобразить страницу, так как она встроена в другой сайт. Чтобы увидеть 
+эту страницу, вам нужно открыть её в новом окне.</div>
+
+          <div id="learnMoreContainer">
+            <p><a id="learnMoreLink" target="new" data-telemetry-id="learn_more_link" href="https://support.mozilla.org/1/firefox/78.0.2/WINNT/ru/connection-not-secure">Подробнее…</a></p>
+          </div>
+
+          <div id="openInNewWindowContainer" class="button-container" style="display: block;">
+            <p><a id="openInNewWindowButton" target="_blank" rel="noopener noreferrer" href="https://best.aliexpress.ru/affiliate/home.htm?aff_platform=portals-promotion&amp;sk=_d8hmFP3&amp;aff_trace_key=2123cbfa7b334636b42ba837b0a77b10-1595826180387-02793-_d8hmFP3&amp;terminal_id=813079cbcdf843f7807cc44837fcabbd&amp;aff_request_id=2123cbfa7b334636b42ba837b0a77b10-1595826180387-02793-_d8hmFP3">
+            <button class="primary" data-l10n-id="open-in-new-window-for-csp-or-xfo-error">Открыть сайт в новом окне</button></a></p>
+          </div>
+        </div>
+
+        <!-- UI to temporarily re-enable TLS 1.0 and 1.1.
+             This should be removed after March 2020, see bug 1579285.  -->
+        <div id="enableTls10Container" class="button-container">
+          <p>Firefox поддерживает протокол TLS 1.2 и выше. Этот веб-сайт
+ может не поддерживать данный протокол. Для установления соединения 
+можно включить TLS 1.0 и TLS 1.1.</p>
+          <p>TLS 1.0 и TLS 1.1 будут навсегда отключены в будущем релизе.</p>
+          <button id="enableTls10Button" class="primary">Включить TLS 1.0 и 1.1</button>
+        </div>
+
+        <!-- UI for option to report certificate errors to Mozilla. Removed on
+             init for other error types .-->
+        <div id="prefChangeContainer" class="button-container">
+          <p>Похоже, что причиной этого могут быть настройки безопасности вашей сети. Вы хотите восстановить настройки по умолчанию?</p>
+          <button id="prefResetButton" class="primary">Восстановить настройки по умолчанию</button>
+        </div>
+
+        <div id="certErrorAndCaptivePortalButtonContainer" class="button-container">
+          <button id="returnButton" class="primary" data-telemetry-id="return_button_top">Вернуться назад (рекомендуется)</button>
+          <button id="openPortalLoginPageButton" class="primary">Открыть страницу входа в сеть</button>
+          <button class="primary try-again">Попробовать снова</button>
+          <button id="advancedButton" data-telemetry-id="advanced_button">Дополнительно…</button>
+        </div>
+      </div>
+
+      <div id="netErrorButtonContainer" class="button-container" style="display: none;">
+        <button class="primary try-again">Попробовать снова</button>
+      </div>
+
+      <div id="advancedPanelContainer">
+        <div id="badCertAdvancedPanel" class="advanced-panel">
+          <p id="badCertTechnicalInfo"></p>
+          <a id="viewCertificate" href="javascript:void(0)">Просмотреть сертификат</a>
+          <div id="advancedPanelButtonContainer" class="button-container">
+            <button id="advancedPanelReturnButton" class="primary" data-telemetry-id="return_button_adv">Вернуться назад (рекомендуется)</button>
+            <button class="primary try-again">Попробовать снова</button>
+            <div class="exceptionDialogButtonContainer">
+              <button id="exceptionDialogButton" data-telemetry-id="exception_button">Принять риск и продолжить</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="certificateErrorReporting">
+            <p class="toggle-container-with-text">
+                <input type="checkbox" id="automaticallyReportInFuture" role="checkbox" />
+                <label for="automaticallyReportInFuture" data-telemetry-id="auto_report_cb">Отправка сообщений о подобных ошибках поможет Mozilla обнаружить и заблокировать вредоносные сайты</label>
+            </p>
+        </div>
+
+        <div id="certificateErrorDebugInformation">
+          <button id="copyToClipboardTop" data-telemetry-id="clipboard_button_top">Копировать текст в буфер обмена</button>
+          <div id="certificateErrorText"></div>
+          <button id="copyToClipboardBottom" data-telemetry-id="clipboard_button_bot">Копировать текст в буфер обмена</button>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="chrome://browser/content/aboutNetError.js"></script>
+</html>

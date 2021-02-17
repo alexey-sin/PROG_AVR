@@ -1,0 +1,15 @@
+[p GLOBOPT AUTOSTATIC PIC14 PICMIDHI PICLOMID SPACEOPT ]
+"12 D:\nRF_CB_Eval_1a\PICCLite\nRF905_Rx\delay.c
+[v _DelayMs `(v  1 e 0 0 ]
+{
+[v _cnt `uc  1 a 1 w ]
+[v _cnt `uc  1 a 1 0 ]
+[v _i `uc  1 a 1 1 ]
+"24
+{
+[v __dcnt `uc  1 a 1 2 ]
+}
+"21
+[v _cnt `uc  1 a 1 0 ]
+"28
+} 3
