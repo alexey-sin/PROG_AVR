@@ -50,10 +50,10 @@
   51 0058 8083      		st Z,r24
   52 005a 87EC      		ldi r24,lo8(-57)
   53 005c 8093 7C00 		sts 124,r24
-  54 0060 8FEC      		ldi r24,lo8(-49)
+  54 0060 87E8      		ldi r24,lo8(-121)
   55 0062 8093 7A00 		sts 122,r24
   56               	/* #APP */
-  57               	 ;  73 "../src/main.c" 1
+  57               	 ;  75 "../src/main.c" 1
   58 0066 7894      		sei
   59               	 ;  0 "" 2
   60               	/* epilogue start */
@@ -84,962 +84,903 @@
   87 009a 6093 0000 		sts ADCvolume,r22
   88 009e 1092 0000 		sts (ADCbuffer)+1,__zero_reg__
   89 00a2 1092 0000 		sts ADCbuffer,__zero_reg__
-  90 00a6 8091 0000 		lds r24,ADCvolume
-  91 00aa 8536      		cpi r24,lo8(101)
-  92 00ac 00F0      		brlo .L5
-  93 00ae 6091 0000 		lds r22,ADCvolume
-  94 00b2 70E0      		ldi r23,lo8(0)
-  95 00b4 8827      		clr r24
-  96 00b6 77FD      		sbrc r23,7
-  97 00b8 8095      		com r24
-  98 00ba 982F      		mov r25,r24
-  99 00bc 00D0      		rcall __floatsisf
- 100 00be 2EEA      		ldi r18,lo8(0x433007ae)
- 101 00c0 37E0      		ldi r19,hi8(0x433007ae)
- 102 00c2 40E3      		ldi r20,hlo8(0x433007ae)
- 103 00c4 53E4      		ldi r21,hhi8(0x433007ae)
- 104 00c6 00D0      		rcall __ltsf2
- 105 00c8 8823      		tst r24
- 106 00ca 04F4      		brge .L5
- 107 00cc 8091 0000 		lds r24,FLAGS2
- 108 00d0 8260      		ori r24,lo8(2)
- 109 00d2 00C0      		rjmp .L10
- 110               	.L5:
- 111 00d4 88EC      		ldi r24,lo8(-56)
- 112 00d6 8093 0000 		sts ADCvolume,r24
- 113 00da 8091 0000 		lds r24,FLAGS2
- 114 00de 8D7F      		andi r24,lo8(-3)
- 115               	.L10:
- 116 00e0 8093 0000 		sts FLAGS2,r24
- 117 00e4 00C0      		rjmp .L7
- 118               	.L4:
- 119 00e6 8091 0000 		lds r24,ADCcntBuff
- 120 00ea 8150      		subi r24,lo8(-(-1))
- 121 00ec 8093 0000 		sts ADCcntBuff,r24
- 122 00f0 4091 0000 		lds r20,ADCbuffer
- 123 00f4 5091 0000 		lds r21,(ADCbuffer)+1
- 124 00f8 962F      		mov r25,r22
- 125 00fa 80E0      		ldi r24,lo8(0)
- 126 00fc 30E0      		ldi r19,lo8(0)
- 127 00fe 822B      		or r24,r18
- 128 0100 932B      		or r25,r19
- 129 0102 840F      		add r24,r20
- 130 0104 951F      		adc r25,r21
- 131 0106 9093 0000 		sts (ADCbuffer)+1,r25
- 132 010a 8093 0000 		sts ADCbuffer,r24
- 133               	.L7:
- 134 010e 8091 7A00 		lds r24,122
- 135 0112 8064      		ori r24,lo8(64)
- 136 0114 8093 7A00 		sts 122,r24
- 137               	/* epilogue start */
- 138 0118 0895      		ret
- 140               	.global	CheckButton
- 142               	CheckButton:
- 143               	/* prologue: function */
- 144               	/* frame size = 0 */
- 145 011a 8091 0000 		lds r24,FLAGS1
- 146 011e 83FD      		sbrc r24,3
- 147 0120 00C0      		rjmp .L19
- 148 0122 8091 0000 		lds r24,FLAGS1
- 149 0126 84FF      		sbrs r24,4
- 150 0128 00C0      		rjmp .L13
- 151 012a 339B      		sbis 38-32,3
- 152 012c 00C0      		rjmp .L19
- 153 012e 8091 0000 		lds r24,FLAGS1
- 154 0132 8F7E      		andi r24,lo8(-17)
- 155 0134 00C0      		rjmp .L22
- 156               	.L13:
- 157 0136 3399      		sbic 38-32,3
- 158 0138 00C0      		rjmp .L14
- 159 013a 8091 0000 		lds r24,FLAGS1
- 160 013e 8061      		ori r24,lo8(16)
- 161 0140 8093 0000 		sts FLAGS1,r24
- 162 0144 8091 0000 		lds r24,FLAGS1
- 163 0148 8460      		ori r24,lo8(4)
- 164               	.L22:
- 165 014a 8093 0000 		sts FLAGS1,r24
- 166 014e 0895      		ret
- 167               	.L14:
- 168 0150 8091 0000 		lds r24,FLAGS1
- 169 0154 85FF      		sbrs r24,5
- 170 0156 00C0      		rjmp .L15
- 171 0158 349B      		sbis 38-32,4
- 172 015a 00C0      		rjmp .L16
- 173 015c 8091 0000 		lds r24,FLAGS1
- 174 0160 8F7D      		andi r24,lo8(-33)
- 175 0162 00C0      		rjmp .L20
- 176               	.L15:
- 177 0164 3499      		sbic 38-32,4
- 178 0166 00C0      		rjmp .L16
- 179 0168 8091 0000 		lds r24,FLAGS1
- 180 016c 8062      		ori r24,lo8(32)
- 181 016e 8093 0000 		sts FLAGS1,r24
- 182 0172 8091 0000 		lds r24,FLAGS1
- 183 0176 8460      		ori r24,lo8(4)
- 184               	.L20:
- 185 0178 8093 0000 		sts FLAGS1,r24
- 186               	.L16:
- 187 017c 8091 0000 		lds r24,FLAGS1
- 188 0180 86FF      		sbrs r24,6
- 189 0182 00C0      		rjmp .L17
- 190 0184 359B      		sbis 38-32,5
- 191 0186 00C0      		rjmp .L18
- 192 0188 8091 0000 		lds r24,FLAGS1
- 193 018c 8F7B      		andi r24,lo8(-65)
- 194 018e 00C0      		rjmp .L21
- 195               	.L17:
- 196 0190 3599      		sbic 38-32,5
- 197 0192 00C0      		rjmp .L18
- 198 0194 8091 0000 		lds r24,FLAGS1
- 199 0198 8064      		ori r24,lo8(64)
- 200 019a 8093 0000 		sts FLAGS1,r24
- 201 019e 8091 0000 		lds r24,FLAGS1
- 202 01a2 8460      		ori r24,lo8(4)
- 203               	.L21:
- 204 01a4 8093 0000 		sts FLAGS1,r24
- 205               	.L18:
- 206 01a8 84E6      		ldi r24,lo8(100)
- 207 01aa 8093 0000 		sts CountMUL_BTN_WAIT,r24
- 208 01ae 8091 0000 		lds r24,FLAGS1
- 209 01b2 8860      		ori r24,lo8(8)
- 210 01b4 8093 0000 		sts FLAGS1,r24
- 211               	.L19:
- 212 01b8 0895      		ret
- 214               	.global	ExecuteButton
- 216               	ExecuteButton:
- 217               	/* prologue: function */
- 218               	/* frame size = 0 */
- 219 01ba 1092 0000 		sts CountMUL_LCD,__zero_reg__
- 220 01be 8091 0000 		lds r24,FLAGS1
- 221 01c2 84FF      		sbrs r24,4
- 222 01c4 00C0      		rjmp .L24
- 223 01c6 9091 0000 		lds r25,STATUS
- 224 01ca 9130      		cpi r25,lo8(1)
- 225 01cc 01F0      		breq .L27
- 226 01ce 9130      		cpi r25,lo8(1)
- 227 01d0 00F4      		brsh .+2
- 228 01d2 00C0      		rjmp .L39
- 229 01d4 9230      		cpi r25,lo8(2)
- 230 01d6 01F0      		breq .+2
- 231 01d8 00C0      		rjmp .L45
- 232 01da 00C0      		rjmp .L52
- 233               	.L27:
- 234 01dc 82E0      		ldi r24,lo8(2)
- 235 01de 8093 0000 		sts STATUS,r24
- 236 01e2 00C0      		rjmp .L31
- 237               	.L52:
- 238 01e4 8091 0000 		lds r24,MENU
- 239 01e8 8130      		cpi r24,lo8(1)
- 240 01ea 01F0      		breq .L30
- 241 01ec 8130      		cpi r24,lo8(1)
- 242 01ee 00F0      		brlo .L29
- 243 01f0 8230      		cpi r24,lo8(2)
- 244 01f2 01F0      		breq .+2
- 245 01f4 00C0      		rjmp .L45
- 246 01f6 00C0      		rjmp .L31
- 247               	.L29:
- 248 01f8 81E0      		ldi r24,lo8(1)
- 249 01fa 8093 0000 		sts MENU,r24
- 250 01fe 00C0      		rjmp .L48
- 251               	.L30:
- 252 0200 9093 0000 		sts MENU,r25
- 253 0204 00C0      		rjmp .L49
- 254               	.L31:
- 255 0206 1092 0000 		sts MENU,__zero_reg__
- 256 020a 00C0      		rjmp .L50
- 257               	.L24:
- 258 020c 8091 0000 		lds r24,FLAGS1
- 259 0210 85FF      		sbrs r24,5
- 260 0212 00C0      		rjmp .L32
- 261 0214 8091 0000 		lds r24,STATUS
- 262 0218 8130      		cpi r24,lo8(1)
- 263 021a 01F0      		breq .L34
- 264 021c 8130      		cpi r24,lo8(1)
- 265 021e 00F4      		brsh .+2
- 266 0220 00C0      		rjmp .L39
- 267 0222 8230      		cpi r24,lo8(2)
- 268 0224 01F0      		breq .+2
- 269 0226 00C0      		rjmp .L45
- 270 0228 00C0      		rjmp .L53
- 271               	.L34:
- 272 022a 5A9A      		sbi 43-32,2
- 273 022c 0895      		ret
- 274               	.L53:
- 275 022e 8091 0000 		lds r24,MENU
- 276 0232 8130      		cpi r24,lo8(1)
- 277 0234 01F0      		breq .L37
- 278 0236 8130      		cpi r24,lo8(1)
- 279 0238 00F0      		brlo .L36
- 280 023a 8230      		cpi r24,lo8(2)
- 281 023c 01F0      		breq .+2
- 282 023e 00C0      		rjmp .L45
- 283 0240 00C0      		rjmp .L54
- 284               	.L36:
- 285 0242 8091 0000 		lds r24,SETVAL_HIGH
- 286 0246 803A      		cpi r24,lo8(-96)
- 287 0248 00F0      		brlo .+2
- 288 024a 00C0      		rjmp .L45
- 289 024c 8091 0000 		lds r24,SETVAL_HIGH
- 290 0250 8F5F      		subi r24,lo8(-(1))
- 291 0252 00C0      		rjmp .L47
- 292               	.L37:
- 293 0254 8091 0000 		lds r24,SETVAL_LOW
- 294 0258 8C38      		cpi r24,lo8(-116)
- 295 025a 00F0      		brlo .+2
- 296 025c 00C0      		rjmp .L45
- 297 025e 8091 0000 		lds r24,SETVAL_LOW
- 298 0262 2091 0000 		lds r18,SETVAL_HIGH
- 299 0266 90E0      		ldi r25,lo8(0)
- 300 0268 0596      		adiw r24,5
- 301 026a 30E0      		ldi r19,lo8(0)
- 302 026c 8217      		cp r24,r18
- 303 026e 9307      		cpc r25,r19
- 304 0270 04F0      		brlt .+2
- 305 0272 00C0      		rjmp .L45
- 306 0274 8091 0000 		lds r24,SETVAL_LOW
- 307 0278 8F5F      		subi r24,lo8(-(1))
- 308 027a 00C0      		rjmp .L51
- 309               	.L54:
- 310 027c 8091 0000 		lds r24,SETVAL_DELAY
- 311 0280 8331      		cpi r24,lo8(19)
- 312 0282 00F0      		brlo .+2
- 313 0284 00C0      		rjmp .L45
- 314 0286 8091 0000 		lds r24,SETVAL_DELAY
- 315 028a 8F5F      		subi r24,lo8(-(1))
- 316 028c 8093 0000 		sts SETVAL_DELAY,r24
- 317               	.L49:
- 318 0290 8091 0000 		lds r24,SETVAL_DELAY
- 319 0294 00C0      		rjmp .L46
- 320               	.L32:
- 321 0296 8091 0000 		lds r24,FLAGS1
- 322 029a 86FF      		sbrs r24,6
- 323 029c 00C0      		rjmp .L45
- 324 029e 8091 0000 		lds r24,STATUS
- 325 02a2 8130      		cpi r24,lo8(1)
- 326 02a4 01F0      		breq .L40
- 327 02a6 8130      		cpi r24,lo8(1)
- 328 02a8 00F0      		brlo .L39
- 329 02aa 8230      		cpi r24,lo8(2)
- 330 02ac 01F0      		breq .+2
- 331 02ae 00C0      		rjmp .L45
- 332 02b0 00C0      		rjmp .L55
- 333               	.L39:
- 334 02b2 81E0      		ldi r24,lo8(1)
- 335 02b4 8093 0000 		sts STATUS,r24
- 336 02b8 0895      		ret
- 337               	.L40:
- 338 02ba 5A98      		cbi 43-32,2
- 339 02bc 0895      		ret
- 340               	.L55:
- 341 02be 8091 0000 		lds r24,MENU
- 342 02c2 8130      		cpi r24,lo8(1)
- 343 02c4 01F0      		breq .L43
- 344 02c6 8130      		cpi r24,lo8(1)
- 345 02c8 00F0      		brlo .L42
- 346 02ca 8230      		cpi r24,lo8(2)
- 347 02cc 01F4      		brne .L45
- 348 02ce 00C0      		rjmp .L56
+  90 00a6 0895      		ret
+  91               	.L4:
+  92 00a8 8091 0000 		lds r24,ADCcntBuff
+  93 00ac 8150      		subi r24,lo8(-(-1))
+  94 00ae 8093 0000 		sts ADCcntBuff,r24
+  95 00b2 4091 0000 		lds r20,ADCbuffer
+  96 00b6 5091 0000 		lds r21,(ADCbuffer)+1
+  97 00ba 962F      		mov r25,r22
+  98 00bc 80E0      		ldi r24,lo8(0)
+  99 00be 30E0      		ldi r19,lo8(0)
+ 100 00c0 822B      		or r24,r18
+ 101 00c2 932B      		or r25,r19
+ 102 00c4 840F      		add r24,r20
+ 103 00c6 951F      		adc r25,r21
+ 104 00c8 9093 0000 		sts (ADCbuffer)+1,r25
+ 105 00cc 8093 0000 		sts ADCbuffer,r24
+ 106 00d0 0895      		ret
+ 108               	.global	CheckButton
+ 110               	CheckButton:
+ 111               	/* prologue: function */
+ 112               	/* frame size = 0 */
+ 113 00d2 8091 0000 		lds r24,FLAGS1
+ 114 00d6 83FD      		sbrc r24,3
+ 115 00d8 00C0      		rjmp .L15
+ 116 00da 8091 0000 		lds r24,FLAGS1
+ 117 00de 84FF      		sbrs r24,4
+ 118 00e0 00C0      		rjmp .L9
+ 119 00e2 339B      		sbis 38-32,3
+ 120 00e4 00C0      		rjmp .L15
+ 121 00e6 8091 0000 		lds r24,FLAGS1
+ 122 00ea 8F7E      		andi r24,lo8(-17)
+ 123 00ec 00C0      		rjmp .L18
+ 124               	.L9:
+ 125 00ee 3399      		sbic 38-32,3
+ 126 00f0 00C0      		rjmp .L10
+ 127 00f2 8091 0000 		lds r24,FLAGS1
+ 128 00f6 8061      		ori r24,lo8(16)
+ 129 00f8 8093 0000 		sts FLAGS1,r24
+ 130 00fc 8091 0000 		lds r24,FLAGS1
+ 131 0100 8460      		ori r24,lo8(4)
+ 132               	.L18:
+ 133 0102 8093 0000 		sts FLAGS1,r24
+ 134 0106 0895      		ret
+ 135               	.L10:
+ 136 0108 8091 0000 		lds r24,FLAGS1
+ 137 010c 85FF      		sbrs r24,5
+ 138 010e 00C0      		rjmp .L11
+ 139 0110 349B      		sbis 38-32,4
+ 140 0112 00C0      		rjmp .L12
+ 141 0114 8091 0000 		lds r24,FLAGS1
+ 142 0118 8F7D      		andi r24,lo8(-33)
+ 143 011a 00C0      		rjmp .L16
+ 144               	.L11:
+ 145 011c 3499      		sbic 38-32,4
+ 146 011e 00C0      		rjmp .L12
+ 147 0120 8091 0000 		lds r24,FLAGS1
+ 148 0124 8062      		ori r24,lo8(32)
+ 149 0126 8093 0000 		sts FLAGS1,r24
+ 150 012a 8091 0000 		lds r24,FLAGS1
+ 151 012e 8460      		ori r24,lo8(4)
+ 152               	.L16:
+ 153 0130 8093 0000 		sts FLAGS1,r24
+ 154               	.L12:
+ 155 0134 8091 0000 		lds r24,FLAGS1
+ 156 0138 86FF      		sbrs r24,6
+ 157 013a 00C0      		rjmp .L13
+ 158 013c 359B      		sbis 38-32,5
+ 159 013e 00C0      		rjmp .L14
+ 160 0140 8091 0000 		lds r24,FLAGS1
+ 161 0144 8F7B      		andi r24,lo8(-65)
+ 162 0146 00C0      		rjmp .L17
+ 163               	.L13:
+ 164 0148 3599      		sbic 38-32,5
+ 165 014a 00C0      		rjmp .L14
+ 166 014c 8091 0000 		lds r24,FLAGS1
+ 167 0150 8064      		ori r24,lo8(64)
+ 168 0152 8093 0000 		sts FLAGS1,r24
+ 169 0156 8091 0000 		lds r24,FLAGS1
+ 170 015a 8460      		ori r24,lo8(4)
+ 171               	.L17:
+ 172 015c 8093 0000 		sts FLAGS1,r24
+ 173               	.L14:
+ 174 0160 84E6      		ldi r24,lo8(100)
+ 175 0162 8093 0000 		sts CountMUL_BTN_WAIT,r24
+ 176 0166 8091 0000 		lds r24,FLAGS1
+ 177 016a 8860      		ori r24,lo8(8)
+ 178 016c 8093 0000 		sts FLAGS1,r24
+ 179               	.L15:
+ 180 0170 0895      		ret
+ 182               	.global	ExecuteButton
+ 184               	ExecuteButton:
+ 185               	/* prologue: function */
+ 186               	/* frame size = 0 */
+ 187 0172 1092 0000 		sts CountMUL_LCD,__zero_reg__
+ 188 0176 8091 0000 		lds r24,FLAGS1
+ 189 017a 84FF      		sbrs r24,4
+ 190 017c 00C0      		rjmp .L20
+ 191 017e 9091 0000 		lds r25,STATUS
+ 192 0182 9130      		cpi r25,lo8(1)
+ 193 0184 01F0      		breq .L23
+ 194 0186 9130      		cpi r25,lo8(1)
+ 195 0188 00F4      		brsh .+2
+ 196 018a 00C0      		rjmp .L35
+ 197 018c 9230      		cpi r25,lo8(2)
+ 198 018e 01F0      		breq .+2
+ 199 0190 00C0      		rjmp .L41
+ 200 0192 00C0      		rjmp .L48
+ 201               	.L23:
+ 202 0194 82E0      		ldi r24,lo8(2)
+ 203 0196 8093 0000 		sts STATUS,r24
+ 204 019a 00C0      		rjmp .L27
+ 205               	.L48:
+ 206 019c 8091 0000 		lds r24,MENU
+ 207 01a0 8130      		cpi r24,lo8(1)
+ 208 01a2 01F0      		breq .L26
+ 209 01a4 8130      		cpi r24,lo8(1)
+ 210 01a6 00F0      		brlo .L25
+ 211 01a8 8230      		cpi r24,lo8(2)
+ 212 01aa 01F0      		breq .+2
+ 213 01ac 00C0      		rjmp .L41
+ 214 01ae 00C0      		rjmp .L27
+ 215               	.L25:
+ 216 01b0 81E0      		ldi r24,lo8(1)
+ 217 01b2 8093 0000 		sts MENU,r24
+ 218 01b6 00C0      		rjmp .L44
+ 219               	.L26:
+ 220 01b8 9093 0000 		sts MENU,r25
+ 221 01bc 00C0      		rjmp .L45
+ 222               	.L27:
+ 223 01be 1092 0000 		sts MENU,__zero_reg__
+ 224 01c2 00C0      		rjmp .L46
+ 225               	.L20:
+ 226 01c4 8091 0000 		lds r24,FLAGS1
+ 227 01c8 85FF      		sbrs r24,5
+ 228 01ca 00C0      		rjmp .L28
+ 229 01cc 8091 0000 		lds r24,STATUS
+ 230 01d0 8130      		cpi r24,lo8(1)
+ 231 01d2 01F0      		breq .L30
+ 232 01d4 8130      		cpi r24,lo8(1)
+ 233 01d6 00F4      		brsh .+2
+ 234 01d8 00C0      		rjmp .L35
+ 235 01da 8230      		cpi r24,lo8(2)
+ 236 01dc 01F0      		breq .+2
+ 237 01de 00C0      		rjmp .L41
+ 238 01e0 00C0      		rjmp .L49
+ 239               	.L30:
+ 240 01e2 8091 0000 		lds r24,FLAGS2
+ 241 01e6 8B7F      		andi r24,lo8(-5)
+ 242 01e8 8093 0000 		sts FLAGS2,r24
+ 243 01ec 5A9A      		sbi 43-32,2
+ 244 01ee 0895      		ret
+ 245               	.L49:
+ 246 01f0 8091 0000 		lds r24,MENU
+ 247 01f4 8130      		cpi r24,lo8(1)
+ 248 01f6 01F0      		breq .L33
+ 249 01f8 8130      		cpi r24,lo8(1)
+ 250 01fa 00F0      		brlo .L32
+ 251 01fc 8230      		cpi r24,lo8(2)
+ 252 01fe 01F0      		breq .+2
+ 253 0200 00C0      		rjmp .L41
+ 254 0202 00C0      		rjmp .L50
+ 255               	.L32:
+ 256 0204 8091 0000 		lds r24,SETVAL_HIGH
+ 257 0208 803A      		cpi r24,lo8(-96)
+ 258 020a 00F0      		brlo .+2
+ 259 020c 00C0      		rjmp .L41
+ 260 020e 8091 0000 		lds r24,SETVAL_HIGH
+ 261 0212 8F5F      		subi r24,lo8(-(1))
+ 262 0214 00C0      		rjmp .L43
+ 263               	.L33:
+ 264 0216 8091 0000 		lds r24,SETVAL_LOW
+ 265 021a 8C38      		cpi r24,lo8(-116)
+ 266 021c 00F0      		brlo .+2
+ 267 021e 00C0      		rjmp .L41
+ 268 0220 2091 0000 		lds r18,SETVAL_LOW
+ 269 0224 8091 0000 		lds r24,SETVAL_HIGH
+ 270 0228 30E0      		ldi r19,lo8(0)
+ 271 022a 90E0      		ldi r25,lo8(0)
+ 272 022c 0597      		sbiw r24,5
+ 273 022e 2817      		cp r18,r24
+ 274 0230 3907      		cpc r19,r25
+ 275 0232 04F0      		brlt .+2
+ 276 0234 00C0      		rjmp .L41
+ 277 0236 8091 0000 		lds r24,SETVAL_LOW
+ 278 023a 8F5F      		subi r24,lo8(-(1))
+ 279 023c 00C0      		rjmp .L47
+ 280               	.L50:
+ 281 023e 8091 0000 		lds r24,SETVAL_DELAY
+ 282 0242 8331      		cpi r24,lo8(19)
+ 283 0244 00F0      		brlo .+2
+ 284 0246 00C0      		rjmp .L41
+ 285 0248 8091 0000 		lds r24,SETVAL_DELAY
+ 286 024c 8F5F      		subi r24,lo8(-(1))
+ 287 024e 8093 0000 		sts SETVAL_DELAY,r24
+ 288               	.L45:
+ 289 0252 8091 0000 		lds r24,SETVAL_DELAY
+ 290 0256 00C0      		rjmp .L42
+ 291               	.L28:
+ 292 0258 8091 0000 		lds r24,FLAGS1
+ 293 025c 86FF      		sbrs r24,6
+ 294 025e 00C0      		rjmp .L41
+ 295 0260 8091 0000 		lds r24,STATUS
+ 296 0264 8130      		cpi r24,lo8(1)
+ 297 0266 01F0      		breq .L36
+ 298 0268 8130      		cpi r24,lo8(1)
+ 299 026a 00F0      		brlo .L35
+ 300 026c 8230      		cpi r24,lo8(2)
+ 301 026e 01F0      		breq .+2
+ 302 0270 00C0      		rjmp .L41
+ 303 0272 00C0      		rjmp .L51
+ 304               	.L35:
+ 305 0274 81E0      		ldi r24,lo8(1)
+ 306 0276 8093 0000 		sts STATUS,r24
+ 307 027a 0895      		ret
+ 308               	.L36:
+ 309 027c 5A98      		cbi 43-32,2
+ 310 027e 0895      		ret
+ 311               	.L51:
+ 312 0280 8091 0000 		lds r24,MENU
+ 313 0284 8130      		cpi r24,lo8(1)
+ 314 0286 01F0      		breq .L39
+ 315 0288 8130      		cpi r24,lo8(1)
+ 316 028a 00F0      		brlo .L38
+ 317 028c 8230      		cpi r24,lo8(2)
+ 318 028e 01F4      		brne .L41
+ 319 0290 00C0      		rjmp .L52
+ 320               	.L38:
+ 321 0292 8091 0000 		lds r24,SETVAL_HIGH
+ 322 0296 8937      		cpi r24,lo8(121)
+ 323 0298 00F0      		brlo .L41
+ 324 029a 2091 0000 		lds r18,SETVAL_HIGH
+ 325 029e 8091 0000 		lds r24,SETVAL_LOW
+ 326 02a2 30E0      		ldi r19,lo8(0)
+ 327 02a4 90E0      		ldi r25,lo8(0)
+ 328 02a6 0596      		adiw r24,5
+ 329 02a8 8217      		cp r24,r18
+ 330 02aa 9307      		cpc r25,r19
+ 331 02ac 04F4      		brge .L41
+ 332 02ae 8091 0000 		lds r24,SETVAL_HIGH
+ 333 02b2 8150      		subi r24,lo8(-(-1))
+ 334               	.L43:
+ 335 02b4 8093 0000 		sts SETVAL_HIGH,r24
+ 336               	.L46:
+ 337 02b8 8091 0000 		lds r24,SETVAL_HIGH
+ 338 02bc 00C0      		rjmp .L42
+ 339               	.L39:
+ 340 02be 8091 0000 		lds r24,SETVAL_LOW
+ 341 02c2 8536      		cpi r24,lo8(101)
+ 342 02c4 00F0      		brlo .L41
+ 343 02c6 8091 0000 		lds r24,SETVAL_LOW
+ 344 02ca 8150      		subi r24,lo8(-(-1))
+ 345               	.L47:
+ 346 02cc 8093 0000 		sts SETVAL_LOW,r24
+ 347               	.L44:
+ 348 02d0 8091 0000 		lds r24,SETVAL_LOW
  349               	.L42:
- 350 02d0 8091 0000 		lds r24,SETVAL_HIGH
- 351 02d4 8937      		cpi r24,lo8(121)
- 352 02d6 00F0      		brlo .L45
- 353 02d8 8091 0000 		lds r24,SETVAL_LOW
- 354 02dc 2091 0000 		lds r18,SETVAL_HIGH
- 355 02e0 90E0      		ldi r25,lo8(0)
- 356 02e2 0496      		adiw r24,4
- 357 02e4 30E0      		ldi r19,lo8(0)
- 358 02e6 8217      		cp r24,r18
- 359 02e8 9307      		cpc r25,r19
- 360 02ea 04F0      		brlt .L45
- 361 02ec 8091 0000 		lds r24,SETVAL_HIGH
- 362 02f0 8150      		subi r24,lo8(-(-1))
- 363               	.L47:
- 364 02f2 8093 0000 		sts SETVAL_HIGH,r24
- 365               	.L50:
- 366 02f6 8091 0000 		lds r24,SETVAL_HIGH
- 367 02fa 00C0      		rjmp .L46
- 368               	.L43:
- 369 02fc 8091 0000 		lds r24,SETVAL_LOW
- 370 0300 8536      		cpi r24,lo8(101)
- 371 0302 00F0      		brlo .L45
- 372 0304 8091 0000 		lds r24,SETVAL_LOW
- 373 0308 8150      		subi r24,lo8(-(-1))
- 374               	.L51:
- 375 030a 8093 0000 		sts SETVAL_LOW,r24
- 376               	.L48:
- 377 030e 8091 0000 		lds r24,SETVAL_LOW
- 378               	.L46:
- 379 0312 8093 0000 		sts LCDvolume,r24
- 380 0316 0895      		ret
- 381               	.L56:
- 382 0318 8091 0000 		lds r24,SETVAL_DELAY
- 383 031c 8823      		tst r24
- 384 031e 01F0      		breq .L45
- 385 0320 8091 0000 		lds r24,SETVAL_DELAY
- 386 0324 8150      		subi r24,lo8(-(-1))
- 387 0326 8093 0000 		sts SETVAL_DELAY,r24
- 388 032a 8091 0000 		lds r24,SETVAL_DELAY
- 389 032e 8093 0000 		sts LCDvolume,r24
- 390               	.L45:
- 391 0332 0895      		ret
- 393               	.global	ClearLCD
- 395               	ClearLCD:
- 396               	/* prologue: function */
- 397               	/* frame size = 0 */
- 398 0334 85B1      		in r24,37-32
- 399 0336 8FEF      		ldi r24,lo8(-1)
- 400 0338 85B9      		out 37-32,r24
- 401 033a 88B1      		in r24,40-32
- 402 033c 8360      		ori r24,lo8(3)
- 403 033e 88B9      		out 40-32,r24
- 404 0340 8BB1      		in r24,43-32
- 405 0342 886F      		ori r24,lo8(-8)
- 406 0344 8BB9      		out 43-32,r24
- 407               	/* epilogue start */
- 408 0346 0895      		ret
- 410               	.global	OutLCD
- 412               	OutLCD:
- 413               	/* prologue: function */
- 414               	/* frame size = 0 */
- 415 0348 9091 0000 		lds r25,LCDvolume
- 416 034c 8091 0000 		lds r24,CntLCDdigit
- 417 0350 8F5F      		subi r24,lo8(-(1))
- 418 0352 8093 0000 		sts CntLCDdigit,r24
- 419 0356 8091 0000 		lds r24,CntLCDdigit
- 420 035a 8330      		cpi r24,lo8(3)
- 421 035c 01F4      		brne .L60
- 422 035e 1092 0000 		sts CntLCDdigit,__zero_reg__
- 423               	.L60:
- 424 0362 85B1      		in r24,37-32
- 425 0364 8FEF      		ldi r24,lo8(-1)
- 426 0366 85B9      		out 37-32,r24
- 427 0368 88B1      		in r24,40-32
- 428 036a 8360      		ori r24,lo8(3)
- 429 036c 88B9      		out 40-32,r24
- 430 036e 8BB1      		in r24,43-32
- 431 0370 886F      		ori r24,lo8(-8)
- 432 0372 8BB9      		out 43-32,r24
- 433 0374 983C      		cpi r25,lo8(-56)
- 434 0376 00F0      		brlo .L61
- 435 0378 8091 0000 		lds r24,CntLCDdigit
- 436 037c 8130      		cpi r24,lo8(1)
- 437 037e 01F0      		breq .L64
- 438 0380 8130      		cpi r24,lo8(1)
- 439 0382 00F0      		brlo .L63
- 440 0384 8230      		cpi r24,lo8(2)
- 441 0386 01F0      		breq .+2
- 442 0388 00C0      		rjmp .L90
- 443 038a 00C0      		rjmp .L98
- 444               	.L63:
- 445 038c 2F98      		cbi 37-32,7
- 446 038e 0895      		ret
- 447               	.L64:
- 448 0390 85B1      		in r24,37-32
- 449 0392 837E      		andi r24,lo8(-29)
- 450 0394 85B9      		out 37-32,r24
- 451 0396 4098      		cbi 40-32,0
- 452 0398 0895      		ret
- 453               	.L98:
- 454 039a 8BB1      		in r24,43-32
- 455 039c 8F70      		andi r24,lo8(15)
- 456 039e 8BB9      		out 43-32,r24
- 457 03a0 0895      		ret
- 458               	.L61:
- 459 03a2 8091 0000 		lds r24,CntLCDdigit
- 460 03a6 8823      		tst r24
- 461 03a8 01F4      		brne .L66
- 462 03aa 9436      		cpi r25,lo8(100)
- 463 03ac 00F0      		brlo .L66
- 464 03ae 2F98      		cbi 37-32,7
- 465               	.L66:
- 466 03b0 892F      		mov r24,r25
- 467 03b2 64E6      		ldi r22,lo8(100)
- 468 03b4 00D0      		rcall __udivmodqi4
- 469 03b6 292F      		mov r18,r25
- 470 03b8 8091 0000 		lds r24,CntLCDdigit
- 471 03bc 8130      		cpi r24,lo8(1)
- 472 03be 01F4      		brne .L67
- 473 03c0 892F      		mov r24,r25
- 474 03c2 6AE0      		ldi r22,lo8(10)
- 475 03c4 00D0      		rcall __udivmodqi4
- 476 03c6 E82F      		mov r30,r24
- 477 03c8 F0E0      		ldi r31,lo8(0)
- 478 03ca EA30      		cpi r30,10
- 479 03cc F105      		cpc r31,__zero_reg__
- 480 03ce 00F4      		brsh .L67
- 481 03d0 E050      		subi r30,lo8(-(gs(.L78)))
- 482 03d2 F040      		sbci r31,hi8(-(gs(.L78)))
- 483 03d4 0994      		ijmp
- 484               		.data
- 485               		.section .progmem.gcc_sw_table, "ax", @progbits
- 486               		.p2align 1
- 487               	.L78:
- 488               		.data
- 489               		.section .progmem.gcc_sw_table, "ax", @progbits
- 490               		.p2align 1
- 491 0000 00C0      		rjmp .L68
- 492 0002 00C0      		rjmp .L69
- 493 0004 00C0      		rjmp .L70
- 494 0006 00C0      		rjmp .L71
- 495 0008 00C0      		rjmp .L72
- 496 000a 00C0      		rjmp .L73
- 497 000c 00C0      		rjmp .L74
- 498 000e 00C0      		rjmp .L75
- 499 0010 00C0      		rjmp .L76
- 500 0012 00C0      		rjmp .L77
- 501               		.text
- 502               	.L68:
- 503 03d6 85B1      		in r24,37-32
- 504 03d8 817D      		andi r24,lo8(-47)
- 505 03da 00C0      		rjmp .L91
- 506               	.L69:
- 507 03dc 2998      		cbi 37-32,1
- 508 03de 00C0      		rjmp .L93
- 509               	.L70:
- 510 03e0 85B1      		in r24,37-32
- 511 03e2 857C      		andi r24,lo8(-59)
- 512 03e4 85B9      		out 37-32,r24
- 513 03e6 4098      		cbi 40-32,0
- 514 03e8 00C0      		rjmp .L67
- 515               	.L71:
- 516 03ea 85B1      		in r24,37-32
- 517 03ec 857C      		andi r24,lo8(-59)
- 518 03ee 00C0      		rjmp .L92
- 519               	.L72:
- 520 03f0 85B1      		in r24,37-32
- 521 03f2 897E      		andi r24,lo8(-23)
- 522 03f4 00C0      		rjmp .L92
- 523               	.L73:
- 524 03f6 85B1      		in r24,37-32
- 525 03f8 837C      		andi r24,lo8(-61)
- 526 03fa 00C0      		rjmp .L92
- 527               	.L74:
- 528 03fc 85B1      		in r24,37-32
- 529 03fe 837C      		andi r24,lo8(-61)
- 530               	.L91:
- 531 0400 85B9      		out 37-32,r24
- 532 0402 88B1      		in r24,40-32
- 533 0404 8C7F      		andi r24,lo8(-4)
- 534 0406 88B9      		out 40-32,r24
- 535 0408 00C0      		rjmp .L67
- 536               	.L75:
- 537 040a 85B1      		in r24,37-32
- 538 040c 857F      		andi r24,lo8(-11)
- 539 040e 00C0      		rjmp .L92
- 540               	.L76:
- 541 0410 85B1      		in r24,37-32
- 542 0412 817C      		andi r24,lo8(-63)
- 543 0414 00C0      		rjmp .L91
- 544               	.L77:
- 545 0416 85B1      		in r24,37-32
- 546 0418 817C      		andi r24,lo8(-63)
- 547               	.L92:
- 548 041a 85B9      		out 37-32,r24
- 549               	.L93:
- 550 041c 4198      		cbi 40-32,1
- 551               	.L67:
- 552 041e 8091 0000 		lds r24,CntLCDdigit
- 553 0422 8230      		cpi r24,lo8(2)
- 554 0424 01F4      		brne .L90
- 555 0426 822F      		mov r24,r18
- 556 0428 6AE0      		ldi r22,lo8(10)
- 557 042a 00D0      		rcall __udivmodqi4
- 558 042c E92F      		mov r30,r25
- 559 042e F0E0      		ldi r31,lo8(0)
- 560 0430 EA30      		cpi r30,10
- 561 0432 F105      		cpc r31,__zero_reg__
- 562 0434 00F4      		brsh .L90
- 563 0436 E050      		subi r30,lo8(-(gs(.L89)))
- 564 0438 F040      		sbci r31,hi8(-(gs(.L89)))
- 565 043a 0994      		ijmp
- 566               		.data
- 567               		.section .progmem.gcc_sw_table, "ax", @progbits
- 568               		.p2align 1
- 569               	.L89:
- 570               		.data
- 571               		.section .progmem.gcc_sw_table, "ax", @progbits
- 572               		.p2align 1
- 573 0014 00C0      		rjmp .L79
- 574 0016 00C0      		rjmp .L80
- 575 0018 00C0      		rjmp .L81
- 576 001a 00C0      		rjmp .L82
- 577 001c 00C0      		rjmp .L83
- 578 001e 00C0      		rjmp .L84
- 579 0020 00C0      		rjmp .L85
- 580 0022 00C0      		rjmp .L86
- 581 0024 00C0      		rjmp .L87
- 582 0026 00C0      		rjmp .L88
- 583               		.text
- 584               	.L79:
- 585 043c 8BB1      		in r24,43-32
- 586 043e 8772      		andi r24,lo8(39)
- 587 0440 00C0      		rjmp .L96
- 588               	.L80:
- 589 0442 5B98      		cbi 43-32,3
- 590 0444 00C0      		rjmp .L97
- 591               	.L81:
- 592 0446 8BB1      		in r24,43-32
- 593 0448 8F78      		andi r24,lo8(-113)
- 594 044a 00C0      		rjmp .L96
- 595               	.L82:
- 596 044c 8BB1      		in r24,43-32
- 597 044e 8779      		andi r24,lo8(-105)
- 598 0450 00C0      		rjmp .L96
- 599               	.L83:
- 600 0452 8BB1      		in r24,43-32
- 601 0454 8775      		andi r24,lo8(87)
- 602 0456 00C0      		rjmp .L95
- 603               	.L84:
- 604 0458 8BB1      		in r24,43-32
- 605 045a 8771      		andi r24,lo8(23)
- 606 045c 00C0      		rjmp .L94
- 607               	.L85:
- 608 045e 8BB1      		in r24,43-32
- 609 0460 8770      		andi r24,lo8(7)
- 610               	.L94:
- 611 0462 8BB9      		out 43-32,r24
- 612 0464 2E98      		cbi 37-32,6
- 613 0466 0895      		ret
- 614               	.L86:
- 615 0468 8BB1      		in r24,43-32
- 616 046a 877B      		andi r24,lo8(-73)
- 617               	.L95:
- 618 046c 8BB9      		out 43-32,r24
- 619               	.L97:
- 620 046e 2898      		cbi 37-32,0
- 621 0470 0895      		ret
- 622               	.L87:
- 623 0472 8BB1      		in r24,43-32
- 624 0474 8770      		andi r24,lo8(7)
- 625               	.L96:
- 626 0476 8BB9      		out 43-32,r24
- 627 0478 85B1      		in r24,37-32
- 628 047a 8E7B      		andi r24,lo8(-66)
- 629 047c 85B9      		out 37-32,r24
- 630 047e 0895      		ret
- 631               	.L88:
- 632 0480 8BB1      		in r24,43-32
- 633 0482 8771      		andi r24,lo8(23)
- 634 0484 8BB9      		out 43-32,r24
- 635 0486 85B1      		in r24,37-32
- 636 0488 8E7B      		andi r24,lo8(-66)
- 637 048a 85B9      		out 37-32,r24
- 638               	.L90:
- 639 048c 0895      		ret
- 641               	.global	Tick2
- 643               	Tick2:
- 644               	/* prologue: function */
- 645               	/* frame size = 0 */
- 646 048e 8091 0000 		lds r24,FLAGS1
- 647 0492 83FF      		sbrs r24,3
- 648 0494 00C0      		rjmp .L100
- 649 0496 8091 0000 		lds r24,CountMUL_BTN_WAIT
- 650 049a 8150      		subi r24,lo8(-(-1))
- 651 049c 8093 0000 		sts CountMUL_BTN_WAIT,r24
- 652 04a0 8091 0000 		lds r24,CountMUL_BTN_WAIT
- 653 04a4 8823      		tst r24
- 654 04a6 01F4      		brne .L100
- 655 04a8 8091 0000 		lds r24,FLAGS1
- 656 04ac 877F      		andi r24,lo8(-9)
- 657 04ae 8093 0000 		sts FLAGS1,r24
- 658               	.L100:
- 659 04b2 8091 0000 		lds r24,STATUS
- 660 04b6 8130      		cpi r24,lo8(1)
- 661 04b8 01F0      		breq .L102
- 662 04ba 8230      		cpi r24,lo8(2)
- 663 04bc 01F4      		brne .L107
- 664 04be 00C0      		rjmp .L110
- 665               	.L102:
- 666 04c0 8091 0000 		lds r24,FLAGS2
- 667 04c4 81FF      		sbrs r24,1
- 668 04c6 00C0      		rjmp .L104
- 669 04c8 8091 0000 		lds r24,ADCvolume
- 670 04cc 00C0      		rjmp .L108
- 671               	.L104:
- 672 04ce 88EC      		ldi r24,lo8(-56)
- 673               	.L108:
- 674 04d0 8093 0000 		sts LCDvolume,r24
- 675 04d4 00C0      		rjmp .L109
- 676               	.L110:
- 677 04d6 8091 0000 		lds r24,FLAGS1
- 678 04da 87FF      		sbrs r24,7
- 679 04dc 00C0      		rjmp .L106
- 680               	.L109:
- 681 04de 00D0      		rcall OutLCD
- 682 04e0 0895      		ret
- 683               	.L106:
- 684 04e2 85B1      		in r24,37-32
- 685 04e4 8FEF      		ldi r24,lo8(-1)
- 686 04e6 85B9      		out 37-32,r24
- 687 04e8 88B1      		in r24,40-32
- 688 04ea 8360      		ori r24,lo8(3)
- 689 04ec 88B9      		out 40-32,r24
- 690 04ee 8BB1      		in r24,43-32
- 691 04f0 886F      		ori r24,lo8(-8)
- 692 04f2 8BB9      		out 43-32,r24
- 693               	.L107:
- 694 04f4 0895      		ret
- 696               	.global	__vector_9
- 698               	__vector_9:
- 699 04f6 1F92      		push __zero_reg__
- 700 04f8 0F92      		push r0
- 701 04fa 0FB6      		in r0,__SREG__
- 702 04fc 0F92      		push r0
- 703 04fe 1124      		clr __zero_reg__
- 704 0500 8F93      		push r24
- 705               	/* prologue: Signal */
- 706               	/* frame size = 0 */
- 707 0502 8091 0000 		lds r24,FLAGS1
- 708 0506 8260      		ori r24,lo8(2)
- 709 0508 8093 0000 		sts FLAGS1,r24
- 710               	/* epilogue start */
- 711 050c 8F91      		pop r24
- 712 050e 0F90      		pop r0
- 713 0510 0FBE      		out __SREG__,r0
- 714 0512 0F90      		pop r0
- 715 0514 1F90      		pop __zero_reg__
- 716 0516 1895      		reti
- 718               	.global	__vector_11
- 720               	__vector_11:
- 721 0518 1F92      		push __zero_reg__
- 722 051a 0F92      		push r0
- 723 051c 0FB6      		in r0,__SREG__
- 724 051e 0F92      		push r0
- 725 0520 1124      		clr __zero_reg__
- 726 0522 8F93      		push r24
- 727               	/* prologue: Signal */
- 728               	/* frame size = 0 */
- 729 0524 1092 8500 		sts 133,__zero_reg__
- 730 0528 1092 8400 		sts 132,__zero_reg__
- 731 052c 8091 0000 		lds r24,FLAGS1
- 732 0530 8160      		ori r24,lo8(1)
- 733 0532 8093 0000 		sts FLAGS1,r24
- 734               	/* epilogue start */
- 735 0536 8F91      		pop r24
- 736 0538 0F90      		pop r0
- 737 053a 0FBE      		out __SREG__,r0
- 738 053c 0F90      		pop r0
- 739 053e 1F90      		pop __zero_reg__
- 740 0540 1895      		reti
- 742               	.global	__vector_21
- 744               	__vector_21:
- 745 0542 1F92      		push __zero_reg__
- 746 0544 0F92      		push r0
- 747 0546 0FB6      		in r0,__SREG__
- 748 0548 0F92      		push r0
- 749 054a 1124      		clr __zero_reg__
- 750 054c 8F93      		push r24
- 751               	/* prologue: Signal */
- 752               	/* frame size = 0 */
- 753 054e 8091 0000 		lds r24,FLAGS2
- 754 0552 8160      		ori r24,lo8(1)
- 755 0554 8093 0000 		sts FLAGS2,r24
- 756               	/* epilogue start */
- 757 0558 8F91      		pop r24
- 758 055a 0F90      		pop r0
- 759 055c 0FBE      		out __SREG__,r0
- 760 055e 0F90      		pop r0
- 761 0560 1F90      		pop __zero_reg__
- 762 0562 1895      		reti
- 764               	.global	UpdateValuesFromEEPROM
- 766               	UpdateValuesFromEEPROM:
- 767               	/* prologue: function */
- 768               	/* frame size = 0 */
- 769 0564 6091 0000 		lds r22,SETVAL_HIGH
- 770 0568 80E0      		ldi r24,lo8(EE_SETVAL_HIGH)
- 771 056a 90E0      		ldi r25,hi8(EE_SETVAL_HIGH)
- 772 056c 00D0      		rcall __eeupd_byte_m88
- 773 056e 6091 0000 		lds r22,SETVAL_LOW
- 774 0572 80E0      		ldi r24,lo8(EE_SETVAL_LOW)
- 775 0574 90E0      		ldi r25,hi8(EE_SETVAL_LOW)
- 776 0576 00D0      		rcall __eeupd_byte_m88
- 777 0578 6091 0000 		lds r22,SETVAL_DELAY
- 778 057c 80E0      		ldi r24,lo8(EE_SETVAL_DELAY)
- 779 057e 90E0      		ldi r25,hi8(EE_SETVAL_DELAY)
- 780 0580 00D0      		rcall __eeupd_byte_m88
- 781               	/* epilogue start */
- 782 0582 0895      		ret
- 784               	.global	Tick250
- 786               	Tick250:
- 787               	/* prologue: function */
- 788               	/* frame size = 0 */
- 789 0584 8091 0000 		lds r24,FLAGS2
- 790 0588 81FF      		sbrs r24,1
- 791 058a 00C0      		rjmp .L120
- 792 058c 9091 0000 		lds r25,ADCvolume
- 793 0590 8091 0000 		lds r24,SETVAL_HIGH
- 794 0594 9817      		cp r25,r24
- 795 0596 00F0      		brlo .L121
- 796 0598 4A9B      		sbis 41-32,2
- 797 059a 5A9A      		sbi 43-32,2
- 798               	.L122:
- 799 059c 8091 0000 		lds r24,FLAGS2
- 800 05a0 8B7F      		andi r24,lo8(-5)
- 801 05a2 8093 0000 		sts FLAGS2,r24
- 802               	.L121:
- 803 05a6 8091 0000 		lds r24,FLAGS2
- 804 05aa 82FF      		sbrs r24,2
- 805 05ac 00C0      		rjmp .L123
- 806 05ae 8091 0000 		lds r24,RELEcntDelay
- 807 05b2 8150      		subi r24,lo8(-(-1))
- 808 05b4 8093 0000 		sts RELEcntDelay,r24
- 809 05b8 8091 0000 		lds r24,RELEcntDelay
- 810 05bc 8823      		tst r24
- 811 05be 01F4      		brne .L120
- 812 05c0 5A98      		cbi 43-32,2
- 813 05c2 8091 0000 		lds r24,FLAGS2
- 814 05c6 8B7F      		andi r24,lo8(-5)
- 815 05c8 00C0      		rjmp .L130
- 816               	.L123:
- 817 05ca 9091 0000 		lds r25,ADCvolume
- 818 05ce 8091 0000 		lds r24,SETVAL_LOW
- 819 05d2 8917      		cp r24,r25
- 820 05d4 00F0      		brlo .L120
- 821 05d6 8091 0000 		lds r24,SETVAL_DELAY
- 822 05da 90E0      		ldi r25,lo8(0)
- 823 05dc 880F      		lsl r24
- 824 05de 991F      		rol r25
- 825 05e0 880F      		lsl r24
- 826 05e2 991F      		rol r25
- 827 05e4 8093 0000 		sts RELEcntDelay,r24
- 828 05e8 8091 0000 		lds r24,FLAGS2
- 829 05ec 8460      		ori r24,lo8(4)
- 830               	.L130:
- 831 05ee 8093 0000 		sts FLAGS2,r24
- 832               	.L120:
- 833 05f2 8091 0000 		lds r24,STATUS
- 834 05f6 8130      		cpi r24,lo8(1)
- 835 05f8 01F0      		breq .L125
- 836 05fa 8230      		cpi r24,lo8(2)
- 837 05fc 01F4      		brne .L129
- 838 05fe 00C0      		rjmp .L131
- 839               	.L125:
- 840 0600 8091 0000 		lds r24,CountMUL_LCD
- 841 0604 8F5F      		subi r24,lo8(-(1))
- 842 0606 8093 0000 		sts CountMUL_LCD,r24
- 843 060a 8091 0000 		lds r24,CountMUL_LCD
- 844 060e 8832      		cpi r24,lo8(40)
- 845 0610 01F4      		brne .L129
- 846 0612 1092 0000 		sts STATUS,__zero_reg__
- 847 0616 1092 0000 		sts CountMUL_LCD,__zero_reg__
- 848 061a 85B1      		in r24,37-32
- 849 061c 8FEF      		ldi r24,lo8(-1)
- 850 061e 85B9      		out 37-32,r24
- 851 0620 88B1      		in r24,40-32
- 852 0622 8360      		ori r24,lo8(3)
- 853 0624 88B9      		out 40-32,r24
- 854 0626 8BB1      		in r24,43-32
- 855 0628 886F      		ori r24,lo8(-8)
- 856 062a 8BB9      		out 43-32,r24
- 857 062c 0895      		ret
- 858               	.L131:
- 859 062e 8091 0000 		lds r24,CountMUL_LCD
- 860 0632 8F5F      		subi r24,lo8(-(1))
- 861 0634 8093 0000 		sts CountMUL_LCD,r24
- 862 0638 8091 0000 		lds r24,CountMUL_LCD
- 863 063c 8832      		cpi r24,lo8(40)
- 864 063e 01F4      		brne .L127
- 865 0640 81E0      		ldi r24,lo8(1)
- 866 0642 8093 0000 		sts STATUS,r24
- 867 0646 1092 0000 		sts CountMUL_LCD,__zero_reg__
- 868 064a 00D0      		rcall UpdateValuesFromEEPROM
- 869               	.L127:
- 870 064c 8091 0000 		lds r24,FLAGS1
- 871 0650 87FF      		sbrs r24,7
- 872 0652 00C0      		rjmp .L128
- 873 0654 8091 0000 		lds r24,FLAGS1
- 874 0658 8F77      		andi r24,lo8(127)
- 875 065a 8093 0000 		sts FLAGS1,r24
- 876 065e 0895      		ret
- 877               	.L128:
- 878 0660 8091 0000 		lds r24,FLAGS1
- 879 0664 8068      		ori r24,lo8(-128)
- 880 0666 8093 0000 		sts FLAGS1,r24
- 881               	.L129:
- 882 066a 0895      		ret
- 884               	.global	LoadValuesFromEEPROM
- 886               	LoadValuesFromEEPROM:
- 887               	/* prologue: function */
- 888               	/* frame size = 0 */
- 889 066c 80E0      		ldi r24,lo8(EE_SETVAL_HIGH)
- 890 066e 90E0      		ldi r25,hi8(EE_SETVAL_HIGH)
- 891 0670 00D0      		rcall __eerd_byte_m88
- 892 0672 8093 0000 		sts SETVAL_HIGH,r24
- 893 0676 80E0      		ldi r24,lo8(EE_SETVAL_LOW)
- 894 0678 90E0      		ldi r25,hi8(EE_SETVAL_LOW)
- 895 067a 00D0      		rcall __eerd_byte_m88
- 896 067c 8093 0000 		sts SETVAL_LOW,r24
- 897 0680 80E0      		ldi r24,lo8(EE_SETVAL_DELAY)
- 898 0682 90E0      		ldi r25,hi8(EE_SETVAL_DELAY)
- 899 0684 00D0      		rcall __eerd_byte_m88
- 900 0686 8093 0000 		sts SETVAL_DELAY,r24
- 901               	/* epilogue start */
- 902 068a 0895      		ret
- 904               	.global	main
- 906               	main:
- 907               	/* prologue: function */
- 908               	/* frame size = 0 */
- 909 068c 00D0      		rcall LoadValuesFromEEPROM
- 910 068e 00D0      		rcall init
- 911 0690 88E8      		ldi r24,lo8(5000)
- 912 0692 93E1      		ldi r25,hi8(5000)
- 913 0694 29E1      		ldi r18,lo8(25)
- 914 0696 30E0      		ldi r19,hi8(25)
- 915               	.L135:
- 916 0698 F901      		movw r30,r18
- 917               	/* #APP */
- 918               	 ;  105 "c:/winavr/lib/gcc/../../avr/include/util/delay_basic.h" 1
- 919 069a 3197      		1: sbiw r30,1
- 920 069c 01F4      		brne 1b
- 921               	 ;  0 "" 2
- 922               	/* #NOAPP */
- 923 069e 0197      		sbiw r24,1
- 924 06a0 01F4      		brne .L135
- 925               	.L144:
- 926 06a2 8091 0000 		lds r24,FLAGS2
- 927 06a6 80FF      		sbrs r24,0
- 928 06a8 00C0      		rjmp .L136
- 929 06aa 00D0      		rcall CalculateVoltage
- 930 06ac 8091 0000 		lds r24,FLAGS2
- 931 06b0 8E7F      		andi r24,lo8(-2)
- 932 06b2 8093 0000 		sts FLAGS2,r24
- 933               	.L136:
- 934 06b6 00D0      		rcall CheckButton
- 935 06b8 8091 0000 		lds r24,FLAGS1
- 936 06bc 82FF      		sbrs r24,2
- 937 06be 00C0      		rjmp .L137
- 938 06c0 00D0      		rcall ExecuteButton
- 939 06c2 8091 0000 		lds r24,FLAGS1
- 940 06c6 8B7F      		andi r24,lo8(-5)
- 941 06c8 8093 0000 		sts FLAGS1,r24
- 942               	.L137:
- 943 06cc 8091 0000 		lds r24,FLAGS1
- 944 06d0 81FF      		sbrs r24,1
- 945 06d2 00C0      		rjmp .L138
- 946 06d4 00D0      		rcall Tick2
- 947 06d6 8091 0000 		lds r24,FLAGS1
- 948 06da 8D7F      		andi r24,lo8(-3)
- 949 06dc 8093 0000 		sts FLAGS1,r24
- 950               	.L138:
- 951 06e0 8091 0000 		lds r24,FLAGS1
- 952 06e4 80FF      		sbrs r24,0
- 953 06e6 00C0      		rjmp .L144
- 954 06e8 00D0      		rcall Tick250
- 955 06ea 8091 0000 		lds r24,FLAGS1
- 956 06ee 8E7F      		andi r24,lo8(-2)
- 957 06f0 8093 0000 		sts FLAGS1,r24
- 958 06f4 00C0      		rjmp .L144
- 960               	.global	CntLCDdigit
- 961               	.global	CntLCDdigit
- 962               		.section .bss
- 965               	CntLCDdigit:
- 966 0000 00        		.skip 1,0
- 967               	.global	LCDvolume
- 968               	.global	LCDvolume
- 971               	LCDvolume:
- 972 0001 00        		.skip 1,0
- 973               	.global	ADCvolume
- 974               	.global	ADCvolume
- 977               	ADCvolume:
- 978 0002 00        		.skip 1,0
- 979               	.global	ADCbuffer
- 980               	.global	ADCbuffer
- 983               	ADCbuffer:
- 984 0003 0000      		.skip 2,0
- 985               	.global	ADCcntBuff
- 986               	.global	ADCcntBuff
- 989               	ADCcntBuff:
- 990 0005 00        		.skip 1,0
- 991               	.global	STATUS
- 992               	.global	STATUS
- 995               	STATUS:
- 996 0006 00        		.skip 1,0
- 997               	.global	FLAGS1
- 998               	.global	FLAGS1
- 1001               	FLAGS1:
- 1002 0007 00        		.skip 1,0
- 1003               	.global	FLAGS2
- 1004               	.global	FLAGS2
- 1007               	FLAGS2:
- 1008 0008 00        		.skip 1,0
- 1009               	.global	CountMUL_BTN_WAIT
- 1010               	.global	CountMUL_BTN_WAIT
- 1013               	CountMUL_BTN_WAIT:
- 1014 0009 00        		.skip 1,0
- 1015               	.global	CountMUL_LCD
- 1016               	.global	CountMUL_LCD
- 1019               	CountMUL_LCD:
- 1020 000a 00        		.skip 1,0
- 1021               	.global	MENU
- 1022               	.global	MENU
- 1025               	MENU:
- 1026 000b 00        		.skip 1,0
- 1027               	.global	RELEcntDelay
- 1028               	.global	RELEcntDelay
- 1031               	RELEcntDelay:
- 1032 000c 00        		.skip 1,0
- 1033               	.global	EE_SETVAL_HIGH
- 1034               		.section	.eeprom,"aw",@progbits
- 1037               	EE_SETVAL_HIGH:
- 1038 0000 8C        		.byte	-116
- 1039               	.global	EE_SETVAL_LOW
- 1042               	EE_SETVAL_LOW:
- 1043 0001 7D        		.byte	125
- 1044               	.global	EE_SETVAL_DELAY
- 1047               	EE_SETVAL_DELAY:
- 1048 0002 05        		.byte	5
- 1049               		.comm SETVAL_HIGH,1,1
- 1050               		.comm SETVAL_LOW,1,1
- 1051               		.comm SETVAL_DELAY,1,1
- 1052               	.global __do_copy_data
- 1053               	.global __do_clear_bss
+ 350 02d4 8093 0000 		sts LCDvolume,r24
+ 351 02d8 0895      		ret
+ 352               	.L52:
+ 353 02da 8091 0000 		lds r24,SETVAL_DELAY
+ 354 02de 8823      		tst r24
+ 355 02e0 01F0      		breq .L41
+ 356 02e2 8091 0000 		lds r24,SETVAL_DELAY
+ 357 02e6 8150      		subi r24,lo8(-(-1))
+ 358 02e8 8093 0000 		sts SETVAL_DELAY,r24
+ 359 02ec 8091 0000 		lds r24,SETVAL_DELAY
+ 360 02f0 8093 0000 		sts LCDvolume,r24
+ 361               	.L41:
+ 362 02f4 0895      		ret
+ 364               	.global	ClearLCD
+ 366               	ClearLCD:
+ 367               	/* prologue: function */
+ 368               	/* frame size = 0 */
+ 369 02f6 85B1      		in r24,37-32
+ 370 02f8 8FEF      		ldi r24,lo8(-1)
+ 371 02fa 85B9      		out 37-32,r24
+ 372 02fc 88B1      		in r24,40-32
+ 373 02fe 8360      		ori r24,lo8(3)
+ 374 0300 88B9      		out 40-32,r24
+ 375 0302 8BB1      		in r24,43-32
+ 376 0304 886F      		ori r24,lo8(-8)
+ 377 0306 8BB9      		out 43-32,r24
+ 378               	/* epilogue start */
+ 379 0308 0895      		ret
+ 381               	.global	OutLCD
+ 383               	OutLCD:
+ 384               	/* prologue: function */
+ 385               	/* frame size = 0 */
+ 386 030a 9091 0000 		lds r25,LCDvolume
+ 387 030e 8091 0000 		lds r24,CntLCDdigit
+ 388 0312 8F5F      		subi r24,lo8(-(1))
+ 389 0314 8093 0000 		sts CntLCDdigit,r24
+ 390 0318 8091 0000 		lds r24,CntLCDdigit
+ 391 031c 8330      		cpi r24,lo8(3)
+ 392 031e 01F4      		brne .L56
+ 393 0320 1092 0000 		sts CntLCDdigit,__zero_reg__
+ 394               	.L56:
+ 395 0324 85B1      		in r24,37-32
+ 396 0326 8FEF      		ldi r24,lo8(-1)
+ 397 0328 85B9      		out 37-32,r24
+ 398 032a 88B1      		in r24,40-32
+ 399 032c 8360      		ori r24,lo8(3)
+ 400 032e 88B9      		out 40-32,r24
+ 401 0330 8BB1      		in r24,43-32
+ 402 0332 886F      		ori r24,lo8(-8)
+ 403 0334 8BB9      		out 43-32,r24
+ 404 0336 983C      		cpi r25,lo8(-56)
+ 405 0338 00F0      		brlo .L57
+ 406 033a 8091 0000 		lds r24,CntLCDdigit
+ 407 033e 8130      		cpi r24,lo8(1)
+ 408 0340 01F0      		breq .L60
+ 409 0342 8130      		cpi r24,lo8(1)
+ 410 0344 00F0      		brlo .L59
+ 411 0346 8230      		cpi r24,lo8(2)
+ 412 0348 01F0      		breq .+2
+ 413 034a 00C0      		rjmp .L86
+ 414 034c 00C0      		rjmp .L94
+ 415               	.L59:
+ 416 034e 2F98      		cbi 37-32,7
+ 417 0350 0895      		ret
+ 418               	.L60:
+ 419 0352 85B1      		in r24,37-32
+ 420 0354 837E      		andi r24,lo8(-29)
+ 421 0356 85B9      		out 37-32,r24
+ 422 0358 4098      		cbi 40-32,0
+ 423 035a 0895      		ret
+ 424               	.L94:
+ 425 035c 8BB1      		in r24,43-32
+ 426 035e 8F70      		andi r24,lo8(15)
+ 427 0360 8BB9      		out 43-32,r24
+ 428 0362 0895      		ret
+ 429               	.L57:
+ 430 0364 8091 0000 		lds r24,CntLCDdigit
+ 431 0368 8823      		tst r24
+ 432 036a 01F4      		brne .L62
+ 433 036c 9436      		cpi r25,lo8(100)
+ 434 036e 00F0      		brlo .L62
+ 435 0370 2F98      		cbi 37-32,7
+ 436               	.L62:
+ 437 0372 892F      		mov r24,r25
+ 438 0374 64E6      		ldi r22,lo8(100)
+ 439 0376 00D0      		rcall __udivmodqi4
+ 440 0378 292F      		mov r18,r25
+ 441 037a 8091 0000 		lds r24,CntLCDdigit
+ 442 037e 8130      		cpi r24,lo8(1)
+ 443 0380 01F4      		brne .L63
+ 444 0382 892F      		mov r24,r25
+ 445 0384 6AE0      		ldi r22,lo8(10)
+ 446 0386 00D0      		rcall __udivmodqi4
+ 447 0388 E82F      		mov r30,r24
+ 448 038a F0E0      		ldi r31,lo8(0)
+ 449 038c EA30      		cpi r30,10
+ 450 038e F105      		cpc r31,__zero_reg__
+ 451 0390 00F4      		brsh .L63
+ 452 0392 E050      		subi r30,lo8(-(gs(.L74)))
+ 453 0394 F040      		sbci r31,hi8(-(gs(.L74)))
+ 454 0396 0994      		ijmp
+ 455               		.data
+ 456               		.section .progmem.gcc_sw_table, "ax", @progbits
+ 457               		.p2align 1
+ 458               	.L74:
+ 459               		.data
+ 460               		.section .progmem.gcc_sw_table, "ax", @progbits
+ 461               		.p2align 1
+ 462 0000 00C0      		rjmp .L64
+ 463 0002 00C0      		rjmp .L65
+ 464 0004 00C0      		rjmp .L66
+ 465 0006 00C0      		rjmp .L67
+ 466 0008 00C0      		rjmp .L68
+ 467 000a 00C0      		rjmp .L69
+ 468 000c 00C0      		rjmp .L70
+ 469 000e 00C0      		rjmp .L71
+ 470 0010 00C0      		rjmp .L72
+ 471 0012 00C0      		rjmp .L73
+ 472               		.text
+ 473               	.L64:
+ 474 0398 85B1      		in r24,37-32
+ 475 039a 817D      		andi r24,lo8(-47)
+ 476 039c 00C0      		rjmp .L87
+ 477               	.L65:
+ 478 039e 2998      		cbi 37-32,1
+ 479 03a0 00C0      		rjmp .L89
+ 480               	.L66:
+ 481 03a2 85B1      		in r24,37-32
+ 482 03a4 857C      		andi r24,lo8(-59)
+ 483 03a6 85B9      		out 37-32,r24
+ 484 03a8 4098      		cbi 40-32,0
+ 485 03aa 00C0      		rjmp .L63
+ 486               	.L67:
+ 487 03ac 85B1      		in r24,37-32
+ 488 03ae 857C      		andi r24,lo8(-59)
+ 489 03b0 00C0      		rjmp .L88
+ 490               	.L68:
+ 491 03b2 85B1      		in r24,37-32
+ 492 03b4 897E      		andi r24,lo8(-23)
+ 493 03b6 00C0      		rjmp .L88
+ 494               	.L69:
+ 495 03b8 85B1      		in r24,37-32
+ 496 03ba 837C      		andi r24,lo8(-61)
+ 497 03bc 00C0      		rjmp .L88
+ 498               	.L70:
+ 499 03be 85B1      		in r24,37-32
+ 500 03c0 837C      		andi r24,lo8(-61)
+ 501               	.L87:
+ 502 03c2 85B9      		out 37-32,r24
+ 503 03c4 88B1      		in r24,40-32
+ 504 03c6 8C7F      		andi r24,lo8(-4)
+ 505 03c8 88B9      		out 40-32,r24
+ 506 03ca 00C0      		rjmp .L63
+ 507               	.L71:
+ 508 03cc 85B1      		in r24,37-32
+ 509 03ce 857F      		andi r24,lo8(-11)
+ 510 03d0 00C0      		rjmp .L88
+ 511               	.L72:
+ 512 03d2 85B1      		in r24,37-32
+ 513 03d4 817C      		andi r24,lo8(-63)
+ 514 03d6 00C0      		rjmp .L87
+ 515               	.L73:
+ 516 03d8 85B1      		in r24,37-32
+ 517 03da 817C      		andi r24,lo8(-63)
+ 518               	.L88:
+ 519 03dc 85B9      		out 37-32,r24
+ 520               	.L89:
+ 521 03de 4198      		cbi 40-32,1
+ 522               	.L63:
+ 523 03e0 8091 0000 		lds r24,CntLCDdigit
+ 524 03e4 8230      		cpi r24,lo8(2)
+ 525 03e6 01F4      		brne .L86
+ 526 03e8 822F      		mov r24,r18
+ 527 03ea 6AE0      		ldi r22,lo8(10)
+ 528 03ec 00D0      		rcall __udivmodqi4
+ 529 03ee E92F      		mov r30,r25
+ 530 03f0 F0E0      		ldi r31,lo8(0)
+ 531 03f2 EA30      		cpi r30,10
+ 532 03f4 F105      		cpc r31,__zero_reg__
+ 533 03f6 00F4      		brsh .L86
+ 534 03f8 E050      		subi r30,lo8(-(gs(.L85)))
+ 535 03fa F040      		sbci r31,hi8(-(gs(.L85)))
+ 536 03fc 0994      		ijmp
+ 537               		.data
+ 538               		.section .progmem.gcc_sw_table, "ax", @progbits
+ 539               		.p2align 1
+ 540               	.L85:
+ 541               		.data
+ 542               		.section .progmem.gcc_sw_table, "ax", @progbits
+ 543               		.p2align 1
+ 544 0014 00C0      		rjmp .L75
+ 545 0016 00C0      		rjmp .L76
+ 546 0018 00C0      		rjmp .L77
+ 547 001a 00C0      		rjmp .L78
+ 548 001c 00C0      		rjmp .L79
+ 549 001e 00C0      		rjmp .L80
+ 550 0020 00C0      		rjmp .L81
+ 551 0022 00C0      		rjmp .L82
+ 552 0024 00C0      		rjmp .L83
+ 553 0026 00C0      		rjmp .L84
+ 554               		.text
+ 555               	.L75:
+ 556 03fe 8BB1      		in r24,43-32
+ 557 0400 8772      		andi r24,lo8(39)
+ 558 0402 00C0      		rjmp .L92
+ 559               	.L76:
+ 560 0404 5B98      		cbi 43-32,3
+ 561 0406 00C0      		rjmp .L93
+ 562               	.L77:
+ 563 0408 8BB1      		in r24,43-32
+ 564 040a 8F78      		andi r24,lo8(-113)
+ 565 040c 00C0      		rjmp .L92
+ 566               	.L78:
+ 567 040e 8BB1      		in r24,43-32
+ 568 0410 8779      		andi r24,lo8(-105)
+ 569 0412 00C0      		rjmp .L92
+ 570               	.L79:
+ 571 0414 8BB1      		in r24,43-32
+ 572 0416 8775      		andi r24,lo8(87)
+ 573 0418 00C0      		rjmp .L91
+ 574               	.L80:
+ 575 041a 8BB1      		in r24,43-32
+ 576 041c 8771      		andi r24,lo8(23)
+ 577 041e 00C0      		rjmp .L90
+ 578               	.L81:
+ 579 0420 8BB1      		in r24,43-32
+ 580 0422 8770      		andi r24,lo8(7)
+ 581               	.L90:
+ 582 0424 8BB9      		out 43-32,r24
+ 583 0426 2E98      		cbi 37-32,6
+ 584 0428 0895      		ret
+ 585               	.L82:
+ 586 042a 8BB1      		in r24,43-32
+ 587 042c 877B      		andi r24,lo8(-73)
+ 588               	.L91:
+ 589 042e 8BB9      		out 43-32,r24
+ 590               	.L93:
+ 591 0430 2898      		cbi 37-32,0
+ 592 0432 0895      		ret
+ 593               	.L83:
+ 594 0434 8BB1      		in r24,43-32
+ 595 0436 8770      		andi r24,lo8(7)
+ 596               	.L92:
+ 597 0438 8BB9      		out 43-32,r24
+ 598 043a 85B1      		in r24,37-32
+ 599 043c 8E7B      		andi r24,lo8(-66)
+ 600 043e 85B9      		out 37-32,r24
+ 601 0440 0895      		ret
+ 602               	.L84:
+ 603 0442 8BB1      		in r24,43-32
+ 604 0444 8771      		andi r24,lo8(23)
+ 605 0446 8BB9      		out 43-32,r24
+ 606 0448 85B1      		in r24,37-32
+ 607 044a 8E7B      		andi r24,lo8(-66)
+ 608 044c 85B9      		out 37-32,r24
+ 609               	.L86:
+ 610 044e 0895      		ret
+ 612               	.global	Tick2
+ 614               	Tick2:
+ 615               	/* prologue: function */
+ 616               	/* frame size = 0 */
+ 617 0450 8091 0000 		lds r24,FLAGS1
+ 618 0454 83FF      		sbrs r24,3
+ 619 0456 00C0      		rjmp .L96
+ 620 0458 8091 0000 		lds r24,CountMUL_BTN_WAIT
+ 621 045c 8150      		subi r24,lo8(-(-1))
+ 622 045e 8093 0000 		sts CountMUL_BTN_WAIT,r24
+ 623 0462 8091 0000 		lds r24,CountMUL_BTN_WAIT
+ 624 0466 8823      		tst r24
+ 625 0468 01F4      		brne .L96
+ 626 046a 8091 0000 		lds r24,FLAGS1
+ 627 046e 877F      		andi r24,lo8(-9)
+ 628 0470 8093 0000 		sts FLAGS1,r24
+ 629               	.L96:
+ 630 0474 8091 0000 		lds r24,STATUS
+ 631 0478 8130      		cpi r24,lo8(1)
+ 632 047a 01F0      		breq .L98
+ 633 047c 8230      		cpi r24,lo8(2)
+ 634 047e 01F4      		brne .L101
+ 635 0480 00C0      		rjmp .L103
+ 636               	.L98:
+ 637 0482 8091 0000 		lds r24,ADCvolume
+ 638 0486 8093 0000 		sts LCDvolume,r24
+ 639 048a 00C0      		rjmp .L102
+ 640               	.L103:
+ 641 048c 8091 0000 		lds r24,FLAGS1
+ 642 0490 87FF      		sbrs r24,7
+ 643 0492 00C0      		rjmp .L100
+ 644               	.L102:
+ 645 0494 00D0      		rcall OutLCD
+ 646 0496 0895      		ret
+ 647               	.L100:
+ 648 0498 85B1      		in r24,37-32
+ 649 049a 8FEF      		ldi r24,lo8(-1)
+ 650 049c 85B9      		out 37-32,r24
+ 651 049e 88B1      		in r24,40-32
+ 652 04a0 8360      		ori r24,lo8(3)
+ 653 04a2 88B9      		out 40-32,r24
+ 654 04a4 8BB1      		in r24,43-32
+ 655 04a6 886F      		ori r24,lo8(-8)
+ 656 04a8 8BB9      		out 43-32,r24
+ 657               	.L101:
+ 658 04aa 0895      		ret
+ 660               	.global	__vector_9
+ 662               	__vector_9:
+ 663 04ac 1F92      		push __zero_reg__
+ 664 04ae 0F92      		push r0
+ 665 04b0 0FB6      		in r0,__SREG__
+ 666 04b2 0F92      		push r0
+ 667 04b4 1124      		clr __zero_reg__
+ 668 04b6 8F93      		push r24
+ 669               	/* prologue: Signal */
+ 670               	/* frame size = 0 */
+ 671 04b8 8091 0000 		lds r24,FLAGS1
+ 672 04bc 8260      		ori r24,lo8(2)
+ 673 04be 8093 0000 		sts FLAGS1,r24
+ 674               	/* epilogue start */
+ 675 04c2 8F91      		pop r24
+ 676 04c4 0F90      		pop r0
+ 677 04c6 0FBE      		out __SREG__,r0
+ 678 04c8 0F90      		pop r0
+ 679 04ca 1F90      		pop __zero_reg__
+ 680 04cc 1895      		reti
+ 682               	.global	__vector_11
+ 684               	__vector_11:
+ 685 04ce 1F92      		push __zero_reg__
+ 686 04d0 0F92      		push r0
+ 687 04d2 0FB6      		in r0,__SREG__
+ 688 04d4 0F92      		push r0
+ 689 04d6 1124      		clr __zero_reg__
+ 690 04d8 8F93      		push r24
+ 691               	/* prologue: Signal */
+ 692               	/* frame size = 0 */
+ 693 04da 1092 8500 		sts 133,__zero_reg__
+ 694 04de 1092 8400 		sts 132,__zero_reg__
+ 695 04e2 8091 0000 		lds r24,FLAGS1
+ 696 04e6 8160      		ori r24,lo8(1)
+ 697 04e8 8093 0000 		sts FLAGS1,r24
+ 698               	/* epilogue start */
+ 699 04ec 8F91      		pop r24
+ 700 04ee 0F90      		pop r0
+ 701 04f0 0FBE      		out __SREG__,r0
+ 702 04f2 0F90      		pop r0
+ 703 04f4 1F90      		pop __zero_reg__
+ 704 04f6 1895      		reti
+ 706               	.global	UpdateValuesFromEEPROM
+ 708               	UpdateValuesFromEEPROM:
+ 709               	/* prologue: function */
+ 710               	/* frame size = 0 */
+ 711 04f8 6091 0000 		lds r22,SETVAL_HIGH
+ 712 04fc 80E0      		ldi r24,lo8(EE_SETVAL_HIGH)
+ 713 04fe 90E0      		ldi r25,hi8(EE_SETVAL_HIGH)
+ 714 0500 00D0      		rcall __eeupd_byte_m88
+ 715 0502 6091 0000 		lds r22,SETVAL_LOW
+ 716 0506 80E0      		ldi r24,lo8(EE_SETVAL_LOW)
+ 717 0508 90E0      		ldi r25,hi8(EE_SETVAL_LOW)
+ 718 050a 00D0      		rcall __eeupd_byte_m88
+ 719 050c 6091 0000 		lds r22,SETVAL_DELAY
+ 720 0510 80E0      		ldi r24,lo8(EE_SETVAL_DELAY)
+ 721 0512 90E0      		ldi r25,hi8(EE_SETVAL_DELAY)
+ 722 0514 00D0      		rcall __eeupd_byte_m88
+ 723               	/* epilogue start */
+ 724 0516 0895      		ret
+ 726               	.global	Tick250
+ 728               	Tick250:
+ 729               	/* prologue: function */
+ 730               	/* frame size = 0 */
+ 731 0518 9091 0000 		lds r25,ADCvolume
+ 732 051c 8091 0000 		lds r24,SETVAL_HIGH
+ 733 0520 9817      		cp r25,r24
+ 734 0522 00F0      		brlo .L111
+ 735 0524 4A9B      		sbis 41-32,2
+ 736 0526 5A9A      		sbi 43-32,2
+ 737               	.L112:
+ 738 0528 8091 0000 		lds r24,FLAGS2
+ 739 052c 8B7F      		andi r24,lo8(-5)
+ 740 052e 8093 0000 		sts FLAGS2,r24
+ 741               	.L111:
+ 742 0532 8091 0000 		lds r24,FLAGS2
+ 743 0536 82FF      		sbrs r24,2
+ 744 0538 00C0      		rjmp .L113
+ 745 053a 8091 0000 		lds r24,RELEcntDelay
+ 746 053e 8150      		subi r24,lo8(-(-1))
+ 747 0540 8093 0000 		sts RELEcntDelay,r24
+ 748 0544 8091 0000 		lds r24,RELEcntDelay
+ 749 0548 8823      		tst r24
+ 750 054a 01F4      		brne .L114
+ 751 054c 5A98      		cbi 43-32,2
+ 752 054e 8091 0000 		lds r24,FLAGS2
+ 753 0552 8B7F      		andi r24,lo8(-5)
+ 754 0554 00C0      		rjmp .L121
+ 755               	.L113:
+ 756 0556 9091 0000 		lds r25,ADCvolume
+ 757 055a 8091 0000 		lds r24,SETVAL_LOW
+ 758 055e 8917      		cp r24,r25
+ 759 0560 00F0      		brlo .L114
+ 760 0562 8091 0000 		lds r24,SETVAL_DELAY
+ 761 0566 90E0      		ldi r25,lo8(0)
+ 762 0568 880F      		lsl r24
+ 763 056a 991F      		rol r25
+ 764 056c 880F      		lsl r24
+ 765 056e 991F      		rol r25
+ 766 0570 8093 0000 		sts RELEcntDelay,r24
+ 767 0574 8091 0000 		lds r24,FLAGS2
+ 768 0578 8460      		ori r24,lo8(4)
+ 769               	.L121:
+ 770 057a 8093 0000 		sts FLAGS2,r24
+ 771               	.L114:
+ 772 057e 8091 0000 		lds r24,STATUS
+ 773 0582 8130      		cpi r24,lo8(1)
+ 774 0584 01F0      		breq .L116
+ 775 0586 8230      		cpi r24,lo8(2)
+ 776 0588 01F4      		brne .L120
+ 777 058a 00C0      		rjmp .L122
+ 778               	.L116:
+ 779 058c 8091 0000 		lds r24,CountMUL_LCD
+ 780 0590 8F5F      		subi r24,lo8(-(1))
+ 781 0592 8093 0000 		sts CountMUL_LCD,r24
+ 782 0596 8091 0000 		lds r24,CountMUL_LCD
+ 783 059a 8832      		cpi r24,lo8(40)
+ 784 059c 01F4      		brne .L120
+ 785 059e 1092 0000 		sts STATUS,__zero_reg__
+ 786 05a2 1092 0000 		sts CountMUL_LCD,__zero_reg__
+ 787 05a6 85B1      		in r24,37-32
+ 788 05a8 8FEF      		ldi r24,lo8(-1)
+ 789 05aa 85B9      		out 37-32,r24
+ 790 05ac 88B1      		in r24,40-32
+ 791 05ae 8360      		ori r24,lo8(3)
+ 792 05b0 88B9      		out 40-32,r24
+ 793 05b2 8BB1      		in r24,43-32
+ 794 05b4 886F      		ori r24,lo8(-8)
+ 795 05b6 8BB9      		out 43-32,r24
+ 796 05b8 0895      		ret
+ 797               	.L122:
+ 798 05ba 8091 0000 		lds r24,CountMUL_LCD
+ 799 05be 8F5F      		subi r24,lo8(-(1))
+ 800 05c0 8093 0000 		sts CountMUL_LCD,r24
+ 801 05c4 8091 0000 		lds r24,CountMUL_LCD
+ 802 05c8 8832      		cpi r24,lo8(40)
+ 803 05ca 01F4      		brne .L118
+ 804 05cc 81E0      		ldi r24,lo8(1)
+ 805 05ce 8093 0000 		sts STATUS,r24
+ 806 05d2 1092 0000 		sts CountMUL_LCD,__zero_reg__
+ 807 05d6 00D0      		rcall UpdateValuesFromEEPROM
+ 808               	.L118:
+ 809 05d8 8091 0000 		lds r24,FLAGS1
+ 810 05dc 87FF      		sbrs r24,7
+ 811 05de 00C0      		rjmp .L119
+ 812 05e0 8091 0000 		lds r24,FLAGS1
+ 813 05e4 8F77      		andi r24,lo8(127)
+ 814 05e6 8093 0000 		sts FLAGS1,r24
+ 815 05ea 0895      		ret
+ 816               	.L119:
+ 817 05ec 8091 0000 		lds r24,FLAGS1
+ 818 05f0 8068      		ori r24,lo8(-128)
+ 819 05f2 8093 0000 		sts FLAGS1,r24
+ 820               	.L120:
+ 821 05f6 0895      		ret
+ 823               	.global	LoadValuesFromEEPROM
+ 825               	LoadValuesFromEEPROM:
+ 826               	/* prologue: function */
+ 827               	/* frame size = 0 */
+ 828 05f8 80E0      		ldi r24,lo8(EE_SETVAL_HIGH)
+ 829 05fa 90E0      		ldi r25,hi8(EE_SETVAL_HIGH)
+ 830 05fc 00D0      		rcall __eerd_byte_m88
+ 831 05fe 8093 0000 		sts SETVAL_HIGH,r24
+ 832 0602 80E0      		ldi r24,lo8(EE_SETVAL_LOW)
+ 833 0604 90E0      		ldi r25,hi8(EE_SETVAL_LOW)
+ 834 0606 00D0      		rcall __eerd_byte_m88
+ 835 0608 8093 0000 		sts SETVAL_LOW,r24
+ 836 060c 80E0      		ldi r24,lo8(EE_SETVAL_DELAY)
+ 837 060e 90E0      		ldi r25,hi8(EE_SETVAL_DELAY)
+ 838 0610 00D0      		rcall __eerd_byte_m88
+ 839 0612 8093 0000 		sts SETVAL_DELAY,r24
+ 840               	/* epilogue start */
+ 841 0616 0895      		ret
+ 843               	.global	main
+ 845               	main:
+ 846               	/* prologue: function */
+ 847               	/* frame size = 0 */
+ 848 0618 00D0      		rcall LoadValuesFromEEPROM
+ 849 061a 00D0      		rcall init
+ 850 061c 88E8      		ldi r24,lo8(5000)
+ 851 061e 93E1      		ldi r25,hi8(5000)
+ 852 0620 29E1      		ldi r18,lo8(25)
+ 853 0622 30E0      		ldi r19,hi8(25)
+ 854               	.L126:
+ 855 0624 F901      		movw r30,r18
+ 856               	/* #APP */
+ 857               	 ;  105 "c:/winavr/lib/gcc/../../avr/include/util/delay_basic.h" 1
+ 858 0626 3197      		1: sbiw r30,1
+ 859 0628 01F4      		brne 1b
+ 860               	 ;  0 "" 2
+ 861               	/* #NOAPP */
+ 862 062a 0197      		sbiw r24,1
+ 863 062c 01F4      		brne .L126
+ 864 062e 8091 7A00 		lds r24,122
+ 865 0632 8064      		ori r24,lo8(64)
+ 866 0634 8093 7A00 		sts 122,r24
+ 867               	.L135:
+ 868 0638 8091 7A00 		lds r24,122
+ 869 063c 86FD      		sbrc r24,6
+ 870 063e 00C0      		rjmp .L127
+ 871 0640 00D0      		rcall CalculateVoltage
+ 872 0642 8091 7A00 		lds r24,122
+ 873 0646 8064      		ori r24,lo8(64)
+ 874 0648 8093 7A00 		sts 122,r24
+ 875               	.L127:
+ 876 064c 00D0      		rcall CheckButton
+ 877 064e 8091 0000 		lds r24,FLAGS1
+ 878 0652 82FF      		sbrs r24,2
+ 879 0654 00C0      		rjmp .L128
+ 880 0656 00D0      		rcall ExecuteButton
+ 881 0658 8091 0000 		lds r24,FLAGS1
+ 882 065c 8B7F      		andi r24,lo8(-5)
+ 883 065e 8093 0000 		sts FLAGS1,r24
+ 884               	.L128:
+ 885 0662 8091 0000 		lds r24,FLAGS1
+ 886 0666 81FF      		sbrs r24,1
+ 887 0668 00C0      		rjmp .L129
+ 888 066a 00D0      		rcall Tick2
+ 889 066c 8091 0000 		lds r24,FLAGS1
+ 890 0670 8D7F      		andi r24,lo8(-3)
+ 891 0672 8093 0000 		sts FLAGS1,r24
+ 892               	.L129:
+ 893 0676 8091 0000 		lds r24,FLAGS1
+ 894 067a 80FF      		sbrs r24,0
+ 895 067c 00C0      		rjmp .L135
+ 896 067e 00D0      		rcall Tick250
+ 897 0680 8091 0000 		lds r24,FLAGS1
+ 898 0684 8E7F      		andi r24,lo8(-2)
+ 899 0686 8093 0000 		sts FLAGS1,r24
+ 900 068a 00C0      		rjmp .L135
+ 902               	.global	CntLCDdigit
+ 903               	.global	CntLCDdigit
+ 904               		.section .bss
+ 907               	CntLCDdigit:
+ 908 0000 00        		.skip 1,0
+ 909               	.global	LCDvolume
+ 910               	.global	LCDvolume
+ 913               	LCDvolume:
+ 914 0001 00        		.skip 1,0
+ 915               	.global	ADCvolume
+ 916               	.global	ADCvolume
+ 919               	ADCvolume:
+ 920 0002 00        		.skip 1,0
+ 921               	.global	ADCbuffer
+ 922               	.global	ADCbuffer
+ 925               	ADCbuffer:
+ 926 0003 0000      		.skip 2,0
+ 927               	.global	ADCcntBuff
+ 928               	.global	ADCcntBuff
+ 931               	ADCcntBuff:
+ 932 0005 00        		.skip 1,0
+ 933               	.global	STATUS
+ 934               	.global	STATUS
+ 937               	STATUS:
+ 938 0006 00        		.skip 1,0
+ 939               	.global	FLAGS1
+ 940               	.global	FLAGS1
+ 943               	FLAGS1:
+ 944 0007 00        		.skip 1,0
+ 945               	.global	FLAGS2
+ 946               	.global	FLAGS2
+ 949               	FLAGS2:
+ 950 0008 00        		.skip 1,0
+ 951               	.global	CountMUL_BTN_WAIT
+ 952               	.global	CountMUL_BTN_WAIT
+ 955               	CountMUL_BTN_WAIT:
+ 956 0009 00        		.skip 1,0
+ 957               	.global	CountMUL_LCD
+ 958               	.global	CountMUL_LCD
+ 961               	CountMUL_LCD:
+ 962 000a 00        		.skip 1,0
+ 963               	.global	MENU
+ 964               	.global	MENU
+ 967               	MENU:
+ 968 000b 00        		.skip 1,0
+ 969               	.global	RELEcntDelay
+ 970               	.global	RELEcntDelay
+ 973               	RELEcntDelay:
+ 974 000c 00        		.skip 1,0
+ 975               	.global	EE_SETVAL_HIGH
+ 976               		.section	.eeprom,"aw",@progbits
+ 979               	EE_SETVAL_HIGH:
+ 980 0000 8C        		.byte	-116
+ 981               	.global	EE_SETVAL_LOW
+ 984               	EE_SETVAL_LOW:
+ 985 0001 7D        		.byte	125
+ 986               	.global	EE_SETVAL_DELAY
+ 989               	EE_SETVAL_DELAY:
+ 990 0002 05        		.byte	5
+ 991               		.comm SETVAL_HIGH,1,1
+ 992               		.comm SETVAL_LOW,1,1
+ 993               		.comm SETVAL_DELAY,1,1
+ 994               	.global __do_copy_data
+ 995               	.global __do_clear_bss
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-C:\WINDOWS\TEMP/ccmWihoJ.s:2      *ABS*:0000003f __SREG__
-C:\WINDOWS\TEMP/ccmWihoJ.s:3      *ABS*:0000003e __SP_H__
-C:\WINDOWS\TEMP/ccmWihoJ.s:4      *ABS*:0000003d __SP_L__
-C:\WINDOWS\TEMP/ccmWihoJ.s:5      *ABS*:00000034 __CCP__
-C:\WINDOWS\TEMP/ccmWihoJ.s:6      *ABS*:00000000 __tmp_reg__
-C:\WINDOWS\TEMP/ccmWihoJ.s:7      *ABS*:00000001 __zero_reg__
-C:\WINDOWS\TEMP/ccmWihoJ.s:11     .text:00000000 init
-C:\WINDOWS\TEMP/ccmWihoJ.s:66     .text:0000006a CalculateVoltage
-C:\WINDOWS\TEMP/ccmWihoJ.s:989    .bss:00000005 ADCcntBuff
-C:\WINDOWS\TEMP/ccmWihoJ.s:983    .bss:00000003 ADCbuffer
-C:\WINDOWS\TEMP/ccmWihoJ.s:977    .bss:00000002 ADCvolume
-C:\WINDOWS\TEMP/ccmWihoJ.s:1007   .bss:00000008 FLAGS2
-C:\WINDOWS\TEMP/ccmWihoJ.s:142    .text:0000011a CheckButton
-C:\WINDOWS\TEMP/ccmWihoJ.s:1001   .bss:00000007 FLAGS1
-C:\WINDOWS\TEMP/ccmWihoJ.s:1013   .bss:00000009 CountMUL_BTN_WAIT
-C:\WINDOWS\TEMP/ccmWihoJ.s:216    .text:000001ba ExecuteButton
-C:\WINDOWS\TEMP/ccmWihoJ.s:1019   .bss:0000000a CountMUL_LCD
-C:\WINDOWS\TEMP/ccmWihoJ.s:995    .bss:00000006 STATUS
-C:\WINDOWS\TEMP/ccmWihoJ.s:1025   .bss:0000000b MENU
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:2      *ABS*:0000003f __SREG__
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:3      *ABS*:0000003e __SP_H__
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:4      *ABS*:0000003d __SP_L__
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:5      *ABS*:00000034 __CCP__
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:11     .text:00000000 init
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:66     .text:0000006a CalculateVoltage
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:931    .bss:00000005 ADCcntBuff
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:925    .bss:00000003 ADCbuffer
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:919    .bss:00000002 ADCvolume
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:110    .text:000000d2 CheckButton
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:943    .bss:00000007 FLAGS1
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:955    .bss:00000009 CountMUL_BTN_WAIT
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:184    .text:00000172 ExecuteButton
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:961    .bss:0000000a CountMUL_LCD
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:937    .bss:00000006 STATUS
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:967    .bss:0000000b MENU
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:949    .bss:00000008 FLAGS2
                             *COM*:00000001 SETVAL_HIGH
                             *COM*:00000001 SETVAL_LOW
                             *COM*:00000001 SETVAL_DELAY
-C:\WINDOWS\TEMP/ccmWihoJ.s:971    .bss:00000001 LCDvolume
-C:\WINDOWS\TEMP/ccmWihoJ.s:395    .text:00000334 ClearLCD
-C:\WINDOWS\TEMP/ccmWihoJ.s:412    .text:00000348 OutLCD
-C:\WINDOWS\TEMP/ccmWihoJ.s:965    .bss:00000000 CntLCDdigit
-C:\WINDOWS\TEMP/ccmWihoJ.s:643    .text:0000048e Tick2
-C:\WINDOWS\TEMP/ccmWihoJ.s:698    .text:000004f6 __vector_9
-C:\WINDOWS\TEMP/ccmWihoJ.s:720    .text:00000518 __vector_11
-C:\WINDOWS\TEMP/ccmWihoJ.s:744    .text:00000542 __vector_21
-C:\WINDOWS\TEMP/ccmWihoJ.s:766    .text:00000564 UpdateValuesFromEEPROM
-C:\WINDOWS\TEMP/ccmWihoJ.s:1037   .eeprom:00000000 EE_SETVAL_HIGH
-C:\WINDOWS\TEMP/ccmWihoJ.s:1042   .eeprom:00000001 EE_SETVAL_LOW
-C:\WINDOWS\TEMP/ccmWihoJ.s:1047   .eeprom:00000002 EE_SETVAL_DELAY
-C:\WINDOWS\TEMP/ccmWihoJ.s:786    .text:00000584 Tick250
-C:\WINDOWS\TEMP/ccmWihoJ.s:1031   .bss:0000000c RELEcntDelay
-C:\WINDOWS\TEMP/ccmWihoJ.s:886    .text:0000066c LoadValuesFromEEPROM
-C:\WINDOWS\TEMP/ccmWihoJ.s:906    .text:0000068c main
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:913    .bss:00000001 LCDvolume
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:366    .text:000002f6 ClearLCD
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:383    .text:0000030a OutLCD
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:907    .bss:00000000 CntLCDdigit
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:614    .text:00000450 Tick2
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:662    .text:000004ac __vector_9
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:684    .text:000004ce __vector_11
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:708    .text:000004f8 UpdateValuesFromEEPROM
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:979    .eeprom:00000000 EE_SETVAL_HIGH
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:984    .eeprom:00000001 EE_SETVAL_LOW
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:989    .eeprom:00000002 EE_SETVAL_DELAY
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:728    .text:00000518 Tick250
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:973    .bss:0000000c RELEcntDelay
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:825    .text:000005f8 LoadValuesFromEEPROM
+C:\Users\9E8E~1\AppData\Local\Temp/ccZyW0SN.s:845    .text:00000618 main
 
 UNDEFINED SYMBOLS
 __floatunsisf
 __mulsf3
 __fixunssfsi
-__floatsisf
-__ltsf2
 __udivmodqi4
 __eeupd_byte_m88
 __eerd_byte_m88

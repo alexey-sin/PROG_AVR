@@ -1,0 +1,48 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.5.4	//
+!_TAG_REVISION_NAME	MCHPTags	//
+!_TAG_REVISION_VERSION	6.0.1	//
+CC::0x80	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	22;"	d	line:22	file:
+DelayMs	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\delay.c	11;"	f	line:11	signature:(unsigned char cnt)
+FCMDIS	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905TX_main.c	31;"	v	line:31
+HIGH::1	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	26;"	d	line:26	file:
+INPUT::1	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	25;"	d	line:25	file:
+LOW::0	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	27;"	d	line:27	file:
+OUTPUT::0	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	24;"	d	line:24	file:
+RFconfig	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	33;"	t	line:33	file:
+RRC::0x10	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	16;"	d	line:16	file:
+RRP::0x24	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	21;"	d	line:21	file:
+RTA::0x23	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	20;"	d	line:20	file:
+RTP::0x21	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	18;"	d	line:18	file:
+RxBuf	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	85;"	v	line:85
+RxTxconfig	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	38;"	v	line:38
+TxBuf	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	84;"	v	line:84
+WRC::0x00	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	15;"	d	line:15	file:
+WTA::0x22	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	19;"	d	line:19	file:
+WTP::0x20	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	17;"	d	line:17	file:
+_RFconfig	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	29;"	s	line:29	file:
+buf	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	32;"	m	line:32	struct:_RFconfig	file:
+c	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	188;"	l	line:188	file:
+dat	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	207;"	l	line:207	file:
+i	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\delay.c	20;"	l	line:20
+i	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	125;"	l	line:125
+i	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	140;"	l	line:140
+i	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	188;"	l	line:188	file:
+i	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	207;"	l	line:207	file:
+i	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	92;"	l	line:92
+i	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905TX_main.c	42;"	l	line:42
+j	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905TX_main.c	42;"	l	line:42
+main	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905TX_main.c	40;"	f	line:40	signature:(void)
+n	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	31;"	m	line:31	struct:_RFconfig	file:
+rfConfig905	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	138;"	f	line:138	signature:(void)
+rfInitIO	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	167;"	f	line:167	signature:(void)
+rfRxPacket	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	123;"	f	line:123	signature:(void)
+rfSetPwrOff	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	221;"	f	line:221	signature:(void)
+rfSetRxMode	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	154;"	f	line:154	signature:(void)
+rfTxPacket	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	90;"	f	line:90	signature:(void)
+spiRead	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	204;"	f	line:204	signature:(void)
+spiWrite	D:\nRF_CB_Eval_1a\PICCLite\nRF905_Tx\nRF905.c	185;"	f	line:185	signature:(INT8U dat)

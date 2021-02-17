@@ -1,0 +1,719 @@
+   1               		.file	"main.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.text
+   9               	.global	init
+  11               	init:
+  12               	/* prologue: function */
+  13               	/* frame size = 0 */
+  14 0000 479A      		sbi 40-32,7
+  15 0002 93E0      		ldi r25,lo8(3)
+  16 0004 9ABB      		out 58-32,r25
+  17 0006 1BBA      		out 59-32,__zero_reg__
+  18 0008 8FEF      		ldi r24,lo8(-1)
+  19 000a 87BB      		out 55-32,r24
+  20 000c 18BA      		out 56-32,__zero_reg__
+  21 000e 81B3      		in r24,49-32
+  22 0010 8267      		ori r24,lo8(114)
+  23 0012 81BB      		out 49-32,r24
+  24 0014 81B3      		in r24,49-32
+  25 0016 827F      		andi r24,lo8(-14)
+  26 0018 81BB      		out 49-32,r24
+  27 001a 8CE7      		ldi r24,lo8(124)
+  28 001c 82BB      		out 50-32,r24
+  29 001e 10BE      		out 80-32,__zero_reg__
+  30 0020 89B7      		in r24,89-32
+  31 0022 8260      		ori r24,lo8(2)
+  32 0024 89BF      		out 89-32,r24
+  33 0026 84E0      		ldi r24,lo8(4)
+  34 0028 83BF      		out 83-32,r24
+  35 002a 1DBC      		out 77-32,__zero_reg__
+  36 002c 1CBC      		out 76-32,__zero_reg__
+  37 002e 1FBC      		out 79-32,__zero_reg__
+  38 0030 9EBD      		out 78-32,r25
+  39 0032 1BBC      		out 75-32,__zero_reg__
+  40 0034 80E8      		ldi r24,lo8(-128)
+  41 0036 8ABD      		out 74-32,r24
+  42 0038 89B7      		in r24,89-32
+  43 003a 8064      		ori r24,lo8(64)
+  44 003c 89BF      		out 89-32,r24
+  45               	/* #APP */
+  46               	 ;  89 "../src/main.c" 1
+  47 003e 7894      		sei
+  48               	 ;  0 "" 2
+  49               	/* epilogue start */
+  50               	/* #NOAPP */
+  51 0040 0895      		ret
+  53               	.global	__vector_4
+  55               	__vector_4:
+  56 0042 1F92      		push __zero_reg__
+  57 0044 0F92      		push r0
+  58 0046 0FB6      		in r0,__SREG__
+  59 0048 0F92      		push r0
+  60 004a 1124      		clr __zero_reg__
+  61 004c 8F93      		push r24
+  62               	/* prologue: Signal */
+  63               	/* frame size = 0 */
+  64 004e 1DBC      		out 77-32,__zero_reg__
+  65 0050 1CBC      		out 76-32,__zero_reg__
+  66 0052 8091 0000 		lds r24,FLAGS1
+  67 0056 8160      		ori r24,lo8(1)
+  68 0058 8093 0000 		sts FLAGS1,r24
+  69               	/* epilogue start */
+  70 005c 8F91      		pop r24
+  71 005e 0F90      		pop r0
+  72 0060 0FBE      		out __SREG__,r0
+  73 0062 0F90      		pop r0
+  74 0064 1F90      		pop __zero_reg__
+  75 0066 1895      		reti
+  77               	.global	__vector_6
+  79               	__vector_6:
+  80 0068 1F92      		push __zero_reg__
+  81 006a 0F92      		push r0
+  82 006c 0FB6      		in r0,__SREG__
+  83 006e 0F92      		push r0
+  84 0070 1124      		clr __zero_reg__
+  85 0072 8F93      		push r24
+  86               	/* prologue: Signal */
+  87               	/* frame size = 0 */
+  88 0074 8091 0000 		lds r24,FLAGS1
+  89 0078 8860      		ori r24,lo8(8)
+  90 007a 8093 0000 		sts FLAGS1,r24
+  91               	/* epilogue start */
+  92 007e 8F91      		pop r24
+  93 0080 0F90      		pop r0
+  94 0082 0FBE      		out __SREG__,r0
+  95 0084 0F90      		pop r0
+  96 0086 1F90      		pop __zero_reg__
+  97 0088 1895      		reti
+  99               	.global	NumberToButeBuffer
+ 101               	NumberToButeBuffer:
+ 102               	/* prologue: function */
+ 103               	/* frame size = 0 */
+ 104 008a 9C01      		movw r18,r24
+ 105 008c 64E6      		ldi r22,lo8(100)
+ 106 008e 70E0      		ldi r23,hi8(100)
+ 107 0090 00D0      		rcall __udivmodhi4
+ 108 0092 6093 0000 		sts SEGM_RAZR+2,r22
+ 109 0096 C901      		movw r24,r18
+ 110 0098 64E6      		ldi r22,lo8(100)
+ 111 009a 70E0      		ldi r23,hi8(100)
+ 112 009c 00D0      		rcall __udivmodhi4
+ 113 009e 9C01      		movw r18,r24
+ 114 00a0 6AE0      		ldi r22,lo8(10)
+ 115 00a2 70E0      		ldi r23,hi8(10)
+ 116 00a4 00D0      		rcall __udivmodhi4
+ 117 00a6 6093 0000 		sts SEGM_RAZR+1,r22
+ 118 00aa C901      		movw r24,r18
+ 119 00ac 6AE0      		ldi r22,lo8(10)
+ 120 00ae 70E0      		ldi r23,hi8(10)
+ 121 00b0 00D0      		rcall __udivmodhi4
+ 122 00b2 8093 0000 		sts SEGM_RAZR,r24
+ 123 00b6 8091 0000 		lds r24,FLAGS1
+ 124 00ba 82FF      		sbrs r24,2
+ 125 00bc 00C0      		rjmp .L9
+ 126 00be 8BE0      		ldi r24,lo8(11)
+ 127 00c0 8093 0000 		sts SEGM_RAZR+2,r24
+ 128               	.L9:
+ 129 00c4 0895      		ret
+ 131               	.global	Display
+ 133               	Display:
+ 134               	/* prologue: function */
+ 135               	/* frame size = 0 */
+ 136 00c6 8091 0000 		lds r24,IND_RAZR
+ 137 00ca 8F5F      		subi r24,lo8(-(1))
+ 138 00cc 8093 0000 		sts IND_RAZR,r24
+ 139 00d0 8091 0000 		lds r24,IND_RAZR
+ 140 00d4 8330      		cpi r24,lo8(3)
+ 141 00d6 01F4      		brne .L11
+ 142 00d8 1092 0000 		sts IND_RAZR,__zero_reg__
+ 143               	.L11:
+ 144 00dc 18BA      		out 56-32,__zero_reg__
+ 145 00de 8091 0000 		lds r24,IND_RAZR
+ 146 00e2 8130      		cpi r24,lo8(1)
+ 147 00e4 01F0      		breq .L14
+ 148 00e6 8130      		cpi r24,lo8(1)
+ 149 00e8 00F0      		brlo .L13
+ 150 00ea 8230      		cpi r24,lo8(2)
+ 151 00ec 01F4      		brne .L12
+ 152 00ee 00C0      		rjmp .L19
+ 153               	.L13:
+ 154 00f0 969A      		sbi 50-32,6
+ 155 00f2 9598      		cbi 50-32,5
+ 156 00f4 00C0      		rjmp .L12
+ 157               	.L14:
+ 158 00f6 959A      		sbi 50-32,5
+ 159 00f8 9498      		cbi 50-32,4
+ 160 00fa 00C0      		rjmp .L12
+ 161               	.L19:
+ 162 00fc 949A      		sbi 50-32,4
+ 163 00fe 9698      		cbi 50-32,6
+ 164               	.L12:
+ 165 0100 8091 0000 		lds r24,IND_RAZR
+ 166 0104 8230      		cpi r24,lo8(2)
+ 167 0106 01F4      		brne .L16
+ 168 0108 8091 0000 		lds r24,SEGM_RAZR+2
+ 169 010c 8823      		tst r24
+ 170 010e 01F0      		breq .L18
+ 171               	.L16:
+ 172 0110 E091 0000 		lds r30,IND_RAZR
+ 173 0114 F0E0      		ldi r31,lo8(0)
+ 174 0116 E050      		subi r30,lo8(-(SEGM_RAZR))
+ 175 0118 F040      		sbci r31,hi8(-(SEGM_RAZR))
+ 176 011a E081      		ld r30,Z
+ 177 011c F0E0      		ldi r31,lo8(0)
+ 178 011e E050      		subi r30,lo8(-(DigSeg))
+ 179 0120 F040      		sbci r31,hi8(-(DigSeg))
+ 180               	/* #APP */
+ 181               	 ;  131 "../src/main.c" 1
+ 182 0122 E491      		lpm r30, Z
+ 183               		
+ 184               	 ;  0 "" 2
+ 185               	/* #NOAPP */
+ 186 0124 E8BB      		out 56-32,r30
+ 187               	.L18:
+ 188 0126 0895      		ret
+ 190               	.global	CheckButtons
+ 192               	CheckButtons:
+ 193               	/* prologue: function */
+ 194               	/* frame size = 0 */
+ 195 0128 80B3      		in r24,48-32
+ 196 012a 8C70      		andi r24,lo8(12)
+ 197 012c 8C30      		cpi r24,lo8(12)
+ 198 012e 01F4      		brne .L21
+ 199 0130 1092 0000 		sts SHAKE_CNT,__zero_reg__
+ 200 0134 1092 0000 		sts EDIT_CNT,__zero_reg__
+ 201 0138 8091 0000 		lds r24,BUTTON
+ 202 013c 82FF      		sbrs r24,2
+ 203 013e 00C0      		rjmp .L25
+ 204 0140 1092 0000 		sts BUTTON,__zero_reg__
+ 205 0144 0895      		ret
+ 206               	.L21:
+ 207 0146 8091 0000 		lds r24,SHAKE_CNT
+ 208 014a 8F5F      		subi r24,lo8(-(1))
+ 209 014c 8093 0000 		sts SHAKE_CNT,r24
+ 210 0150 8091 0000 		lds r24,SHAKE_CNT
+ 211 0154 8F31      		cpi r24,lo8(31)
+ 212 0156 00F0      		brlo .L23
+ 213 0158 8091 0000 		lds r24,SHAKE_CNT
+ 214 015c 8B3F      		cpi r24,lo8(-5)
+ 215 015e 00F4      		brsh .L23
+ 216 0160 8399      		sbic 48-32,3
+ 217 0162 00C0      		rjmp .L24
+ 218 0164 8091 0000 		lds r24,BUTTON
+ 219 0168 8160      		ori r24,lo8(1)
+ 220 016a 8093 0000 		sts BUTTON,r24
+ 221               	.L24:
+ 222 016e 8299      		sbic 48-32,2
+ 223 0170 00C0      		rjmp .L25
+ 224 0172 8091 0000 		lds r24,BUTTON
+ 225 0176 8260      		ori r24,lo8(2)
+ 226 0178 8093 0000 		sts BUTTON,r24
+ 227 017c 0895      		ret
+ 228               	.L23:
+ 229 017e 8091 0000 		lds r24,SHAKE_CNT
+ 230 0182 8B3F      		cpi r24,lo8(-5)
+ 231 0184 00F0      		brlo .L25
+ 232 0186 8091 0000 		lds r24,BUTTON
+ 233 018a 8860      		ori r24,lo8(8)
+ 234 018c 8093 0000 		sts BUTTON,r24
+ 235 0190 8091 0000 		lds r24,SHAKE_CNT
+ 236 0194 8150      		subi r24,lo8(-(-1))
+ 237 0196 8093 0000 		sts SHAKE_CNT,r24
+ 238               	.L25:
+ 239 019a 0895      		ret
+ 241               	.global	ChangeVALUE
+ 243               	ChangeVALUE:
+ 244               	/* prologue: function */
+ 245               	/* frame size = 0 */
+ 246 019c 982F      		mov r25,r24
+ 247 019e 8091 0000 		lds r24,FLAGS1
+ 248 01a2 82FF      		sbrs r24,2
+ 249 01a4 00C0      		rjmp .L27
+ 250 01a6 9923      		tst r25
+ 251 01a8 01F4      		brne .L28
+ 252 01aa 8091 0000 		lds r24,SETVAL_PID
+ 253 01ae 8F5F      		subi r24,lo8(-(1))
+ 254 01b0 8093 0000 		sts SETVAL_PID,r24
+ 255 01b4 8091 0000 		lds r24,SETVAL_PID
+ 256 01b8 8531      		cpi r24,lo8(21)
+ 257 01ba 00F4      		brsh .+2
+ 258 01bc 00C0      		rjmp .L31
+ 259 01be 84E1      		ldi r24,lo8(20)
+ 260 01c0 8093 0000 		sts SETVAL_PID,r24
+ 261 01c4 0895      		ret
+ 262               	.L28:
+ 263 01c6 9130      		cpi r25,lo8(1)
+ 264 01c8 01F4      		brne .L31
+ 265 01ca 8091 0000 		lds r24,SETVAL_PID
+ 266 01ce 8150      		subi r24,lo8(-(-1))
+ 267 01d0 8093 0000 		sts SETVAL_PID,r24
+ 268 01d4 8091 0000 		lds r24,SETVAL_PID
+ 269 01d8 8823      		tst r24
+ 270 01da 01F4      		brne .L31
+ 271 01dc 9093 0000 		sts SETVAL_PID,r25
+ 272 01e0 0895      		ret
+ 273               	.L27:
+ 274 01e2 9923      		tst r25
+ 275 01e4 01F4      		brne .L30
+ 276 01e6 8091 0000 		lds r24,SETVAL_TEMP
+ 277 01ea 9091 0000 		lds r25,(SETVAL_TEMP)+1
+ 278 01ee 0196      		adiw r24,1
+ 279 01f0 9093 0000 		sts (SETVAL_TEMP)+1,r25
+ 280 01f4 8093 0000 		sts SETVAL_TEMP,r24
+ 281 01f8 8091 0000 		lds r24,SETVAL_TEMP
+ 282 01fc 9091 0000 		lds r25,(SETVAL_TEMP)+1
+ 283 0200 8159      		subi r24,lo8(401)
+ 284 0202 9140      		sbci r25,hi8(401)
+ 285 0204 00F0      		brlo .L31
+ 286 0206 80E9      		ldi r24,lo8(400)
+ 287 0208 91E0      		ldi r25,hi8(400)
+ 288 020a 9093 0000 		sts (SETVAL_TEMP)+1,r25
+ 289 020e 8093 0000 		sts SETVAL_TEMP,r24
+ 290 0212 0895      		ret
+ 291               	.L30:
+ 292 0214 9130      		cpi r25,lo8(1)
+ 293 0216 01F4      		brne .L31
+ 294 0218 8091 0000 		lds r24,SETVAL_TEMP
+ 295 021c 9091 0000 		lds r25,(SETVAL_TEMP)+1
+ 296 0220 0197      		sbiw r24,1
+ 297 0222 9093 0000 		sts (SETVAL_TEMP)+1,r25
+ 298 0226 8093 0000 		sts SETVAL_TEMP,r24
+ 299 022a 8091 0000 		lds r24,SETVAL_TEMP
+ 300 022e 9091 0000 		lds r25,(SETVAL_TEMP)+1
+ 301 0232 4497      		sbiw r24,20
+ 302 0234 00F4      		brsh .L31
+ 303 0236 84E1      		ldi r24,lo8(20)
+ 304 0238 90E0      		ldi r25,hi8(20)
+ 305 023a 9093 0000 		sts (SETVAL_TEMP)+1,r25
+ 306 023e 8093 0000 		sts SETVAL_TEMP,r24
+ 307               	.L31:
+ 308 0242 0895      		ret
+ 310               	.global	ProcessingButtons
+ 312               	ProcessingButtons:
+ 313               	/* prologue: function */
+ 314               	/* frame size = 0 */
+ 315 0244 1092 0000 		sts (EDIT_OUT_CNT)+1,__zero_reg__
+ 316 0248 1092 0000 		sts EDIT_OUT_CNT,__zero_reg__
+ 317 024c 8091 0000 		lds r24,BUTTON
+ 318 0250 80FF      		sbrs r24,0
+ 319 0252 00C0      		rjmp .L33
+ 320 0254 8091 0000 		lds r24,BUTTON
+ 321 0258 81FF      		sbrs r24,1
+ 322 025a 00C0      		rjmp .L33
+ 323 025c 8091 0000 		lds r24,FLAGS1
+ 324 0260 8460      		ori r24,lo8(4)
+ 325 0262 8093 0000 		sts FLAGS1,r24
+ 326               	.L33:
+ 327 0266 8091 0000 		lds r24,FLAGS1
+ 328 026a 81FD      		sbrc r24,1
+ 329 026c 00C0      		rjmp .L34
+ 330 026e 1092 0000 		sts (EDIT_OUT_CNT)+1,__zero_reg__
+ 331 0272 1092 0000 		sts EDIT_OUT_CNT,__zero_reg__
+ 332 0276 8091 0000 		lds r24,FLAGS1
+ 333 027a 8260      		ori r24,lo8(2)
+ 334 027c 8093 0000 		sts FLAGS1,r24
+ 335 0280 8091 0000 		lds r24,BUTTON
+ 336 0284 8460      		ori r24,lo8(4)
+ 337 0286 8093 0000 		sts BUTTON,r24
+ 338 028a 00C0      		rjmp .L35
+ 339               	.L34:
+ 340 028c 8091 0000 		lds r24,BUTTON
+ 341 0290 83FD      		sbrc r24,3
+ 342 0292 00C0      		rjmp .L36
+ 343 0294 8091 0000 		lds r24,BUTTON
+ 344 0298 82FD      		sbrc r24,2
+ 345 029a 00C0      		rjmp .L36
+ 346 029c 8091 0000 		lds r24,BUTTON
+ 347 02a0 80FF      		sbrs r24,0
+ 348 02a2 00C0      		rjmp .L37
+ 349 02a4 80E0      		ldi r24,lo8(0)
+ 350 02a6 00D0      		rcall ChangeVALUE
+ 351               	.L37:
+ 352 02a8 8091 0000 		lds r24,BUTTON
+ 353 02ac 81FF      		sbrs r24,1
+ 354 02ae 00C0      		rjmp .L38
+ 355 02b0 81E0      		ldi r24,lo8(1)
+ 356 02b2 00D0      		rcall ChangeVALUE
+ 357               	.L38:
+ 358 02b4 8091 0000 		lds r24,BUTTON
+ 359 02b8 8460      		ori r24,lo8(4)
+ 360 02ba 8093 0000 		sts BUTTON,r24
+ 361               	.L36:
+ 362 02be 8091 0000 		lds r24,BUTTON
+ 363 02c2 83FF      		sbrs r24,3
+ 364 02c4 00C0      		rjmp .L35
+ 365 02c6 8091 0000 		lds r24,EDIT_CNT
+ 366 02ca 8F5F      		subi r24,lo8(-(1))
+ 367 02cc 8093 0000 		sts EDIT_CNT,r24
+ 368 02d0 8091 0000 		lds r24,EDIT_CNT
+ 369 02d4 8639      		cpi r24,lo8(-106)
+ 370 02d6 00F0      		brlo .L35
+ 371 02d8 1092 0000 		sts EDIT_CNT,__zero_reg__
+ 372 02dc 8091 0000 		lds r24,BUTTON
+ 373 02e0 80FF      		sbrs r24,0
+ 374 02e2 00C0      		rjmp .L39
+ 375 02e4 80E0      		ldi r24,lo8(0)
+ 376 02e6 00D0      		rcall ChangeVALUE
+ 377               	.L39:
+ 378 02e8 8091 0000 		lds r24,BUTTON
+ 379 02ec 81FF      		sbrs r24,1
+ 380 02ee 00C0      		rjmp .L35
+ 381 02f0 81E0      		ldi r24,lo8(1)
+ 382 02f2 00D0      		rcall ChangeVALUE
+ 383               	.L35:
+ 384 02f4 8091 0000 		lds r24,FLAGS1
+ 385 02f8 82FF      		sbrs r24,2
+ 386 02fa 00C0      		rjmp .L40
+ 387 02fc 8091 0000 		lds r24,SETVAL_PID
+ 388 0300 90E0      		ldi r25,lo8(0)
+ 389 0302 00C0      		rjmp .L43
+ 390               	.L40:
+ 391 0304 8091 0000 		lds r24,SETVAL_TEMP
+ 392 0308 9091 0000 		lds r25,(SETVAL_TEMP)+1
+ 393               	.L43:
+ 394 030c 00D0      		rcall NumberToButeBuffer
+ 395 030e 0895      		ret
+ 397               	.global	ReadMAX6675
+ 399               	ReadMAX6675:
+ 400               	/* prologue: function */
+ 401               	/* frame size = 0 */
+ 402 0310 9198      		cbi 50-32,1
+ 403 0312 80E1      		ldi r24,lo8(16)
+ 404 0314 20E0      		ldi r18,lo8(0)
+ 405 0316 30E0      		ldi r19,hi8(0)
+ 406 0318 00C0      		rjmp .L45
+ 407               	.L47:
+ 408 031a D99A      		sbi 59-32,1
+ 409 031c 220F      		lsl r18
+ 410 031e 331F      		rol r19
+ 411 0320 8099      		sbic 48-32,0
+ 412 0322 2160      		ori r18,lo8(1)
+ 413               	.L46:
+ 414 0324 D998      		cbi 59-32,1
+ 415               	.L45:
+ 416 0326 8150      		subi r24,1
+ 417 0328 00F4      		brcc .L47
+ 418 032a 919A      		sbi 50-32,1
+ 419 032c C901      		movw r24,r18
+ 420 032e 8670      		andi r24,lo8(-32762)
+ 421 0330 9078      		andi r25,hi8(-32762)
+ 422 0332 892B      		or r24,r25
+ 423 0334 01F0      		breq .L48
+ 424 0336 80E0      		ldi r24,lo8(0)
+ 425 0338 90E0      		ldi r25,hi8(0)
+ 426 033a 22E0      		ldi r18,lo8(2)
+ 427 033c 00C0      		rjmp .L49
+ 428               	.L48:
+ 429 033e C901      		movw r24,r18
+ 430 0340 25E0      		ldi r18,5
+ 431 0342 9695      	1:	lsr r25
+ 432 0344 8795      		ror r24
+ 433 0346 2A95      		dec r18
+ 434 0348 01F4      		brne 1b
+ 435 034a 23E0      		ldi r18,hi8(1000)
+ 436 034c 883E      		cpi r24,lo8(1000)
+ 437 034e 9207      		cpc r25,r18
+ 438 0350 00F0      		brlo .L50
+ 439 0352 23E0      		ldi r18,lo8(3)
+ 440 0354 00C0      		rjmp .L49
+ 441               	.L50:
+ 442 0356 21E0      		ldi r18,lo8(1)
+ 443               	.L49:
+ 444 0358 2093 0000 		sts STATUS_TC,r18
+ 445 035c 9093 0000 		sts (VALUE_TC)+1,r25
+ 446 0360 8093 0000 		sts VALUE_TC,r24
+ 447               	/* epilogue start */
+ 448 0364 0895      		ret
+ 450               	.global	CalculatePID
+ 452               	CalculatePID:
+ 453               	/* prologue: function */
+ 454               	/* frame size = 0 */
+ 455 0366 8091 0000 		lds r24,STATUS_TC
+ 456 036a 8130      		cpi r24,lo8(1)
+ 457 036c 01F4      		brne .L58
+ 458               	.L53:
+ 459 036e 8091 0000 		lds r24,SETVAL_TEMP
+ 460 0372 9091 0000 		lds r25,(SETVAL_TEMP)+1
+ 461 0376 2091 0000 		lds r18,VALUE_TC
+ 462 037a 3091 0000 		lds r19,(VALUE_TC)+1
+ 463 037e 6091 0000 		lds r22,SETVAL_PID
+ 464 0382 821B      		sub r24,r18
+ 465 0384 930B      		sbc r25,r19
+ 466 0386 70E0      		ldi r23,lo8(0)
+ 467 0388 00D0      		rcall __mulhi3
+ 468 038a 97FF      		sbrs r25,7
+ 469 038c 00C0      		rjmp .L55
+ 470               	.L58:
+ 471 038e 1092 0000 		sts PID_VAL,__zero_reg__
+ 472 0392 0895      		ret
+ 473               	.L55:
+ 474 0394 8F3F      		cpi r24,255
+ 475 0396 9105      		cpc r25,__zero_reg__
+ 476 0398 01F0      		breq .L56
+ 477 039a 04F0      		brlt .L56
+ 478 039c 8FEF      		ldi r24,lo8(-1)
+ 479               	.L56:
+ 480 039e 8093 0000 		sts PID_VAL,r24
+ 481 03a2 0895      		ret
+ 483               	.global	ProcessingPID
+ 485               	ProcessingPID:
+ 486               	/* prologue: function */
+ 487               	/* frame size = 0 */
+ 488 03a4 8091 0000 		lds r24,PID_CNT
+ 489 03a8 8F5F      		subi r24,lo8(-(1))
+ 490 03aa 8093 0000 		sts PID_CNT,r24
+ 491 03ae 8091 0000 		lds r24,PID_CNT
+ 492 03b2 8F3F      		cpi r24,lo8(-1)
+ 493 03b4 01F4      		brne .L60
+ 494 03b6 00D0      		rcall CalculatePID
+ 495               	.L60:
+ 496 03b8 8091 0000 		lds r24,PID_VAL
+ 497 03bc 8823      		tst r24
+ 498 03be 01F4      		brne .L61
+ 499 03c0 D898      		cbi 59-32,0
+ 500 03c2 0895      		ret
+ 501               	.L61:
+ 502 03c4 8091 0000 		lds r24,PID_CNT
+ 503 03c8 8111      		cpse r24,__zero_reg__
+ 504 03ca D89A      		sbi 59-32,0
+ 505               	.L63:
+ 506 03cc 9091 0000 		lds r25,PID_CNT
+ 507 03d0 8091 0000 		lds r24,PID_VAL
+ 508 03d4 8917      		cp r24,r25
+ 509 03d6 00F4      		brsh .L64
+ 510 03d8 D898      		cbi 59-32,0
+ 511               	.L64:
+ 512 03da 0895      		ret
+ 514               	.global	UpdateValuesFromEEPROM
+ 516               	UpdateValuesFromEEPROM:
+ 517               	/* prologue: function */
+ 518               	/* frame size = 0 */
+ 519 03dc 6091 0000 		lds r22,SETVAL_PID
+ 520 03e0 80E0      		ldi r24,lo8(EE_SETVAL_PID)
+ 521 03e2 90E0      		ldi r25,hi8(EE_SETVAL_PID)
+ 522 03e4 00D0      		rcall __eeupd_byte_tn2313a
+ 523 03e6 6091 0000 		lds r22,SETVAL_TEMP
+ 524 03ea 7091 0000 		lds r23,(SETVAL_TEMP)+1
+ 525 03ee 80E0      		ldi r24,lo8(EE_SETVAL_TEMP)
+ 526 03f0 90E0      		ldi r25,hi8(EE_SETVAL_TEMP)
+ 527 03f2 00D0      		rcall __eeupd_word_tn2313a
+ 528               	/* epilogue start */
+ 529 03f4 0895      		ret
+ 531               	.global	LoadValuesFromEEPROM
+ 533               	LoadValuesFromEEPROM:
+ 534               	/* prologue: function */
+ 535               	/* frame size = 0 */
+ 536 03f6 80E0      		ldi r24,lo8(EE_SETVAL_PID)
+ 537 03f8 90E0      		ldi r25,hi8(EE_SETVAL_PID)
+ 538 03fa 00D0      		rcall __eerd_byte_tn2313a
+ 539 03fc 8093 0000 		sts SETVAL_PID,r24
+ 540 0400 80E0      		ldi r24,lo8(EE_SETVAL_TEMP)
+ 541 0402 90E0      		ldi r25,hi8(EE_SETVAL_TEMP)
+ 542 0404 00D0      		rcall __eerd_word_tn2313a
+ 543 0406 9093 0000 		sts (SETVAL_TEMP)+1,r25
+ 544 040a 8093 0000 		sts SETVAL_TEMP,r24
+ 545               	/* epilogue start */
+ 546 040e 0895      		ret
+ 548               	.global	main
+ 550               	main:
+ 551 0410 1F93      		push r17
+ 552               	/* prologue: function */
+ 553               	/* frame size = 0 */
+ 554 0412 00D0      		rcall init
+ 555 0414 00D0      		rcall LoadValuesFromEEPROM
+ 556 0416 1AE0      		ldi r17,lo8(10)
+ 557               	.L80:
+ 558 0418 8091 0000 		lds r24,FLAGS1
+ 559 041c 80FF      		sbrs r24,0
+ 560 041e 00C0      		rjmp .L70
+ 561 0420 8091 0000 		lds r24,CNT_TEMP_START
+ 562 0424 9091 0000 		lds r25,(CNT_TEMP_START)+1
+ 563 0428 0196      		adiw r24,1
+ 564 042a 9093 0000 		sts (CNT_TEMP_START)+1,r25
+ 565 042e 8093 0000 		sts CNT_TEMP_START,r24
+ 566 0432 8091 0000 		lds r24,CNT_TEMP_START
+ 567 0436 9091 0000 		lds r25,(CNT_TEMP_START)+1
+ 568 043a 885E      		subi r24,lo8(1000)
+ 569 043c 9340      		sbci r25,hi8(1000)
+ 570 043e 01F4      		brne .L71
+ 571 0440 1092 0000 		sts (CNT_TEMP_START)+1,__zero_reg__
+ 572 0444 1092 0000 		sts CNT_TEMP_START,__zero_reg__
+ 573 0448 00D0      		rcall ReadMAX6675
+ 574               	.L71:
+ 575 044a 8091 0000 		lds r24,FLAGS1
+ 576 044e 81FF      		sbrs r24,1
+ 577 0450 00C0      		rjmp .L72
+ 578 0452 8091 0000 		lds r24,EDIT_OUT_CNT
+ 579 0456 9091 0000 		lds r25,(EDIT_OUT_CNT)+1
+ 580 045a 0196      		adiw r24,1
+ 581 045c 9093 0000 		sts (EDIT_OUT_CNT)+1,r25
+ 582 0460 8093 0000 		sts EDIT_OUT_CNT,r24
+ 583 0464 8091 0000 		lds r24,EDIT_OUT_CNT
+ 584 0468 9091 0000 		lds r25,(EDIT_OUT_CNT)+1
+ 585 046c 885B      		subi r24,lo8(3000)
+ 586 046e 9B40      		sbci r25,hi8(3000)
+ 587 0470 00F0      		brlo .L73
+ 588 0472 8091 0000 		lds r24,FLAGS1
+ 589 0476 8D7F      		andi r24,lo8(-3)
+ 590 0478 8093 0000 		sts FLAGS1,r24
+ 591 047c 8091 0000 		lds r24,FLAGS1
+ 592 0480 8B7F      		andi r24,lo8(-5)
+ 593 0482 8093 0000 		sts FLAGS1,r24
+ 594 0486 00D0      		rcall UpdateValuesFromEEPROM
+ 595 0488 00C0      		rjmp .L73
+ 596               	.L72:
+ 597 048a 8091 0000 		lds r24,STATUS_TC
+ 598 048e 8130      		cpi r24,lo8(1)
+ 599 0490 01F4      		brne .L74
+ 600 0492 8091 0000 		lds r24,VALUE_TC
+ 601 0496 9091 0000 		lds r25,(VALUE_TC)+1
+ 602 049a 00D0      		rcall NumberToButeBuffer
+ 603 049c 00C0      		rjmp .L73
+ 604               	.L74:
+ 605 049e 1093 0000 		sts SEGM_RAZR,r17
+ 606 04a2 1093 0000 		sts SEGM_RAZR+1,r17
+ 607 04a6 1093 0000 		sts SEGM_RAZR+2,r17
+ 608               	.L73:
+ 609 04aa 00D0      		rcall CheckButtons
+ 610 04ac 8091 0000 		lds r24,BUTTON
+ 611 04b0 8111      		cpse r24,__zero_reg__
+ 612 04b2 00D0      		rcall ProcessingButtons
+ 613               	.L75:
+ 614 04b4 00D0      		rcall Display
+ 615 04b6 8091 0000 		lds r24,FLAGS1
+ 616 04ba 8E7F      		andi r24,lo8(-2)
+ 617 04bc 8093 0000 		sts FLAGS1,r24
+ 618               	.L70:
+ 619 04c0 8091 0000 		lds r24,FLAGS1
+ 620 04c4 83FF      		sbrs r24,3
+ 621 04c6 00C0      		rjmp .L80
+ 622 04c8 00D0      		rcall ProcessingPID
+ 623 04ca 8091 0000 		lds r24,FLAGS1
+ 624 04ce 877F      		andi r24,lo8(-9)
+ 625 04d0 8093 0000 		sts FLAGS1,r24
+ 626 04d4 00C0      		rjmp .L80
+ 628               	.global	FLAGS1
+ 629               	.global	FLAGS1
+ 630               		.section .bss
+ 633               	FLAGS1:
+ 634 0000 00        		.skip 1,0
+ 635               	.global	BUTTON
+ 636               	.global	BUTTON
+ 639               	BUTTON:
+ 640 0001 00        		.skip 1,0
+ 641               	.global	EDIT_OUT_CNT
+ 642               	.global	EDIT_OUT_CNT
+ 645               	EDIT_OUT_CNT:
+ 646 0002 0000      		.skip 2,0
+ 647               	.global	EDIT_CNT
+ 648               	.global	EDIT_CNT
+ 651               	EDIT_CNT:
+ 652 0004 00        		.skip 1,0
+ 653               	.global	IND_RAZR
+ 654               	.global	IND_RAZR
+ 657               	IND_RAZR:
+ 658 0005 00        		.skip 1,0
+ 659               	.global	SHAKE_CNT
+ 660               	.global	SHAKE_CNT
+ 663               	SHAKE_CNT:
+ 664 0006 00        		.skip 1,0
+ 665               	.global	PID_CNT
+ 666               	.global	PID_CNT
+ 669               	PID_CNT:
+ 670 0007 00        		.skip 1,0
+ 671               	.global	PID_VAL
+ 672               	.global	PID_VAL
+ 675               	PID_VAL:
+ 676 0008 00        		.skip 1,0
+ 677               	.global	EE_SETVAL_TEMP
+ 678               		.section	.eeprom,"aw",@progbits
+ 681               	EE_SETVAL_TEMP:
+ 682 0000 FA00      		.word	250
+ 683               	.global	EE_SETVAL_PID
+ 686               	EE_SETVAL_PID:
+ 687 0002 0A00      		.word	10
+ 688               	.global	CNT_TEMP_START
+ 689               	.global	CNT_TEMP_START
+ 690               		.section .bss
+ 693               	CNT_TEMP_START:
+ 694 0009 0000      		.skip 2,0
+ 695               	.global	VALUE_TC
+ 696               	.global	VALUE_TC
+ 699               	VALUE_TC:
+ 700 000b 0000      		.skip 2,0
+ 701               	.global	STATUS_TC
+ 702               	.global	STATUS_TC
+ 705               	STATUS_TC:
+ 706 000d 00        		.skip 1,0
+ 707               	.global	DigSeg
+ 708               		.section	.progmem.data,"a",@progbits
+ 711               	DigSeg:
+ 712 0000 D7        		.byte	-41
+ 713 0001 14        		.byte	20
+ 714 0002 CD        		.byte	-51
+ 715 0003 5D        		.byte	93
+ 716 0004 1E        		.byte	30
+ 717 0005 5B        		.byte	91
+ 718 0006 DB        		.byte	-37
+ 719 0007 15        		.byte	21
+ 720 0008 DF        		.byte	-33
+ 721 0009 5F        		.byte	95
+ 722 000a 08        		.byte	8
+ 723 000b 8F        		.byte	-113
+ 724               		.comm SEGM_RAZR,3,1
+ 725               		.comm SETVAL_TEMP,2,1
+ 726               		.comm SETVAL_PID,1,1
+ 727               	.global __do_clear_bss
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:2      *ABS*:0000003f __SREG__
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:3      *ABS*:0000003e __SP_H__
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:4      *ABS*:0000003d __SP_L__
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:5      *ABS*:00000034 __CCP__
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:11     .text:00000000 init
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:55     .text:00000042 __vector_4
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:633    .bss:00000000 FLAGS1
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:79     .text:00000068 __vector_6
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:101    .text:0000008a NumberToButeBuffer
+                            *COM*:00000003 SEGM_RAZR
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:133    .text:000000c6 Display
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:657    .bss:00000005 IND_RAZR
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:711    .progmem.data:00000000 DigSeg
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:192    .text:00000128 CheckButtons
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:663    .bss:00000006 SHAKE_CNT
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:651    .bss:00000004 EDIT_CNT
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:639    .bss:00000001 BUTTON
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:243    .text:0000019c ChangeVALUE
+                            *COM*:00000001 SETVAL_PID
+                            *COM*:00000002 SETVAL_TEMP
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:312    .text:00000244 ProcessingButtons
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:645    .bss:00000002 EDIT_OUT_CNT
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:399    .text:00000310 ReadMAX6675
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:705    .bss:0000000d STATUS_TC
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:699    .bss:0000000b VALUE_TC
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:452    .text:00000366 CalculatePID
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:675    .bss:00000008 PID_VAL
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:485    .text:000003a4 ProcessingPID
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:669    .bss:00000007 PID_CNT
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:516    .text:000003dc UpdateValuesFromEEPROM
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:686    .eeprom:00000002 EE_SETVAL_PID
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:681    .eeprom:00000000 EE_SETVAL_TEMP
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:533    .text:000003f6 LoadValuesFromEEPROM
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:550    .text:00000410 main
+C:\Users\9E8E~1\AppData\Local\Temp/cccE8eQw.s:693    .bss:00000009 CNT_TEMP_START
+
+UNDEFINED SYMBOLS
+__udivmodhi4
+__mulhi3
+__eeupd_byte_tn2313a
+__eeupd_word_tn2313a
+__eerd_byte_tn2313a
+__eerd_word_tn2313a
+__do_clear_bss

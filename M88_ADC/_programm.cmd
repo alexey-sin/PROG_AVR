@@ -1,6 +1,6 @@
 @echo off
-PATH=%~d0\WinAVR\bin;%~d0\WinAVR\utils\bin;%~d0\PROG_AVR\_AVRISPmkII\STK500;%PATH%
-
+PATH=%~d0\PROG_AVR\_AVRISPmkII\STK500;%PATH%
+REM %~d0\WinAVR\bin;%~d0\WinAVR\utils\bin;
 cd ./build
 REM make -f ./Makefile program
 call Stk500.exe -dATmega88 -cUSB -ms -e -if"main.hex" -pf -vf
